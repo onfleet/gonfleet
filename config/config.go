@@ -1,10 +1,9 @@
 package config
 
-// version refers to gonfleet package version
-const version = "1.0.0"
-
-// name refers to name of package
-const name = "onfleet/gonfleet"
+const (
+	version = "1.0.0"
+	name    = "onfleet/gonfleet"
+)
 
 // defaults - can be overriden by user init params
 const (
@@ -36,9 +35,9 @@ type Config struct {
 // InitConfig returns Config.
 // Any default overrides provided by the user are applied
 func InitConfig(params InitParams) Config {
-	baseUrl := "https://onfleet.com"
-	path := "/api"
-	apiVersion := "/v2"
+	baseUrl := defaultBaseUrl
+	path := defaultPath
+	apiVersion := defaultApiVersion
 
 	if params.BaseUrl != "" {
 		baseUrl = params.BaseUrl
