@@ -17,8 +17,9 @@ func NewHttpClient(timeoutMillis int64) *http.Client {
 	}
 }
 
-// NewHttpRequest reuturn an http request with package config parameters applied.
-func NewHttpRequest(apiKey string, method string, url string, body []byte) (*http.Request, error) {
+// Call creates and runs an http request.
+// It returns the response.
+func Call(httpClient *http.Client, apiKey string, method string, url string, body []byte) (*http.Response, error) {
 	var request *http.Request
 	var err error
 	switch method {
@@ -40,7 +41,11 @@ func NewHttpRequest(apiKey string, method string, url string, body []byte) (*htt
 	}
 	request.Header.Set("User-Agent", fmt.Sprintf("%s-%s", constant.PkgName, constant.PkgVersion))
 	request.SetBasicAuth(apiKey, "")
-	return request, err
+	response, err := httpClient.Do(request)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
 }
 
 func IsErrorStatus(status int) bool {
