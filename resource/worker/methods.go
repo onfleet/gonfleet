@@ -7,6 +7,7 @@ import (
 	"github.com/onfleet/gonfleet/util"
 )
 
+// List fetches all workers in organization
 func (c *Client) List() ([]Worker, error) {
 	workers := []Worker{}
 	req, err := util.NewHttpRequest(

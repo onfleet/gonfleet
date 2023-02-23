@@ -11,11 +11,18 @@ const (
 )
 
 type Metadata struct {
-	Name       string             `json:"name"`
-	Type       string             `json:"type"`              // "boolean" ; "number" ; "string" ; "object" ; "array"
-	Subtype    string             `json:"subtype,omitempty"` // "boolean" ; "number" ; "string" ; "object" ; "array"
-	Visibility []VisibilityOption `json:"visibility"`        // "api" ; "dashboard" ; "worker"
-	Value      any                `json:"value"`
+	// Name of the metadata object
+	Name string `json:"name,omitempty"`
+	// Type can be one of the following "boolean", "number", "string", "object", "array"
+	Type string `json:"type"`
+	// Subtype only required for Type of "array"
+	// And can be one of the following "boolean", "number", "string", "object"
+	Subtype string `json:"subtype,omitempty"`
+	// Visibility lists who / what can view the metadata.
+	// Options are "api", "dashboard", "worker"
+	Visibility []VisibilityOption `json:"visibility"`
+	// Value is any user assigned data that matches Type / Subtype
+	Value any `json:"value"`
 }
 
 type MatchedMetadataResult struct {

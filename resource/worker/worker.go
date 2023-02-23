@@ -15,45 +15,67 @@ type Client struct {
 }
 
 type WorkerUserData struct {
-	AppVersion        string `json:"appVersion"`
-	BatteryLevel      int    `json:"batteryLevel"`
-	DeviceDescription string `json:"deviceDescription"`
-	Platform          string `json:"platform"`
+	AppVersion        string `json:"appVersion,omitempty"`
+	BatteryLevel      int    `json:"batteryLevel,omitempty"`
+	DeviceDescription string `json:"deviceDescription,omitempty"`
+	Platform          string `json:"platform,omitempty"`
+}
+
+type WorkerAdditionalCapacities struct {
+	CapacityA int `json:"capacityA,omitempty"`
+	CapacityB int `json:"capacityB,omitempty"`
+	CapacityC int `json:"capacityC,omitempty"`
+}
+
+type WorkerVehicleType string
+
+const (
+	WorkerVehicleTypeCar        WorkerVehicleType = "CAR"
+	WorkerVehicleTypeTruck      WorkerVehicleType = "TRUCK"
+	WorkerVehicleTypeBicycle    WorkerVehicleType = "BICYCLE"
+	WorkerVehicleTypeMotorcycle WorkerVehicleType = "MOTORCYCLE"
+)
+
+type WorkerVehicle struct {
+	ID               string            `json:"id,omitempty"`
+	Type             WorkerVehicleType `json:"type,omitempty"`
+	Description      *string           `json:"description,omitempty"`
+	LicensePlate     *string           `json:"licensePlate,omitempty"`
+	Color            *string           `json:"color,omitempty"`
+	TimeLastModified int64             `json:"timeLastModified,omitempty"`
 }
 
 type AccountStatusOption string
 
-// const (
-//     AccountStatusAccepted
-// )
+const (
+	AccountStatusAccepted AccountStatusOption = "ACCEPTED"
+	AccountStatusInvited  AccountStatusOption = "INVITED"
+)
 
 // Worker refers to an Onfleet Worker.
 // Reference https://docs.onfleet.com/reference/workers.
 type Worker struct {
-	ID               string              `json:"id"`
-	TimeCreated      int64               `json:"timeCreated"`
-	TimeLastModified int64               `json:"timeLastModified"`
-	Organization     string              `json:"organization"`
-	Name             string              `json:"name"`
-	DisplayName      string              `json:"displayName"`
-	Phone            string              `json:"phone"`
-	ActiveTask       *string             `json:"activeTask"`
-	Tasks            []string            `json:"tasks"`
-	OnDuty           bool                `json:"onDuty"`
-	TimeLastSeen     int64               `json:"timeLastSeen"`
-	Capacity         int                 `json:"capacity"`
-	UserData         WorkerUserData      `json:"userData"`
-	AccountStatus    string              `json:"accountStatus"`
-	Metadata         []metadata.Metadata `json:"metadata"`
-	ImageUrl         *string             `json:"imageUrl"`
-	Teams            []string            `json:"teams"`
-	DelayTime        *int64
-	Location         *destination.Location
+	ID                              string                     `json:"id,omitempty"`
+	TimeCreated                     int64                      `json:"timeCreated,omitempty"`
+	TimeLastModified                int64                      `json:"timeLastModified,omitempty"`
+	Organization                    string                     `json:"organization,omitempty"`
+	Name                            string                     `json:"name,omitempty"`
+	DisplayName                     *string                    `json:"displayName,omitempty"`
+	Phone                           string                     `json:"phone,omitempty"`
+	ActiveTask                      *string                    `json:"activeTask,omitempty"`
+	Tasks                           []string                   `json:"tasks,omitempty"`
+	OnDuty                          bool                       `json:"onDuty,omitempty"`
+	TimeLastSeen                    int64                      `json:"timeLastSeen,omitempty"`
+	Capacity                        int                        `json:"capacity,omitempty"`
+	AdditionalCapacities            WorkerAdditionalCapacities `json:"additionalCapacities,omitempty"`
+	UserData                        WorkerUserData             `json:"userData,omitempty"`
+	AccountStatus                   AccountStatusOption        `json:"accountStatus,omitempty"`
+	Metadata                        []metadata.Metadata        `json:"metadata,omitempty"`
+	TimeZone                        *string                    `json:"timezone,omitempty"`
+	Teams                           []string                   `json:"teams,omitempty"`
+	ImageUrl                        *string                    `json:"imageUrl,omitempty"`
+	DelayTime                       *int64                     `json:"delayTime,omitempty"`
+	Location                        *destination.Location      `json:"location,omitempty"`
+	Vehicle                         WorkerVehicle              `json:"vehicle,omitempty"`
+	HasRecentlyUsedSpoofedLocations bool                       `json:"hasRecentlyUsedSpoofedLocations,omitempty"`
 }
-
-// location  and hasRecentlyUseSpooofLocation can be undefined
-// location can also be null
-// neead additoinal capacities { capacityA: 0, ... capacityC }
-
-// location: [ -79.87536748882206, 43.48756954002783 ],
-//    hasRecentlyUsedSpoofedLocations: false

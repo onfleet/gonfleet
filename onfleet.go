@@ -16,7 +16,7 @@ const (
 )
 
 type Onfleet struct {
-	Workers worker.Client
+	Workers *worker.Client
 }
 
 // InitParams accepts user provided overrides to be set on Config
@@ -33,6 +33,7 @@ func New(params InitParams) (*Onfleet, error) {
 	if params.ApiKey == "" {
 		return nil, fmt.Errorf("Onfleet API key not found")
 	}
+
 	o := Onfleet{}
 	baseUrl := defaultBaseUrl
 	path := defaultPath
@@ -55,7 +56,7 @@ func New(params InitParams) (*Onfleet, error) {
 	httpClient := util.NewHttpClient(timeout)
 	fullBaseUrl := baseUrl + path + apiVersion
 
-	o.Workers = worker.Client{
+	o.Workers = &worker.Client{
 		ApiKey:     params.ApiKey,
 		HttpClient: httpClient,
 		Url:        fullBaseUrl + "/workers",
