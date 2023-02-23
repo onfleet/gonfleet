@@ -3,16 +3,15 @@ package worker
 import (
 	"net/http"
 
-	"github.com/onfleet/gonfleet/config"
 	"github.com/onfleet/gonfleet/resource/destination"
 	"github.com/onfleet/gonfleet/resource/metadata"
 )
 
 // Client for Workers resource
 type Client struct {
-	Config     config.Config
+	ApiKey     string
 	HttpClient *http.Client
-	SubPath    string
+	Url        string
 }
 
 type WorkerUserData struct {
