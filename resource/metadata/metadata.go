@@ -10,8 +10,9 @@ const (
 	VisibilityOptionWorker    VisibilityOption = "worker"
 )
 
+// Onfleet Metadata.
+// Reference https://docs.onfleet.com/reference/metadata
 type Metadata struct {
-	// Name of the metadata object
 	Name string `json:"name,omitempty"`
 	// Type can be one of the following "boolean", "number", "string", "object", "array"
 	Type string `json:"type"`

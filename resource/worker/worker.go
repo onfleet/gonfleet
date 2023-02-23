@@ -52,7 +52,7 @@ const (
 	AccountStatusInvited  AccountStatusOption = "INVITED"
 )
 
-// Worker refers to an Onfleet Worker.
+// Onfleet Worker.
 // Reference https://docs.onfleet.com/reference/workers.
 type Worker struct {
 	ID                              string                     `json:"id,omitempty"`
