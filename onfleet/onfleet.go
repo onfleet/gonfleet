@@ -1,4 +1,4 @@
-package client
+package onfleet
 
 import (
 	"github.com/onfleet/gonfleet/config"

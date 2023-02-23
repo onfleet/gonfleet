@@ -3,6 +3,7 @@ package netw
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"net/http"
 	"time"
 
@@ -49,4 +50,19 @@ func NewHttpRequest(c config.Config, params NewRequestParams) (*http.Request, er
 	request.Header.Set("User-Agent", fmt.Sprintf("%s-%s", c.Name, c.Version))
 	request.Header.Set("Authorization", fmt.Sprintf("Basic %s", conv.EncodeBase64(c.ApiKey)))
 	return request, err
+}
+
+// ExecHttpRequest executes / runs / makes (however you wanna phrase it) the provided request.
+// The response body is return in bytes.
+func ExecHttpRequest(client *http.Client, req *http.Request) ([]byte, error) {
+	resp, err := client.Do(req)
+	if err != nil {
+		return []byte{}, err
+	}
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return []byte{}, err
+	}
+	return body, nil
 }
