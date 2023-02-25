@@ -3,7 +3,7 @@ package onfleet
 import (
 	"fmt"
 
-	"github.com/onfleet/gonfleet/resource/worker"
+	"github.com/onfleet/gonfleet/service/worker"
 	"github.com/onfleet/gonfleet/util"
 )
 

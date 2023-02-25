@@ -1,5 +1,5 @@
-package destination
+package types
 
 // Location is a location based on longitude and latitude.
 // First element is longitude, second element is latitude.
-type Location [2]float64
+type Location [2]float32
