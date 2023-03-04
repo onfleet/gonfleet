@@ -21,7 +21,6 @@ type Onfleet struct {
 
 // InitParams accepts user provided overrides to be set on Config
 type InitParams struct {
-	ApiKey string
 	// timeout used for http client in milliseconds
 	UserTimeout int64
 	BaseUrl     string
@@ -29,8 +28,8 @@ type InitParams struct {
 	ApiVersion  string
 }
 
-func New(params InitParams) (*Onfleet, error) {
-	if params.ApiKey == "" {
+func New(apiKey string, params *InitParams) (*Onfleet, error) {
+	if apiKey == "" {
 		return nil, fmt.Errorf("Onfleet API key not found")
 	}
 
@@ -40,24 +39,26 @@ func New(params InitParams) (*Onfleet, error) {
 	apiVersion := defaultApiVersion
 	timeout := defaultUserTimeout
 
-	if params.BaseUrl != "" {
-		baseUrl = params.BaseUrl
-	}
-	if params.Path != "" {
-		path = params.Path
-	}
-	if params.ApiVersion != "" {
-		apiVersion = params.ApiVersion
-	}
-	if params.UserTimeout > 0 && params.UserTimeout <= defaultUserTimeout {
-		timeout = params.UserTimeout
+	if params != nil {
+		if params.BaseUrl != "" {
+			baseUrl = params.BaseUrl
+		}
+		if params.Path != "" {
+			path = params.Path
+		}
+		if params.ApiVersion != "" {
+			apiVersion = params.ApiVersion
+		}
+		if params.UserTimeout > 0 && params.UserTimeout <= defaultUserTimeout {
+			timeout = params.UserTimeout
+		}
 	}
 
 	httpClient := util.NewHttpClient(timeout)
 	fullBaseUrl := baseUrl + path + apiVersion
 
 	o.Workers = &worker.Client{
-		ApiKey:     params.ApiKey,
+		ApiKey:     apiKey,
 		HttpClient: httpClient,
 		Url:        fullBaseUrl + "/workers",
 	}
