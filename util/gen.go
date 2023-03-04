@@ -1,11 +1,14 @@
 package util
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
-func PrettyPrint(data any) (string, error) {
+func PrettyPrint(data any) {
 	b, err := json.MarshalIndent(data, "", "    ")
 	if err != nil {
-		return "", err
+		return
 	}
-	return string(b), nil
+	fmt.Println(string(b))
 }
