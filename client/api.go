@@ -1,4 +1,4 @@
-package onfleet
+package client
 
 import (
 	"fmt"
@@ -7,6 +7,10 @@ import (
 	"github.com/onfleet/gonfleet/util"
 )
 
+type Client struct {
+	Workers *worker.Client
+}
+
 // user overridable defaults
 const (
 	defaultUserTimeout int64 = 70000
@@ -14,10 +18,6 @@ const (
 	defaultPath              = "/api"
 	defaultApiVersion        = "/v2"
 )
-
-type Onfleet struct {
-	Workers *worker.Client
-}
 
 // InitParams accepts user provided overrides to be set on Config
 type InitParams struct {
@@ -28,12 +28,12 @@ type InitParams struct {
 	ApiVersion  string
 }
 
-func New(apiKey string, params *InitParams) (*Onfleet, error) {
+func New(apiKey string, params *InitParams) (*Client, error) {
 	if apiKey == "" {
 		return nil, fmt.Errorf("Onfleet API key not found")
 	}
 
-	o := Onfleet{}
+	c := Client{}
 	baseUrl := defaultBaseUrl
 	path := defaultPath
 	apiVersion := defaultApiVersion
@@ -57,10 +57,7 @@ func New(apiKey string, params *InitParams) (*Onfleet, error) {
 	httpClient := util.NewHttpClient(timeout)
 	fullBaseUrl := baseUrl + path + apiVersion
 
-	o.Workers = &worker.Client{
-		ApiKey:     apiKey,
-		HttpClient: httpClient,
-		Url:        fullBaseUrl + "/workers",
-	}
-	return &o, nil
+	c.Workers = worker.Register(apiKey, httpClient, fullBaseUrl+"/workers")
+
+	return &c, nil
 }

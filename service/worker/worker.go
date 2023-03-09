@@ -5,21 +5,29 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/onfleet/gonfleet/resource"
+	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/util"
 )
 
 // Client for Workers resource
 type Client struct {
-	ApiKey     string
-	HttpClient *http.Client
-	Url        string
+	apiKey     string
+	httpClient *http.Client
+	url        string
+}
+
+func Register(apiKey string, httpClient *http.Client, url string) *Client {
+	return &Client{
+		apiKey:     apiKey,
+		httpClient: httpClient,
+		url:        url,
+	}
 }
 
 // List fetches all workers
-func (c *Client) List() ([]resource.Worker, error) {
-	workers := []resource.Worker{}
-	resp, err := util.Call(c.HttpClient, c.ApiKey, http.MethodGet, c.Url, nil)
+func (c *Client) List() ([]onfleet.Worker, error) {
+	workers := []onfleet.Worker{}
+	resp, err := util.Call(c.httpClient, c.apiKey, http.MethodGet, c.url, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -34,10 +42,10 @@ func (c *Client) List() ([]resource.Worker, error) {
 }
 
 // GetSchedule gets the specified worker's schedule
-func (c *Client) GetSchedule(workerId string) (resource.WorkerScheduleEntries, error) {
-	var scheduleEntries resource.WorkerScheduleEntries
-	url := fmt.Sprintf("%s/%s/schedule", c.Url, workerId)
-	resp, err := util.Call(c.HttpClient, c.ApiKey, http.MethodGet, url, nil)
+func (c *Client) GetSchedule(workerId string) (onfleet.WorkerScheduleEntries, error) {
+	var scheduleEntries onfleet.WorkerScheduleEntries
+	url := fmt.Sprintf("%s/%s/schedule", c.url, workerId)
+	resp, err := util.Call(c.httpClient, c.apiKey, http.MethodGet, url, nil)
 	if err != nil {
 		return scheduleEntries, err
 	}

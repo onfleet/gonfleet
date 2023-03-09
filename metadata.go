@@ -1,13 +1,13 @@
-package resource
+package onfleet
 
 // Onfleet Metadata.
 // Reference https://docs.onfleet.com/reference/metadata
 type Metadata struct {
-	Name       string                     `json:"name,omitempty"`
+	Name       string                     `json:"name"`
 	Subtype    string                     `json:"subtype,omitempty"`
-	Type       string                     `json:"type,omitempty"`
-	Value      any                        `json:"value,omitempty"`
-	Visibility []MetadataVisibilityOption `json:"visibility,omitempty"`
+	Type       string                     `json:"type"`
+	Value      any                        `json:"value"`
+	Visibility []MetadataVisibilityOption `json:"visibility"`
 }
 
 type MetadataVisibilityOption string
@@ -19,6 +19,6 @@ const (
 )
 
 type MetadataMatchedResult struct {
-	ID       string     `json:"id,omitempty"`
-	Metadata []Metadata `json:"metadata,omitempty"`
+	ID       string     `json:"id"`
+	Metadata []Metadata `json:"metadata"`
 }

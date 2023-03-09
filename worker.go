@@ -1,4 +1,4 @@
-package resource
+package onfleet
 
 // Onfleet Worker.
 // Reference https://docs.onfleet.com/reference/workers.
