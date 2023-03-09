@@ -3,12 +3,15 @@ package client
 import (
 	"fmt"
 
+	"github.com/onfleet/gonfleet/service/destination"
 	"github.com/onfleet/gonfleet/service/worker"
+
 	"github.com/onfleet/gonfleet/util"
 )
 
-type Client struct {
-	Workers *worker.Client
+type API struct {
+	Destinations *destination.Client
+	Workers      *worker.Client
 }
 
 // user overridable defaults
@@ -28,12 +31,12 @@ type InitParams struct {
 	ApiVersion  string
 }
 
-func New(apiKey string, params *InitParams) (*Client, error) {
+func New(apiKey string, params *InitParams) (*API, error) {
 	if apiKey == "" {
 		return nil, fmt.Errorf("Onfleet API key not found")
 	}
 
-	c := Client{}
+	api := API{}
 	baseUrl := defaultBaseUrl
 	path := defaultPath
 	apiVersion := defaultApiVersion
@@ -57,7 +60,8 @@ func New(apiKey string, params *InitParams) (*Client, error) {
 	httpClient := util.NewHttpClient(timeout)
 	fullBaseUrl := baseUrl + path + apiVersion
 
-	c.Workers = worker.Register(apiKey, httpClient, fullBaseUrl+"/workers")
+	api.Workers = worker.Register(apiKey, httpClient, fullBaseUrl+"/workers")
+	api.Destinations = destination.Register(apiKey, httpClient, fullBaseUrl+"/destinations")
 
-	return &c, nil
+	return &api, nil
 }

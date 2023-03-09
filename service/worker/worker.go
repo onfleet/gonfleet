@@ -29,21 +29,21 @@ func (c *Client) List() ([]onfleet.Worker, error) {
 	workers := []onfleet.Worker{}
 	resp, err := util.Call(c.httpClient, c.apiKey, http.MethodGet, c.url, nil)
 	if err != nil {
-		return nil, err
+		return workers, err
 	}
 	defer resp.Body.Close()
 	if util.IsErrorStatus(resp.StatusCode) {
-		return nil, util.ReadRequestError(resp.Body)
+		return workers, util.ReadRequestError(resp.Body)
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&workers); err != nil {
-		return nil, err
+		return workers, err
 	}
 	return workers, nil
 }
 
 // GetSchedule gets the specified worker's schedule
 func (c *Client) GetSchedule(workerId string) (onfleet.WorkerScheduleEntries, error) {
-	var scheduleEntries onfleet.WorkerScheduleEntries
+	scheduleEntries := onfleet.WorkerScheduleEntries{}
 	url := fmt.Sprintf("%s/%s/schedule", c.url, workerId)
 	resp, err := util.Call(c.httpClient, c.apiKey, http.MethodGet, url, nil)
 	if err != nil {

@@ -25,7 +25,7 @@ type DestinationAddress struct {
 	PostalCode string `json:"postalCode"`
 	State      string `json:"state"`
 	Street     string `json:"street"`
-	Unparsed   string `json:"unparsed"`
+	Unparsed   string `json:"unparsed,omitempty"`
 }
 
 type DestinationCreationParams struct {
