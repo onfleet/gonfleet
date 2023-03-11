@@ -9,11 +9,13 @@ import (
 	"time"
 
 	"github.com/onfleet/gonfleet/service/destination"
+	"github.com/onfleet/gonfleet/service/recipient"
 	"github.com/onfleet/gonfleet/service/worker"
 )
 
 type API struct {
 	Destinations *destination.Client
+	Recipients   *recipient.Client
 	Workers      *worker.Client
 }
 
@@ -131,6 +133,13 @@ func New(apiKey string, params *InitParams) (*API, error) {
 
 	fullBaseUrl := baseUrl + path + apiVersion
 
+	api.Destinations = destination.Register(
+		apiKey,
+		httpClient,
+		fullBaseUrl+"/destinations",
+		call,
+		parseError,
+	)
 	api.Workers = worker.Register(
 		apiKey,
 		httpClient,
@@ -138,10 +147,10 @@ func New(apiKey string, params *InitParams) (*API, error) {
 		call,
 		parseError,
 	)
-	api.Destinations = destination.Register(
+	api.Recipients = recipient.Register(
 		apiKey,
 		httpClient,
-		fullBaseUrl+"/destinations",
+		fullBaseUrl+"/recipients",
 		call,
 		parseError,
 	)

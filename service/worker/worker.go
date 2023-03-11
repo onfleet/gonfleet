@@ -13,7 +13,6 @@ import (
 type caller func(apiKey string, httpClient *http.Client, method string, url string, body []byte) (*http.Response, error)
 type errorParser func(r io.Reader) error
 
-// Client for Workers resource
 type Client struct {
 	apiKey     string
 	httpClient *http.Client
@@ -64,5 +63,4 @@ func (c *Client) GetSchedule(workerId string) (onfleet.WorkerScheduleEntries, er
 	if err := json.NewDecoder(resp.Body).Decode(&scheduleEntries); err != nil {
 		return scheduleEntries, err
 	}
-	return scheduleEntries, nil
-}
+	return scheduleEntries, nil }
