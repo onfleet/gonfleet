@@ -5,6 +5,7 @@ package onfleet
 type Task struct {
 	AdditionalQuantities     TaskAdditionalQuantities `json:"additionalQuantities"`
 	Appearance               TaskAppearance           `json:"appearance"`
+	Barcodes                 TaskBarcodeContainer     `json:"barcodes,omitempty"`
 	CompleteAfter            *int64                   `json:"completeAfter"`
 	CompleteBefore           *int64                   `json:"completeBefore"`
 	CompletionDetails        TaskCompletionDetails    `json:"completionDetails"`
@@ -37,6 +38,9 @@ type Task struct {
 	TrackingUrl              string                   `json:"trackingURL"`
 	TrackingViewed           bool                     `json:"trackingViewed"`
 	Worker                   *string                  `json:"worker"`
+}
+
+type TaskCreationParams struct {
 }
 
 type TaskState int
@@ -107,3 +111,24 @@ type TaskContainer struct {
 	Type         TaskContainerType `json:"type"`
 	Worker       string            `json:"worker"`
 }
+
+type TaskBarcodeContainer struct {
+	Captured []TaskCapturedBarcode `json:"captured"`
+	Required []TaskBarcode         `json:"required"`
+}
+
+type TaskBarcode struct {
+	BlockCompletion bool            `json:"blockCompletion"`
+	Data            TaskBarcodeData `json:"data,omitempty"`
+}
+
+type TaskCapturedBarcode struct {
+	Data         TaskBarcodeData     `json:"data"`
+	ID           string              `json:"id"`
+	Location     DestinationLocation `json:"location"`
+	Symbology    string              `json:"symbology"`
+	Time         int64               `json:"time"`
+	WasRequested bool                `json:"wasRequested"`
+}
+
+type TaskBarcodeData string

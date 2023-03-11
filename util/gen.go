@@ -12,3 +12,7 @@ func PrettyPrint(data any) {
 	}
 	fmt.Println(string(b))
 }
+
+func IsErrorStatus(status int) bool {
+	return status < 200 || status > 299
+}
