@@ -42,6 +42,7 @@ type InitParams struct {
 }
 
 type requestErrorMessage struct {
+	Cause string `json:"cause"`
 	// Error is an internal error code.
 	// It is different than the request status code.
 	Error int `json:"error"`

@@ -29,7 +29,13 @@ type DestinationAddress struct {
 }
 
 type DestinationCreationParams struct {
-	Address  DestinationAddress  `json:"address"`
-	Location DestinationLocation `json:"location"`
-	Notes    string              `json:"notes"`
+	Address  DestinationAddress   `json:"address"`
+	Location *DestinationLocation `json:"location,omitempty"`
+	Notes    string               `json:"notes,omitempty"`
+	Options  *DestinationOptions  `json:"options,omitempty"`
+}
+
+type DestinationOptions struct {
+	// Language is a ISO standard two letter country code
+	Language string `json:"language,omitempty"`
 }

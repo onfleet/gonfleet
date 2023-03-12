@@ -48,3 +48,24 @@ func (c *Client) Get(destinationId string) (onfleet.Destination, error) {
 	}
 	return destination, nil
 }
+
+func (c *Client) Create(params onfleet.DestinationCreationParams) (onfleet.Destination, error) {
+	destination := onfleet.Destination{}
+	url := c.url
+	body, err := json.Marshal(params)
+	if err != nil {
+		return destination, err
+	}
+	resp, err := c.call(c.apiKey, c.httpClient, http.MethodPost, url, body)
+	if err != nil {
+		return destination, err
+	}
+	defer resp.Body.Close()
+	if util.IsErrorStatus((resp.StatusCode)) {
+		return destination, c.parseError(resp.Body)
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&destination); err != nil {
+		return destination, err
+	}
+	return destination, nil
+}
