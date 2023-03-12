@@ -2,6 +2,7 @@ package admin
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 
@@ -45,4 +46,45 @@ func (c *Client) List() ([]onfleet.Admin, error) {
 		return admins, err
 	}
 	return admins, nil
+}
+
+func (c *Client) Create(params onfleet.AdminCreateParams) (onfleet.Admin, error) {
+	admin := onfleet.Admin{}
+	body, err := json.Marshal(params)
+	if err != nil {
+		return admin, err
+	}
+	resp, err := c.call(c.apiKey, c.httpClient, http.MethodPost, c.url, body)
+	if err != nil {
+		return admin, err
+	}
+	defer resp.Body.Close()
+	if util.IsErrorStatus(resp.StatusCode) {
+		return admin, c.parseError(resp.Body)
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&admin); err != nil {
+		return admin, err
+	}
+	return admin, nil
+}
+
+func (c *Client) Update(adminId string, params onfleet.AdminUpdateParams) (onfleet.Admin, error) {
+	admin := onfleet.Admin{}
+	body, err := json.Marshal(params)
+	if err != nil {
+		return admin, err
+	}
+	url := fmt.Sprintf("%s/%s", c.url, adminId)
+	resp, err := c.call(c.apiKey, c.httpClient, http.MethodPut, url, body)
+	if err != nil {
+		return admin, err
+	}
+	defer resp.Body.Close()
+	if util.IsErrorStatus(resp.StatusCode) {
+		return admin, c.parseError(resp.Body)
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&admin); err != nil {
+		return admin, err
+	}
+	return admin, nil
 }

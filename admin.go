@@ -17,3 +17,21 @@ type Admin struct {
 	TimeLastModified int64      `json:"timeLastModified"`
 	Type             string     `json:"type"`
 }
+
+type AdminCreateParams struct {
+	Email      string     `json:"email"`
+	IsReadOnly bool       `json:"isReadOnly"`
+	Metadata   []Metadata `json:"metadata,omitempty"`
+	Name       string     `json:"name"`
+	Phone      string     `json:"phone,omitempty"`
+	// Type is the admin type. Can be "super" or "standard".
+	// If empty will default to "standard".
+	Type string `json:"type,omitempty"`
+}
+
+type AdminUpdateParams struct {
+	Email    string     `json:"email,omitempty"`
+	Metadata []Metadata `json:"metadata,omitempty"`
+	Name     string     `json:"name,omitempty"`
+	Phone    string     `json:"phone,omitempty"`
+}

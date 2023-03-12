@@ -143,7 +143,6 @@ func New(apiKey string, params *InitParams) (*API, error) {
 		call,
 		parseError,
 	)
-
 	api.Destinations = destination.Register(
 		apiKey,
 		httpClient,
