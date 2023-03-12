@@ -40,9 +40,6 @@ type Task struct {
 	Worker                   *string                  `json:"worker"`
 }
 
-type TaskCreationParams struct {
-}
-
 type TaskState int
 
 const (

@@ -1,10 +1,10 @@
 package admin
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/onfleet/gonfleet"
+	"github.com/onfleet/gonfleet/util"
 )
 
 type caller func(apiKey string, httpClient *http.Client, method string, url string, body any, result any) error
@@ -40,13 +40,13 @@ func (c *Client) Create(params onfleet.AdminCreateParams) (onfleet.Admin, error)
 
 func (c *Client) Update(adminId string, params onfleet.AdminUpdateParams) (onfleet.Admin, error) {
 	admin := onfleet.Admin{}
-	url := fmt.Sprintf("%s/%s", c.url, adminId)
+	url := util.UrlAttachPath(c.url, adminId)
 	err := c.call(c.apiKey, c.httpClient, http.MethodPut, url, params, &admin)
 	return admin, err
 }
 
 func (c *Client) Delete(adminId string) error {
-	url := fmt.Sprintf("%s/%s", c.url, adminId)
+	url := util.UrlAttachPath(c.url, adminId)
 	err := c.call(c.apiKey, c.httpClient, http.MethodDelete, url, nil, nil)
 	return err
 }

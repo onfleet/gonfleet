@@ -1,11 +1,10 @@
 package recipient
 
 import (
-	"fmt"
 	"net/http"
-	"net/url"
 
 	"github.com/onfleet/gonfleet"
+	"github.com/onfleet/gonfleet/util"
 )
 
 type caller func(apiKey string, httpClient *http.Client, method string, url string, body any, result any) error
@@ -28,35 +27,35 @@ func Register(apiKey string, httpClient *http.Client, url string, call caller) *
 
 func (c *Client) Get(recipientId string) (onfleet.Recipient, error) {
 	recipient := onfleet.Recipient{}
-	url := fmt.Sprintf("%s/%s", c.url, recipientId)
+	url := util.UrlAttachPath(c.url, recipientId)
 	err := c.call(c.apiKey, c.httpClient, http.MethodGet, url, nil, &recipient)
 	return recipient, err
 }
 
 // Find searches for recipient based on provided name of phone value.
-// Key options are "name" and "phone".
+// Key options are RecipientQueryKeyName and RecipientQueryKeyPhone
 //
 // e.g.
 //
-// Find("jane doe", "name")
-// Find("3105550100", "phone")
-func (c *Client) Find(value string, key string) (onfleet.Recipient, error) {
+// Find("jane doe", onfleet.RecipientQueryKeyName)
+// Find("3105550100", onfleet.RecipientQueryKeyPhone)
+func (c *Client) Find(value string, key onfleet.RecipientQueryKey) (onfleet.Recipient, error) {
 	recipient := onfleet.Recipient{}
-	url := fmt.Sprintf("%s/%s/%s", c.url, key, url.PathEscape(value))
+	url := util.UrlAttachPath(c.url, string(key), value)
 	err := c.call(c.apiKey, c.httpClient, http.MethodGet, url, nil, &recipient)
 	return recipient, err
 }
 
+// Update accepts recipientId and RecipientUpdateParams and updates the recipient.
 func (c *Client) Update(recipientId string, params onfleet.RecipientUpdateParams) (onfleet.Recipient, error) {
 	recipient := onfleet.Recipient{}
-	url := fmt.Sprintf("%s/%s", c.url, recipientId)
+	url := util.UrlAttachPath(c.url, recipientId)
 	err := c.call(c.apiKey, c.httpClient, http.MethodPut, url, params, &recipient)
 	return recipient, err
 }
 
 func (c *Client) Create(params onfleet.RecipientCreateParams) (onfleet.Recipient, error) {
 	recipient := onfleet.Recipient{}
-	url := c.url
-	err := c.call(c.apiKey, c.httpClient, http.MethodPost, url, params, &recipient)
+	err := c.call(c.apiKey, c.httpClient, http.MethodPost, c.url, params, &recipient)
 	return recipient, err
 }

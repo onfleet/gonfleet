@@ -30,3 +30,10 @@ type RecipientUpdateParams struct {
 	Notes                string     `json:"notes,omitempty"`
 	SkipSmsNotifications bool       `json:"skipSMSNotifications,omitempty"`
 }
+
+type RecipientQueryKey string
+
+const (
+	RecipientQueryKeyName  RecipientQueryKey = "name"
+	RecipientQueryKeyPhone RecipientQueryKey = "phone"
+)

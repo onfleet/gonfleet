@@ -77,3 +77,8 @@ type WorkerSchedule struct {
 type WorkerScheduleEntries struct {
 	Entries []WorkerSchedule `json:"entries"`
 }
+
+type WorkerGetParams struct {
+	// Analytics indicates whether analytics data should be includes on the retrieved worker object
+	Analytics bool `json:"analytics,omitempty"`
+}

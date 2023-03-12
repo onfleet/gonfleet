@@ -107,14 +107,12 @@ func call(apiKey string, httpClient *http.Client, method string, url string, bod
 	}
 	defer response.Body.Close()
 	if response.StatusCode < 200 || response.StatusCode > 299 {
-		fmt.Println("status ")
 		return parseError(response.Body)
 	}
 	if result == nil {
 		return nil
 	}
 	if err := json.NewDecoder(response.Body).Decode(result); err != nil {
-		fmt.Println("error ", err)
 		return err
 	}
 	return nil

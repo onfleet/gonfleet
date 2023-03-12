@@ -3,6 +3,7 @@ package util
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 )
 
 func PrettyPrint(data any) {
@@ -24,4 +25,25 @@ func Contains[T string | int](slice []T, target T) bool {
 		}
 	}
 	return false
+}
+
+func UrlAttachQuery(baseUrl string, params map[string]string) string {
+	URL, err := url.Parse(baseUrl)
+	if err != nil {
+		return baseUrl
+	}
+	q := URL.Query()
+	for k, v := range params {
+		q.Set(k, v)
+	}
+	URL.RawQuery = q.Encode()
+	return URL.String()
+}
+
+func UrlAttachPath(baseUrl string, pathSegments ...string) string {
+	newUrl, err := url.JoinPath(baseUrl, pathSegments...)
+	if err != nil {
+		return baseUrl
+	}
+	return newUrl
 }
