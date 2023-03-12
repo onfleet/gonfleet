@@ -14,10 +14,6 @@ func PrettyPrint(data any) {
 	fmt.Println(string(b))
 }
 
-func IsErrorStatus(status int) bool {
-	return status < 200 || status > 299
-}
-
 func Contains[T string | int](slice []T, target T) bool {
 	for _, x := range slice {
 		if x == target {
@@ -27,6 +23,7 @@ func Contains[T string | int](slice []T, target T) bool {
 	return false
 }
 
+// UrlAttachQuery sets query parameters on the provided baseUrl.
 func UrlAttachQuery(baseUrl string, params map[string]string) string {
 	URL, err := url.Parse(baseUrl)
 	if err != nil {
@@ -40,6 +37,7 @@ func UrlAttachQuery(baseUrl string, params map[string]string) string {
 	return URL.String()
 }
 
+// UrlAttachPath appends path segments onto provided baseUrl.
 func UrlAttachPath(baseUrl string, pathSegments ...string) string {
 	newUrl, err := url.JoinPath(baseUrl, pathSegments...)
 	if err != nil {
