@@ -13,3 +13,20 @@ type Recipient struct {
 	Phone                string     `json:"phone"`
 	SkipSmsNotifications bool       `json:"skipSMSNotifications"`
 }
+
+type RecipientCreationParams struct {
+	Metadata                  []Metadata `json:"metadata,omitempty"`
+	Name                      string     `json:"name,omitempty"`
+	Notes                     string     `json:"notes,omitempty"`
+	Phone                     string     `json:"phone,omitempty"`
+	SkipPhoneNumberValidation bool       `json:"skipPhoneNumberValidation,omitempty"`
+	SkipSmsNotifications      bool       `json:"skipSMSNotifications,omitempty"`
+	UseLongCodeForText        bool       `json:"useLongCodeForText,omitempty"`
+}
+
+type RecipientUpdateParams struct {
+	Metadata             []Metadata `json:"metadata,omitempty"`
+	Name                 string     `json:"name,omitempty"`
+	Notes                string     `json:"notes,omitempty"`
+	SkipSmsNotifications bool       `json:"skipSMSNotifications,omitempty"`
+}

@@ -17,7 +17,7 @@ func IsErrorStatus(status int) bool {
 	return status < 200 || status > 299
 }
 
-func Contains[T string | int](slice []T, target any) bool {
+func Contains[T string | int](slice []T, target T) bool {
 	for _, x := range slice {
 		if x == target {
 			return true

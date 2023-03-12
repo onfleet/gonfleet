@@ -76,3 +76,45 @@ func (c *Client) Find(value string, key string) (onfleet.Recipient, error) {
 	}
 	return recipient, nil
 }
+
+func (c *Client) Update(recipientId string, params onfleet.RecipientUpdateParams) (onfleet.Recipient, error) {
+	recipient := onfleet.Recipient{}
+	url := fmt.Sprintf("%s/%s", c.url, recipientId)
+	body, err := json.Marshal(params)
+	if err != nil {
+		return recipient, err
+	}
+	resp, err := c.call(c.apiKey, c.httpClient, http.MethodPut, url, body)
+	if err != nil {
+		return recipient, err
+	}
+	defer resp.Body.Close()
+	if util.IsErrorStatus(resp.StatusCode) {
+		return recipient, c.parseError(resp.Body)
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&recipient); err != nil {
+		return recipient, err
+	}
+	return recipient, nil
+}
+
+func (c *Client) Create(params onfleet.RecipientCreationParams) (onfleet.Recipient, error) {
+	recipient := onfleet.Recipient{}
+	url := c.url
+	body, err := json.Marshal(params)
+	if err != nil {
+		return recipient, err
+	}
+	resp, err := c.call(c.apiKey, c.httpClient, http.MethodPost, url, body)
+	if err != nil {
+		return recipient, err
+	}
+	defer resp.Body.Close()
+	if util.IsErrorStatus(resp.StatusCode) {
+		return recipient, c.parseError(resp.Body)
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&recipient); err != nil {
+		return recipient, err
+	}
+	return recipient, nil
+}
