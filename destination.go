@@ -28,7 +28,7 @@ type DestinationAddress struct {
 	Unparsed   string `json:"unparsed,omitempty"`
 }
 
-type DestinationCreationParams struct {
+type DestinationCreateParams struct {
 	Address  DestinationAddress   `json:"address"`
 	Location *DestinationLocation `json:"location,omitempty"`
 	Notes    string               `json:"notes,omitempty"`

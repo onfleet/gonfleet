@@ -44,7 +44,7 @@ type InitParams struct {
 }
 
 type requestErrorMessage struct {
-	Cause string `json:"cause"`
+	Cause any `json:"cause,omitempty"`
 	// Error is an internal error code.
 	// It is different than the request status code.
 	Error int `json:"error"`
@@ -75,11 +75,11 @@ func parseError(r io.Reader) error {
 	return reqError
 }
 
-func call(apiKey string, httpClient *http.Client, method string, url string, body []byte) (*http.Response, error) {
+func call(apiKey string, httpClient *http.Client, method string, url string, body any, result any) error {
 	var request *http.Request
 	var err error
 	switch method {
-	case "GET":
+	case "GET", "DELETE":
 		request, err = http.NewRequest(
 			method,
 			url,
@@ -87,11 +87,15 @@ func call(apiKey string, httpClient *http.Client, method string, url string, bod
 		)
 		request.Header.Set("Accept", "application/json")
 	case "POST", "PUT":
-		body := bytes.NewBuffer(body)
+		body, err := json.Marshal(body)
+		if err != nil {
+			return err
+		}
+		buffer := bytes.NewBuffer(body)
 		request, err = http.NewRequest(
 			method,
 			url,
-			body,
+			buffer,
 		)
 		request.Header.Set("Content-Type", "application/json")
 	}
@@ -99,9 +103,21 @@ func call(apiKey string, httpClient *http.Client, method string, url string, bod
 	request.SetBasicAuth(apiKey, "")
 	response, err := httpClient.Do(request)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return response, nil
+	defer response.Body.Close()
+	if response.StatusCode < 200 || response.StatusCode > 299 {
+		fmt.Println("status ")
+		return parseError(response.Body)
+	}
+	if result == nil {
+		return nil
+	}
+	if err := json.NewDecoder(response.Body).Decode(result); err != nil {
+		fmt.Println("error ", err)
+		return err
+	}
+	return nil
 }
 
 func New(apiKey string, params *InitParams) (*API, error) {
@@ -141,28 +157,24 @@ func New(apiKey string, params *InitParams) (*API, error) {
 		httpClient,
 		fullBaseUrl+"/admins",
 		call,
-		parseError,
 	)
 	api.Destinations = destination.Register(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/destinations",
 		call,
-		parseError,
 	)
 	api.Workers = worker.Register(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/workers",
 		call,
-		parseError,
 	)
 	api.Recipients = recipient.Register(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/recipients",
 		call,
-		parseError,
 	)
 
 	return &api, nil

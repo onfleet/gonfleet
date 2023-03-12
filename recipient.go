@@ -14,7 +14,7 @@ type Recipient struct {
 	SkipSmsNotifications bool       `json:"skipSMSNotifications"`
 }
 
-type RecipientCreationParams struct {
+type RecipientCreateParams struct {
 	Metadata                  []Metadata `json:"metadata,omitempty"`
 	Name                      string     `json:"name,omitempty"`
 	Notes                     string     `json:"notes,omitempty"`

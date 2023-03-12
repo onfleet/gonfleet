@@ -1,17 +1,13 @@
 package destination
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 
 	"github.com/onfleet/gonfleet"
-	"github.com/onfleet/gonfleet/util"
 )
 
-type caller func(apiKey string, httpClient *http.Client, method string, url string, body []byte) (*http.Response, error)
-type errorParser func(r io.Reader) error
+type caller func(apiKey string, httpClient *http.Client, method string, url string, body any, result any) error
 
 // Client for Workers resource
 type Client struct {
@@ -19,53 +15,27 @@ type Client struct {
 	httpClient *http.Client
 	url        string
 	call       caller
-	parseError errorParser
 }
 
-func Register(apiKey string, httpClient *http.Client, url string, call caller, parseError errorParser) *Client {
+func Register(apiKey string, httpClient *http.Client, url string, call caller) *Client {
 	return &Client{
 		apiKey:     apiKey,
 		httpClient: httpClient,
 		url:        url,
 		call:       call,
-		parseError: parseError,
 	}
 }
 
 func (c *Client) Get(destinationId string) (onfleet.Destination, error) {
 	destination := onfleet.Destination{}
 	url := fmt.Sprintf("%s/%s", c.url, destinationId)
-	resp, err := c.call(c.apiKey, c.httpClient, http.MethodGet, url, nil)
-	if err != nil {
-		return destination, err
-	}
-	defer resp.Body.Close()
-	if util.IsErrorStatus(resp.StatusCode) {
-		return destination, c.parseError(resp.Body)
-	}
-	if err := json.NewDecoder(resp.Body).Decode(&destination); err != nil {
-		return destination, err
-	}
-	return destination, nil
+	err := c.call(c.apiKey, c.httpClient, http.MethodGet, url, nil, &destination)
+	return destination, err
 }
 
-func (c *Client) Create(params onfleet.DestinationCreationParams) (onfleet.Destination, error) {
+func (c *Client) Create(params onfleet.DestinationCreateParams) (onfleet.Destination, error) {
 	destination := onfleet.Destination{}
 	url := c.url
-	body, err := json.Marshal(params)
-	if err != nil {
-		return destination, err
-	}
-	resp, err := c.call(c.apiKey, c.httpClient, http.MethodPost, url, body)
-	if err != nil {
-		return destination, err
-	}
-	defer resp.Body.Close()
-	if util.IsErrorStatus((resp.StatusCode)) {
-		return destination, c.parseError(resp.Body)
-	}
-	if err := json.NewDecoder(resp.Body).Decode(&destination); err != nil {
-		return destination, err
-	}
-	return destination, nil
+	err := c.call(c.apiKey, c.httpClient, http.MethodPost, url, params, &destination)
+	return destination, err
 }
