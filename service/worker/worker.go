@@ -63,4 +63,5 @@ func (c *Client) GetSchedule(workerId string) (onfleet.WorkerScheduleEntries, er
 	if err := json.NewDecoder(resp.Body).Decode(&scheduleEntries); err != nil {
 		return scheduleEntries, err
 	}
-	return scheduleEntries, nil }
+	return scheduleEntries, nil
+}

@@ -8,15 +8,17 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/onfleet/gonfleet/service/admin"
 	"github.com/onfleet/gonfleet/service/destination"
 	"github.com/onfleet/gonfleet/service/recipient"
 	"github.com/onfleet/gonfleet/service/worker"
 )
 
 type API struct {
-	Destinations *destination.Client
-	Recipients   *recipient.Client
-	Workers      *worker.Client
+	Administrators *admin.Client
+	Destinations   *destination.Client
+	Recipients     *recipient.Client
+	Workers        *worker.Client
 }
 
 // user overridable defaults
@@ -133,6 +135,14 @@ func New(apiKey string, params *InitParams) (*API, error) {
 	}
 
 	fullBaseUrl := baseUrl + path + apiVersion
+
+	api.Administrators = admin.Register(
+		apiKey,
+		httpClient,
+		fullBaseUrl+"/admins",
+		call,
+		parseError,
+	)
 
 	api.Destinations = destination.Register(
 		apiKey,
