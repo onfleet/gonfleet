@@ -10,6 +10,7 @@ import (
 
 	"github.com/onfleet/gonfleet/service/admin"
 	"github.com/onfleet/gonfleet/service/destination"
+	"github.com/onfleet/gonfleet/service/organization"
 	"github.com/onfleet/gonfleet/service/recipient"
 	"github.com/onfleet/gonfleet/service/worker"
 )
@@ -17,6 +18,7 @@ import (
 type API struct {
 	Administrators *admin.Client
 	Destinations   *destination.Client
+	Organizations  *organization.Client
 	Recipients     *recipient.Client
 	Workers        *worker.Client
 }
@@ -150,28 +152,35 @@ func New(apiKey string, params *InitParams) (*API, error) {
 
 	fullBaseUrl := baseUrl + path + apiVersion
 
-	api.Administrators = admin.Register(
+	api.Administrators = admin.New(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/admins",
 		call,
 	)
-	api.Destinations = destination.Register(
+	api.Destinations = destination.New(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/destinations",
 		call,
 	)
-	api.Workers = worker.Register(
+	api.Organizations = organization.New(
 		apiKey,
 		httpClient,
-		fullBaseUrl+"/workers",
+		fullBaseUrl+"/organization",
+		fullBaseUrl+"/organizations",
 		call,
 	)
-	api.Recipients = recipient.Register(
+	api.Recipients = recipient.New(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/recipients",
+		call,
+	)
+	api.Workers = worker.New(
+		apiKey,
+		httpClient,
+		fullBaseUrl+"/workers",
 		call,
 	)
 

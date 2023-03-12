@@ -16,7 +16,7 @@ type Client struct {
 	call       caller
 }
 
-func Register(apiKey string, httpClient *http.Client, url string, call caller) *Client {
+func New(apiKey string, httpClient *http.Client, url string, call caller) *Client {
 	return &Client{
 		apiKey:     apiKey,
 		httpClient: httpClient,
