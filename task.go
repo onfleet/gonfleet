@@ -94,19 +94,11 @@ type TaskAppearance struct {
 	TriangleColor *string `json:"triangleColor"`
 }
 
-type TaskContainerType string
-
-const (
-	TaskContainerTypeOrganization TaskContainerType = "ORGANIZATION"
-	TaskContainerTypeTeam         TaskContainerType = "TEAM"
-	TaskContainerTypeWorker       TaskContainerType = "WORKER"
-)
-
 type TaskContainer struct {
-	Organization string            `json:"organization"`
-	Team         string            `json:"team"`
-	Type         TaskContainerType `json:"type"`
-	Worker       string            `json:"worker"`
+	Organization string        `json:"organization"`
+	Team         string        `json:"team"`
+	Type         ContainerType `json:"type"`
+	Worker       string        `json:"worker"`
 }
 
 type TaskBarcodeContainer struct {
