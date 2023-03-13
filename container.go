@@ -29,3 +29,8 @@ const (
 	ContainerQueryKeyTeams         ContainerQueryKey = "teams"
 	ContainerQueryKeyWorkers       ContainerQueryKey = "workers"
 )
+
+type ContainerTaskInsertParams struct {
+	Tasks                []any `json:"tasks"`
+	ConsiderDependencies bool  `json:"considerDependencies"`
+}
