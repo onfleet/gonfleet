@@ -1,5 +1,7 @@
 package onfleet
 
+// Onfleet Container.
+// Reference https://docs.onfleet.com/reference/containers.
 type Container struct {
 	ActiveTask       *string       `json:"activeTask"`
 	ID               string        `json:"id"`
@@ -18,4 +20,12 @@ const (
 	ContainerTypeOrganization ContainerType = "ORGANIZATION"
 	ContainerTypeTeam         ContainerType = "TEAM"
 	ContainerTypeWorker       ContainerType = "WORKER"
+)
+
+type ContainerQueryKey string
+
+const (
+	ContainerQueryKeyOrganizations ContainerQueryKey = "organizations"
+	ContainerQueryKeyTeams         ContainerQueryKey = "teams"
+	ContainerQueryKeyWorkers       ContainerQueryKey = "workers"
 )

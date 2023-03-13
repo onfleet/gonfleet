@@ -1,7 +1,7 @@
 package onfleet
 
-// Onfleet Task
-// Reference https://docs.onfleet.com/reference/tasks
+// Onfleet Task.
+// Reference https://docs.onfleet.com/reference/tasks.
 type Task struct {
 	AdditionalQuantities     TaskAdditionalQuantities `json:"additionalQuantities"`
 	Appearance               TaskAppearance           `json:"appearance"`
