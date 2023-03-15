@@ -121,3 +121,12 @@ type TaskCapturedBarcode struct {
 }
 
 type TaskBarcodeData string
+
+type TaskCreateParams struct {
+	Executor string `json:"executor,omitempty"`
+	Merchant string `json:"merchant,omitempty"`
+}
+
+type TaskBatchCreateParams struct {
+	Tasks []Task `json:"tasks"`
+}

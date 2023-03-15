@@ -160,56 +160,56 @@ func New(apiKey string, params *InitParams) (*API, error) {
 
 	fullBaseUrl := baseUrl + path + apiVersion
 
-	api.Administrators = admin.New(
+	api.Administrators = admin.Plug(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/admins",
 		call,
 	)
-	api.Containers = container.New(
+	api.Containers = container.Plug(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/containers",
 		call,
 	)
-	api.Destinations = destination.New(
+	api.Destinations = destination.Plug(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/destinations",
 		call,
 	)
-	api.Hubs = hub.New(
+	api.Hubs = hub.Plug(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/hubs",
 		call,
 	)
-	api.Organizations = organization.New(
+	api.Organizations = organization.Plug(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/organization",
 		fullBaseUrl+"/organizations",
 		call,
 	)
-	api.Recipients = recipient.New(
+	api.Recipients = recipient.Plug(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/recipients",
 		call,
 	)
-	api.Teams = team.New(
+	api.Teams = team.Plug(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/teams",
 		call,
 	)
-	api.Webhooks = webhook.New(
+	api.Webhooks = webhook.Plug(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/webhooks",
 		call,
 	)
-	api.Workers = worker.New(
+	api.Workers = worker.Plug(
 		apiKey,
 		httpClient,
 		fullBaseUrl+"/workers",

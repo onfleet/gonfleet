@@ -16,7 +16,7 @@ type Client struct {
 	call       caller
 }
 
-func New(apiKey string, httpClient *http.Client, url string, call caller) *Client {
+func Plug(apiKey string, httpClient *http.Client, url string, call caller) *Client {
 	return &Client{
 		apiKey:     apiKey,
 		httpClient: httpClient,
