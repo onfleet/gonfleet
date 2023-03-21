@@ -4,24 +4,21 @@ import (
 	"net/http"
 
 	"github.com/onfleet/gonfleet"
+	"github.com/onfleet/gonfleet/netw"
 	"github.com/onfleet/gonfleet/util"
 )
 
-type caller func(apiKey string, httpClient *http.Client, method string, url string, body any, result any) error
-
 type Client struct {
-	apiKey     string
-	httpClient *http.Client
-	url        string
-	call       caller
+	apiKey       string
+	rlHttpClient *netw.RlHttpClient
+	url          string
 }
 
-func Plug(apiKey string, httpClient *http.Client, url string, call caller) *Client {
+func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string) *Client {
 	return &Client{
-		apiKey:     apiKey,
-		httpClient: httpClient,
-		url:        url,
-		call:       call,
+		apiKey:       apiKey,
+		rlHttpClient: rlHttpClient,
+		url:          url,
 	}
 }
 
@@ -33,7 +30,7 @@ func Plug(apiKey string, httpClient *http.Client, url string, call caller) *Clie
 func (c *Client) Get(id string, key onfleet.ContainerQueryKey) (onfleet.Container, error) {
 	container := onfleet.Container{}
 	url := util.UrlAttachPath(c.url, string(key), id)
-	err := c.call(c.apiKey, c.httpClient, http.MethodGet, url, nil, &container)
+	err := netw.Call(c.apiKey, c.rlHttpClient, http.MethodGet, url, nil, &container)
 	return container, err
 }
 
@@ -74,6 +71,6 @@ func (c *Client) Get(id string, key onfleet.ContainerQueryKey) (onfleet.Containe
 func (c *Client) InsertTasks(id string, key onfleet.ContainerQueryKey, params onfleet.ContainerTaskInsertParams) (onfleet.Container, error) {
 	container := onfleet.Container{}
 	url := util.UrlAttachPath(c.url, string(key), id)
-	err := c.call(c.apiKey, c.httpClient, http.MethodPut, url, params, &container)
+	err := netw.Call(c.apiKey, c.rlHttpClient, http.MethodPut, url, params, &container)
 	return container, err
 }

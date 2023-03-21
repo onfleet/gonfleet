@@ -4,24 +4,21 @@ import (
 	"net/http"
 
 	"github.com/onfleet/gonfleet"
+	"github.com/onfleet/gonfleet/netw"
 	"github.com/onfleet/gonfleet/util"
 )
 
-type caller func(apiKey string, httpClient *http.Client, method string, url string, body any, result any) error
-
 type Client struct {
-	apiKey     string
-	httpClient *http.Client
-	url        string
-	call       caller
+	apiKey       string
+	rlHttpClient *netw.RlHttpClient
+	url          string
 }
 
-func Plug(apiKey string, httpClient *http.Client, url string, call caller) *Client {
+func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string) *Client {
 	return &Client{
-		apiKey:     apiKey,
-		httpClient: httpClient,
-		url:        url,
-		call:       call,
+		apiKey:       apiKey,
+		rlHttpClient: rlHttpClient,
+		url:          url,
 	}
 }
 
@@ -34,7 +31,7 @@ func Plug(apiKey string, httpClient *http.Client, url string, call caller) *Clie
 // List fetches all workers.
 func (c *Client) List() ([]onfleet.Worker, error) {
 	workers := []onfleet.Worker{}
-	err := c.call(c.apiKey, c.httpClient, http.MethodGet, c.url, nil, &workers)
+	err := netw.Call(c.apiKey, c.rlHttpClient, http.MethodGet, c.url, nil, &workers)
 	return workers, err
 }
 
@@ -42,6 +39,6 @@ func (c *Client) List() ([]onfleet.Worker, error) {
 func (c *Client) GetSchedule(workerId string) (onfleet.WorkerScheduleEntries, error) {
 	scheduleEntries := onfleet.WorkerScheduleEntries{}
 	url := util.UrlAttachPath(c.url, workerId, "schedule")
-	err := c.call(c.apiKey, c.httpClient, http.MethodGet, url, nil, &scheduleEntries)
+	err := netw.Call(c.apiKey, c.rlHttpClient, http.MethodGet, url, nil, &scheduleEntries)
 	return scheduleEntries, err
 }

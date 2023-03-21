@@ -4,31 +4,28 @@ import (
 	"net/http"
 
 	"github.com/onfleet/gonfleet"
+	"github.com/onfleet/gonfleet/netw"
 	"github.com/onfleet/gonfleet/util"
 )
 
-type caller func(apiKey string, httpClient *http.Client, method string, url string, body any, result any) error
-
 type Client struct {
-	apiKey     string
-	httpClient *http.Client
-	url        string
-	call       caller
+	apiKey       string
+	rlHttpClient *netw.RlHttpClient
+	url          string
 }
 
-func Plug(apiKey string, httpClient *http.Client, url string, call caller) *Client {
+func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string) *Client {
 	return &Client{
-		apiKey:     apiKey,
-		httpClient: httpClient,
-		url:        url,
-		call:       call,
+		apiKey:       apiKey,
+		rlHttpClient: rlHttpClient,
+		url:          url,
 	}
 }
 
 func (c *Client) Get(recipientId string) (onfleet.Recipient, error) {
 	recipient := onfleet.Recipient{}
 	url := util.UrlAttachPath(c.url, recipientId)
-	err := c.call(c.apiKey, c.httpClient, http.MethodGet, url, nil, &recipient)
+	err := netw.Call(c.apiKey, c.rlHttpClient, http.MethodGet, url, nil, &recipient)
 	return recipient, err
 }
 
@@ -42,7 +39,7 @@ func (c *Client) Get(recipientId string) (onfleet.Recipient, error) {
 func (c *Client) Find(value string, key onfleet.RecipientQueryKey) (onfleet.Recipient, error) {
 	recipient := onfleet.Recipient{}
 	url := util.UrlAttachPath(c.url, string(key), value)
-	err := c.call(c.apiKey, c.httpClient, http.MethodGet, url, nil, &recipient)
+	err := netw.Call(c.apiKey, c.rlHttpClient, http.MethodGet, url, nil, &recipient)
 	return recipient, err
 }
 
@@ -50,12 +47,12 @@ func (c *Client) Find(value string, key onfleet.RecipientQueryKey) (onfleet.Reci
 func (c *Client) Update(recipientId string, params onfleet.RecipientUpdateParams) (onfleet.Recipient, error) {
 	recipient := onfleet.Recipient{}
 	url := util.UrlAttachPath(c.url, recipientId)
-	err := c.call(c.apiKey, c.httpClient, http.MethodPut, url, params, &recipient)
+	err := netw.Call(c.apiKey, c.rlHttpClient, http.MethodPut, url, params, &recipient)
 	return recipient, err
 }
 
 func (c *Client) Create(params onfleet.RecipientCreateParams) (onfleet.Recipient, error) {
 	recipient := onfleet.Recipient{}
-	err := c.call(c.apiKey, c.httpClient, http.MethodPost, c.url, params, &recipient)
+	err := netw.Call(c.apiKey, c.rlHttpClient, http.MethodPost, c.url, params, &recipient)
 	return recipient, err
 }
