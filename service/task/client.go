@@ -24,5 +24,5 @@ func (c *Client) GetById(taskId string) {
 func (c *Client) GetByShortId(taskShortId string) {
 }
 
-func (c *Client) Get() {
+func (c *Client) List() {
 }
