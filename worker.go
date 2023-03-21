@@ -7,7 +7,7 @@ type Worker struct {
 	ActiveTask                      *string                    `json:"activeTask"`
 	AdditionalCapacities            WorkerAdditionalCapacities `json:"additionalCapacities"`
 	Capacity                        int                        `json:"capacity"`
-	DelayTime                       *int64                     `json:"delayTime"`
+	DelayTime                       *float64                   `json:"delayTime"`
 	DisplayName                     *string                    `json:"displayName"`
 	HasRecentlyUsedSpoofedLocations bool                       `json:"hasRecentlyUsedSpoofedLocations"`
 	ID                              string                     `json:"id"`
