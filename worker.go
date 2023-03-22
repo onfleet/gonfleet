@@ -12,7 +12,7 @@ type Worker struct {
 	HasRecentlyUsedSpoofedLocations bool                       `json:"hasRecentlyUsedSpoofedLocations"`
 	ID                              string                     `json:"id"`
 	ImageUrl                        *string                    `json:"imageUrl"`
-	Location                        *DestinationLocation       `json:"location"`
+	Location                        DestinationLocation        `json:"location"`
 	Metadata                        []Metadata                 `json:"metadata"`
 	Name                            string                     `json:"name"`
 	OnDuty                          bool                       `json:"onDuty"`

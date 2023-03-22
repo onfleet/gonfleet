@@ -14,7 +14,7 @@ type Destination struct {
 
 // Location is longitude and latitude.
 // In that order :)
-type DestinationLocation [2]float32
+type DestinationLocation []float32
 
 type DestinationAddress struct {
 	Apartment  string `json:"apartment"`
@@ -29,10 +29,10 @@ type DestinationAddress struct {
 }
 
 type DestinationCreateParams struct {
-	Address  DestinationAddress   `json:"address"`
-	Location *DestinationLocation `json:"location,omitempty"`
-	Notes    string               `json:"notes,omitempty"`
-	Options  *DestinationOptions  `json:"options,omitempty"`
+	Address  DestinationAddress  `json:"address"`
+	Location DestinationLocation `json:"location,omitempty"`
+	Notes    string              `json:"notes,omitempty"`
+	Options  *DestinationOptions `json:"options,omitempty"`
 }
 
 type DestinationOptions struct {

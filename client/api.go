@@ -12,6 +12,7 @@ import (
 	"github.com/onfleet/gonfleet/service/hub"
 	"github.com/onfleet/gonfleet/service/organization"
 	"github.com/onfleet/gonfleet/service/recipient"
+	"github.com/onfleet/gonfleet/service/task"
 	"github.com/onfleet/gonfleet/service/team"
 	"github.com/onfleet/gonfleet/service/webhook"
 	"github.com/onfleet/gonfleet/service/worker"
@@ -26,6 +27,7 @@ type API struct {
 	Hubs           *hub.Client
 	Organizations  *organization.Client
 	Recipients     *recipient.Client
+	Tasks          *task.Client
 	Teams          *team.Client
 	Webhooks       *webhook.Client
 	Workers        *worker.Client
@@ -103,6 +105,11 @@ func New(apiKey string, params *InitParams) (*API, error) {
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/recipients",
+	)
+	api.Tasks = task.Plug(
+		apiKey,
+		rlHttpClient,
+		fullBaseUrl+"/tasks",
 	)
 	api.Teams = team.Plug(
 		apiKey,
