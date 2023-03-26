@@ -1,6 +1,6 @@
 package pkg
 
 const (
-	Name    = "github.com/onfleet/gonfleet"
-	Version = "0.1.0"
+	Name    = "onfleet/gonfleet"
+	Version = "0.1.1"
 )
