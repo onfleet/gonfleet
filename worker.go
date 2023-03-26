@@ -6,7 +6,8 @@ type Worker struct {
 	AccountStatus                   WorkerAccountStatus        `json:"accountStatus"`
 	ActiveTask                      *string                    `json:"activeTask"`
 	AdditionalCapacities            WorkerAdditionalCapacities `json:"additionalCapacities"`
-	Capacity                        int                        `json:"capacity"`
+	Analytics                       *WorkerAnalytics           `json:"analytics,omitempty"`
+	Capacity                        *int                       `json:"capacity"`
 	DelayTime                       *float64                   `json:"delayTime"`
 	DisplayName                     *string                    `json:"displayName"`
 	HasRecentlyUsedSpoofedLocations bool                       `json:"hasRecentlyUsedSpoofedLocations"`
@@ -78,7 +79,36 @@ type WorkerScheduleEntries struct {
 	Entries []WorkerSchedule `json:"entries"`
 }
 
+type WorkerAnalytics struct {
+	Distances  WorkerAnalyticsDistances  `json:"distances"`
+	Events     []WorkerAnalyticsEvent    `json:"events"`
+	TaskCounts WorkerAnalyticsTaskCounts `json:"taskCounts"`
+	Times      WorkerAnalyticsTimes      `json:"times"`
+}
+
+type WorkerAnalyticsEvent struct {
+	Action string `json:"action"`
+	Time   int64  `json:"time"`
+}
+
+type WorkerAnalyticsDistances struct {
+	Enroute float64 `json:"enroute"`
+	Idle    float64 `json:"idle"`
+}
+
+type WorkerAnalyticsTimes struct {
+	Enroute float64 `json:"enroute"`
+	Idle    float64 `json:"idle"`
+}
+
+type WorkerAnalyticsTaskCounts struct {
+	Failed    int `json:"failed"`
+	Succeeded int `json:"succeeded"`
+}
+
 type WorkerGetParams struct {
 	// Analytics indicates whether analytics data should be includes on the retrieved worker object
 	Analytics bool `json:"analytics,omitempty"`
+	From   int64  `json:"from,omitempty,string"`
+	To     int64  `json:"to,omitempty,string"`
 }

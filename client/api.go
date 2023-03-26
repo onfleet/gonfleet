@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/onfleet/gonfleet/constants"
 	"github.com/onfleet/gonfleet/netw"
 	"github.com/onfleet/gonfleet/service/admin"
 	"github.com/onfleet/gonfleet/service/container"
@@ -18,6 +17,14 @@ import (
 	"github.com/onfleet/gonfleet/service/worker"
 
 	"golang.org/x/time/rate"
+)
+
+// user overridable defaults
+const (
+	defaultUserTimeout int64 = 70000
+	defaultBaseUrl           = "https://onfleet.com"
+	defaultPath              = "/api"
+	defaultApiVersion        = "/v2"
 )
 
 type API struct {
@@ -48,10 +55,10 @@ func New(apiKey string, params *InitParams) (*API, error) {
 	}
 
 	api := API{}
-	baseUrl := constants.DefaultBaseUrl
-	path := constants.DefaultPath
-	apiVersion := constants.DefaultApiVersion
-	timeout := constants.DefaultUserTimeout
+	baseUrl := defaultBaseUrl
+	path := defaultPath
+	apiVersion := defaultApiVersion
+	timeout := defaultUserTimeout
 
 	if params != nil {
 		if params.BaseUrl != "" {
@@ -63,7 +70,7 @@ func New(apiKey string, params *InitParams) (*API, error) {
 		if params.ApiVersion != "" {
 			apiVersion = params.ApiVersion
 		}
-		if params.UserTimeout > 0 && params.UserTimeout <= constants.DefaultUserTimeout {
+		if params.UserTimeout > 0 && params.UserTimeout <= defaultUserTimeout {
 			timeout = params.UserTimeout
 		}
 	}
@@ -79,52 +86,62 @@ func New(apiKey string, params *InitParams) (*API, error) {
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/admins",
+		netw.Call,
 	)
 	api.Containers = container.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/containers",
+		netw.Call,
 	)
 	api.Destinations = destination.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/destinations",
+		netw.Call,
 	)
 	api.Hubs = hub.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/hubs",
+		netw.Call,
 	)
 	api.Organizations = organization.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/organization",
 		fullBaseUrl+"/organizations",
+		netw.Call,
 	)
 	api.Recipients = recipient.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/recipients",
+		netw.Call,
 	)
 	api.Tasks = task.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/tasks",
+		netw.Call,
 	)
 	api.Teams = team.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/teams",
+		netw.Call,
 	)
 	api.Webhooks = webhook.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/webhooks",
+		netw.Call,
 	)
 	api.Workers = worker.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/workers",
+		netw.Call,
 	)
 
 	return &api, nil

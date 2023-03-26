@@ -12,13 +12,15 @@ type Client struct {
 	apiKey       string
 	rlHttpClient *netw.RlHttpClient
 	url          string
+	call         netw.Caller
 }
 
-func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string) *Client {
+func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, call netw.Caller) *Client {
 	return &Client{
 		apiKey:       apiKey,
 		rlHttpClient: rlHttpClient,
 		url:          url,
+		call:         call,
 	}
 }
 
@@ -30,7 +32,7 @@ func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string) *Client {
 func (c *Client) Get(id string, key onfleet.ContainerQueryKey) (onfleet.Container, error) {
 	container := onfleet.Container{}
 	url := util.UrlAttachPath(c.url, string(key), id)
-	err := netw.Call(c.apiKey, c.rlHttpClient, http.MethodGet, url, nil, &container)
+	err := c.call(c.apiKey, c.rlHttpClient, http.MethodGet, url, nil, &container)
 	return container, err
 }
 
@@ -71,6 +73,6 @@ func (c *Client) Get(id string, key onfleet.ContainerQueryKey) (onfleet.Containe
 func (c *Client) InsertTasks(id string, key onfleet.ContainerQueryKey, params onfleet.ContainerTaskInsertParams) (onfleet.Container, error) {
 	container := onfleet.Container{}
 	url := util.UrlAttachPath(c.url, string(key), id)
-	err := netw.Call(c.apiKey, c.rlHttpClient, http.MethodPut, url, params, &container)
+	err := c.call(c.apiKey, c.rlHttpClient, http.MethodPut, url, params, &container)
 	return container, err
 }

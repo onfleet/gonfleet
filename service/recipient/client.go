@@ -12,20 +12,22 @@ type Client struct {
 	apiKey       string
 	rlHttpClient *netw.RlHttpClient
 	url          string
+	call         netw.Caller
 }
 
-func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string) *Client {
+func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, call netw.Caller) *Client {
 	return &Client{
 		apiKey:       apiKey,
 		rlHttpClient: rlHttpClient,
 		url:          url,
+		call:         call,
 	}
 }
 
 func (c *Client) Get(recipientId string) (onfleet.Recipient, error) {
 	recipient := onfleet.Recipient{}
 	url := util.UrlAttachPath(c.url, recipientId)
-	err := netw.Call(c.apiKey, c.rlHttpClient, http.MethodGet, url, nil, &recipient)
+	err := c.call(c.apiKey, c.rlHttpClient, http.MethodGet, url, nil, &recipient)
 	return recipient, err
 }
 
@@ -39,7 +41,7 @@ func (c *Client) Get(recipientId string) (onfleet.Recipient, error) {
 func (c *Client) Find(value string, key onfleet.RecipientQueryKey) (onfleet.Recipient, error) {
 	recipient := onfleet.Recipient{}
 	url := util.UrlAttachPath(c.url, string(key), value)
-	err := netw.Call(c.apiKey, c.rlHttpClient, http.MethodGet, url, nil, &recipient)
+	err := c.call(c.apiKey, c.rlHttpClient, http.MethodGet, url, nil, &recipient)
 	return recipient, err
 }
 
@@ -47,12 +49,12 @@ func (c *Client) Find(value string, key onfleet.RecipientQueryKey) (onfleet.Reci
 func (c *Client) Update(recipientId string, params onfleet.RecipientUpdateParams) (onfleet.Recipient, error) {
 	recipient := onfleet.Recipient{}
 	url := util.UrlAttachPath(c.url, recipientId)
-	err := netw.Call(c.apiKey, c.rlHttpClient, http.MethodPut, url, params, &recipient)
+	err := c.call(c.apiKey, c.rlHttpClient, http.MethodPut, url, params, &recipient)
 	return recipient, err
 }
 
 func (c *Client) Create(params onfleet.RecipientCreateParams) (onfleet.Recipient, error) {
 	recipient := onfleet.Recipient{}
-	err := netw.Call(c.apiKey, c.rlHttpClient, http.MethodPost, c.url, params, &recipient)
+	err := c.call(c.apiKey, c.rlHttpClient, http.MethodPost, c.url, params, &recipient)
 	return recipient, err
 }

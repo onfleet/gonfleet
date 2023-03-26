@@ -11,7 +11,7 @@ import (
 
 	"golang.org/x/time/rate"
 
-	"github.com/onfleet/gonfleet/constants"
+	"github.com/onfleet/gonfleet/pkg"
 )
 
 type RlHttpClient struct {
@@ -60,7 +60,9 @@ func parseError(r io.Reader) error {
 	return reqError
 }
 
-func Call(apiKey string, rlHttpClient *RlHttpClient, method string, url string, body any, result any) error {
+type Caller func(apiKey string, rlHttpClient *RlHttpClient, method string, url string, body any, v any) error
+
+func Call(apiKey string, rlHttpClient *RlHttpClient, method string, url string, body any, v any) error {
 	var request *http.Request
 	var err error
 	switch method {
@@ -84,7 +86,7 @@ func Call(apiKey string, rlHttpClient *RlHttpClient, method string, url string, 
 		)
 		request.Header.Set("Content-Type", "application/json")
 	}
-	request.Header.Set("User-Agent", fmt.Sprintf("%s-%s", constants.PkgName, constants.PkgVersion))
+	request.Header.Set("User-Agent", fmt.Sprintf("%s-%s", pkg.Name, pkg.Version))
 	request.SetBasicAuth(apiKey, "")
 
 	ctx := context.Background()
@@ -100,10 +102,10 @@ func Call(apiKey string, rlHttpClient *RlHttpClient, method string, url string, 
 	if response.StatusCode < 200 || response.StatusCode > 299 {
 		return parseError(response.Body)
 	}
-	if result == nil {
+	if v == nil {
 		return nil
 	}
-	if err := json.NewDecoder(response.Body).Decode(result); err != nil {
+	if err := json.NewDecoder(response.Body).Decode(v); err != nil {
 		return err
 	}
 	return nil
