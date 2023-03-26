@@ -6,8 +6,9 @@ type Worker struct {
 	AccountStatus                   WorkerAccountStatus        `json:"accountStatus"`
 	ActiveTask                      *string                    `json:"activeTask"`
 	AdditionalCapacities            WorkerAdditionalCapacities `json:"additionalCapacities"`
+	Addresses                       WorkerAddresses            `json:"addresses"`
 	Analytics                       *WorkerAnalytics           `json:"analytics,omitempty"`
-	Capacity                        *int                       `json:"capacity"`
+	Capacity                        float64                    `json:"capacity"`
 	DelayTime                       *float64                   `json:"delayTime"`
 	DisplayName                     *string                    `json:"displayName"`
 	HasRecentlyUsedSpoofedLocations bool                       `json:"hasRecentlyUsedSpoofedLocations"`
@@ -37,9 +38,9 @@ type WorkerUserData struct {
 }
 
 type WorkerAdditionalCapacities struct {
-	CapacityA int `json:"capacityA"`
-	CapacityB int `json:"capacityB"`
-	CapacityC int `json:"capacityC"`
+	CapacityA float64 `json:"capacityA"`
+	CapacityB float64 `json:"capacityB"`
+	CapacityC float64 `json:"capacityC"`
 }
 
 type WorkerVehicleType string
@@ -79,6 +80,23 @@ type WorkerScheduleEntries struct {
 	Entries []WorkerSchedule `json:"entries"`
 }
 
+type WorkerAddresses struct {
+	Routing *WorkerAddressesRouting `json:"routing"`
+}
+
+type WorkerAddressesRouting struct {
+	Address           DestinationAddress  `json:"address"`
+	CreatedByLocation bool                `json:"createdByLocation"`
+	GooglePlaceId     string              `json:"googlePlaceId"`
+	ID                string              `json:"id"`
+	Location          DestinationLocation `json:"location"`
+	Notes             string              `json:"notes"`
+	Organization      string              `json:"organization"`
+	TimeCreated       int64               `json:"timeCreated"`
+	TimeLastModified  int64               `json:"timeLastModified"`
+	WasGeocoded       bool                `json:"wasGeocoded"`
+}
+
 type WorkerAnalytics struct {
 	Distances  WorkerAnalyticsDistances  `json:"distances"`
 	Events     []WorkerAnalyticsEvent    `json:"events"`
@@ -106,9 +124,44 @@ type WorkerAnalyticsTaskCounts struct {
 	Succeeded int `json:"succeeded"`
 }
 
-type WorkerGetParams struct {
+type WorkerGetQueryParams struct {
 	// Analytics indicates whether analytics data should be includes on the retrieved worker object
 	Analytics bool `json:"analytics,omitempty"`
+	// Filter is comma separated list of worker fields to return
+	Filter string `json:"filter,omitempty"`
 	From   int64  `json:"from,omitempty,string"`
 	To     int64  `json:"to,omitempty,string"`
+}
+
+type WorkerListQueryParams struct {
+	// Filter is comma separated list of worker fields to return
+	Filter string `json:"filter,omitempty"`
+	// Phones is a comma separated list of workers' phone numbers
+	Phones string `json:"phones,omitempty"`
+	// States is comma separeted list of worker states
+	States string `json:"states,omitempty"`
+	// Teams is a comma separated list of team ids worker must be part of
+	Teams string `json:"teams,omitempty"`
+}
+
+type WorkerCreateParams struct {
+	Addresses   *WorkerCreateParamsAddressRouting `json:"addresses,omitempty"`
+	Capacity    float64                           `json:"capacity,omitempty"`
+	DisplayName string                            `json:"displayName,omitempty"`
+	Name        string                            `json:"name"`
+	Phone       string                            `json:"phone"`
+	Teams       []string                          `json:"teams"`
+	Vehicle     *WorkerCreateParamsVehicle        `json:"vehicle,omitempty"`
+}
+
+type WorkerCreateParamsAddressRouting struct {
+	// Routing should be set to a destination id
+	Routing string `json:"routing"`
+}
+
+type WorkerCreateParamsVehicle struct {
+	Color        string            `json:"color,omitempty"`
+	Description  string            `json:"description,omitempty"`
+	LicensePlate string            `json:"licensePlate,omitempty"`
+	Type         WorkerVehicleType `json:"type,omitempty"`
 }

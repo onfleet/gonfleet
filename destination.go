@@ -20,7 +20,7 @@ type DestinationAddress struct {
 	Apartment  string `json:"apartment"`
 	City       string `json:"city"`
 	Country    string `json:"country"`
-	Name       string `json:"name"`
+	Name       string `json:"name,omitempty"`
 	Number     string `json:"number"`
 	PostalCode string `json:"postalCode"`
 	State      string `json:"state"`

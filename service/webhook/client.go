@@ -5,7 +5,6 @@ import (
 
 	onfleet "github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/netw"
-	"github.com/onfleet/gonfleet/util"
 )
 
 type Client struct {
@@ -26,18 +25,44 @@ func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, call netw.
 
 func (c *Client) List() ([]onfleet.Webhook, error) {
 	webhooks := []onfleet.Webhook{}
-	err := c.call(c.apiKey, c.rlHttpClient, http.MethodGet, c.url, nil, &webhooks)
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodGet,
+		c.url,
+		nil,
+		nil,
+		nil,
+		&webhooks,
+	)
 	return webhooks, err
 }
 
 func (c *Client) Create(params onfleet.WebhookCreateParams) (onfleet.Webhook, error) {
 	webhook := onfleet.Webhook{}
-	err := c.call(c.apiKey, c.rlHttpClient, http.MethodPost, c.url, params, &webhook)
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodPost,
+		c.url,
+		nil,
+		nil,
+		params,
+		&webhook,
+	)
 	return webhook, err
 }
 
 func (c *Client) Delete(webhookId string) error {
-	url := util.UrlAttachPath(c.url, webhookId)
-	err := c.call(c.apiKey, c.rlHttpClient, http.MethodDelete, url, nil, nil)
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodDelete,
+		c.url,
+		[]string{webhookId},
+		nil,
+		nil,
+		nil,
+	)
 	return err
 }

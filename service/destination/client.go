@@ -5,7 +5,6 @@ import (
 
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/netw"
-	"github.com/onfleet/gonfleet/util"
 )
 
 type Client struct {
@@ -26,13 +25,30 @@ func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, call netw.
 
 func (c *Client) Get(destinationId string) (onfleet.Destination, error) {
 	destination := onfleet.Destination{}
-	url := util.UrlAttachPath(c.url, destinationId)
-	err := c.call(c.apiKey, c.rlHttpClient, http.MethodGet, url, nil, &destination)
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodGet,
+		c.url,
+		[]string{destinationId},
+		nil,
+		nil,
+		&destination,
+	)
 	return destination, err
 }
 
 func (c *Client) Create(params onfleet.DestinationCreateParams) (onfleet.Destination, error) {
 	destination := onfleet.Destination{}
-	err := c.call(c.apiKey, c.rlHttpClient, http.MethodPost, c.url, params, &destination)
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodPost,
+		c.url,
+		nil,
+		nil,
+		params,
+		&destination,
+	)
 	return destination, err
 }
