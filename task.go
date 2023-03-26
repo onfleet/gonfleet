@@ -27,7 +27,7 @@ type Task struct {
 	Organization             string                   `json:"organization"`
 	Overrides                TaskOverrides            `json:"overrides"`
 	PickupTask               bool                     `json:"pickupTask"`
-	Quantity                 int                      `json:"quantity"`
+	Quantity                 float64                  `json:"quantity"`
 	Recipients               []Recipient              `json:"recipients"`
 	ScanOnlyRequiredBarcodes bool                     `json:"scanOnlyRequiredBarcodes"`
 	ServiceTime              float32                  `json:"serviceTime"`
@@ -80,9 +80,9 @@ type TaskOverrides struct {
 }
 
 type TaskAdditionalQuantities struct {
-	QuantityA float32 `json:"quantityA"`
-	QuantityB float32 `json:"quantityB"`
-	QuantityC float32 `json:"quantityC"`
+	QuantityA float64 `json:"quantityA"`
+	QuantityB float64 `json:"quantityB"`
+	QuantityC float64 `json:"quantityC"`
 }
 
 type TaskIdentity struct {

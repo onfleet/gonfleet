@@ -11,7 +11,8 @@ import (
 
 	"golang.org/x/time/rate"
 
-	"github.com/onfleet/gonfleet/pkg"
+	"github.com/onfleet/gonfleet/util"
+	"github.com/onfleet/gonfleet/version"
 )
 
 type RlHttpClient struct {
@@ -60,11 +61,38 @@ func parseError(r io.Reader) error {
 	return reqError
 }
 
-type Caller func(apiKey string, rlHttpClient *RlHttpClient, method string, url string, body any, v any) error
+type Caller func(
+	apiKey string,
+	rlHttpClient *RlHttpClient,
+	method string,
+	baseUrl string,
+	pathSegments []string,
+	queryParams any,
+	body any,
+	v any,
+) error
 
-func Call(apiKey string, rlHttpClient *RlHttpClient, method string, url string, body any, v any) error {
+func Call(
+	apiKey string,
+	rlHttpClient *RlHttpClient,
+	method string,
+	baseUrl string,
+	pathSegments []string,
+	queryParams any,
+	body any,
+	v any,
+) error {
 	var request *http.Request
 	var err error
+
+	url := baseUrl
+	if pathSegments != nil {
+		url = util.UrlAttachPath(url, pathSegments...)
+	}
+	if queryParams != nil {
+		url = util.UrlAttachQuery(url, queryParams)
+	}
+
 	switch method {
 	case "GET", "DELETE":
 		request, err = http.NewRequest(
@@ -86,7 +114,8 @@ func Call(apiKey string, rlHttpClient *RlHttpClient, method string, url string, 
 		)
 		request.Header.Set("Content-Type", "application/json")
 	}
-	request.Header.Set("User-Agent", fmt.Sprintf("%s-%s", pkg.Name, pkg.Version))
+
+	request.Header.Set("User-Agent", fmt.Sprintf("%s-%s", version.Name, version.Value))
 	request.SetBasicAuth(apiKey, "")
 
 	ctx := context.Background()

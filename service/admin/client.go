@@ -5,7 +5,6 @@ import (
 
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/netw"
-	"github.com/onfleet/gonfleet/util"
 )
 
 type Client struct {
@@ -27,14 +26,32 @@ func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, call netw.
 // List fetches all admins.
 func (c *Client) List() ([]onfleet.Admin, error) {
 	admins := []onfleet.Admin{}
-	err := c.call(c.apiKey, c.rlHttpClient, http.MethodGet, c.url, nil, &admins)
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodGet,
+		c.url,
+		nil,
+		nil,
+		nil,
+		&admins,
+	)
 	return admins, err
 }
 
 // Creates a new administrator.
 func (c *Client) Create(params onfleet.AdminCreateParams) (onfleet.Admin, error) {
 	admin := onfleet.Admin{}
-	err := c.call(c.apiKey, c.rlHttpClient, http.MethodPost, c.url, params, &admin)
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodPost,
+		c.url,
+		nil,
+		nil,
+		params,
+		&admin,
+	)
 	return admin, err
 }
 
@@ -42,14 +59,30 @@ func (c *Client) Create(params onfleet.AdminCreateParams) (onfleet.Admin, error)
 // If updating email address further email verification will be required before change is processed.
 func (c *Client) Update(adminId string, params onfleet.AdminUpdateParams) (onfleet.Admin, error) {
 	admin := onfleet.Admin{}
-	url := util.UrlAttachPath(c.url, adminId)
-	err := c.call(c.apiKey, c.rlHttpClient, http.MethodPut, url, params, &admin)
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodPut,
+		c.url,
+		nil,
+		nil,
+		params,
+		&admin,
+	)
 	return admin, err
 }
 
 // Deletes an admin
 func (c *Client) Delete(adminId string) error {
-	url := util.UrlAttachPath(c.url, adminId)
-	err := c.call(c.apiKey, c.rlHttpClient, http.MethodDelete, url, nil, nil)
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodDelete,
+		c.url,
+		[]string{adminId},
+		nil,
+		nil,
+		nil,
+	)
 	return err
 }

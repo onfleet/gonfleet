@@ -5,7 +5,6 @@ import (
 
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/netw"
-	"github.com/onfleet/gonfleet/util"
 )
 
 type Client struct {
@@ -28,13 +27,30 @@ func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, altUrl str
 
 func (c *Client) Get() (onfleet.Organization, error) {
 	organization := onfleet.Organization{}
-	err := c.call(c.apiKey, c.rlHttpClient, http.MethodGet, c.url, nil, &organization)
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodGet,
+		c.url,
+		nil,
+		nil,
+		nil,
+		&organization,
+	)
 	return organization, err
 }
 
 func (c *Client) GetDelegate(orgId string) (onfleet.OrganizationDelegate, error) {
 	delegate := onfleet.OrganizationDelegate{}
-	url := util.UrlAttachPath(c.altUrl, orgId)
-	err := c.call(c.apiKey, c.rlHttpClient, http.MethodGet, url, nil, &delegate)
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodGet,
+		c.altUrl,
+		[]string{orgId},
+		nil,
+		nil,
+		&delegate,
+	)
 	return delegate, err
 }
