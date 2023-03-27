@@ -14,7 +14,7 @@ type Destination struct {
 
 // Location is longitude and latitude.
 // In that order :)
-type DestinationLocation []float32
+type DestinationLocation []float64
 
 type DestinationAddress struct {
 	Apartment  string `json:"apartment"`

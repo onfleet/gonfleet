@@ -6,7 +6,7 @@ type Worker struct {
 	AccountStatus                   WorkerAccountStatus        `json:"accountStatus"`
 	ActiveTask                      *string                    `json:"activeTask"`
 	AdditionalCapacities            WorkerAdditionalCapacities `json:"additionalCapacities"`
-	Addresses                       WorkerAddresses            `json:"addresses"`
+	Addresses                       *WorkerAddresses           `json:"addresses,omitempty"`
 	Analytics                       *WorkerAnalytics           `json:"analytics,omitempty"`
 	Capacity                        float64                    `json:"capacity"`
 	DelayTime                       *float64                   `json:"delayTime"`
@@ -27,7 +27,7 @@ type Worker struct {
 	TimeLastSeen                    int64                      `json:"timeLastSeen"`
 	UserData                        WorkerUserData             `json:"userData"`
 	Timezone                        *string                    `json:"timezone"`
-	Vehicle                         WorkerVehicle              `json:"vehicle"`
+	Vehicle                         *WorkerVehicle             `json:"vehicle"`
 }
 
 type WorkerUserData struct {
@@ -71,9 +71,9 @@ const (
 // Onfleet Worker Schedule
 // Reference https://docs.onfleet.com/reference/get-workers-schedule
 type WorkerSchedule struct {
-	Date     string     `json:"data"`
-	Shifts   [][2]int64 `json:"shifts"`
-	Timezone string     `json:"timezone"`
+	Date     string    `json:"date"`
+	Shifts   [][]int64 `json:"shifts"`
+	Timezone string    `json:"timezone"`
 }
 
 type WorkerScheduleEntries struct {
@@ -144,24 +144,62 @@ type WorkerListQueryParams struct {
 	Teams string `json:"teams,omitempty"`
 }
 
-type WorkerCreateParams struct {
-	Addresses   *WorkerCreateParamsAddressRouting `json:"addresses,omitempty"`
-	Capacity    float64                           `json:"capacity,omitempty"`
-	DisplayName string                            `json:"displayName,omitempty"`
-	Name        string                            `json:"name"`
-	Phone       string                            `json:"phone"`
-	Teams       []string                          `json:"teams"`
-	Vehicle     *WorkerCreateParamsVehicle        `json:"vehicle,omitempty"`
+type WorkersByLocation struct {
+	Workers []Worker `json:"workers"`
 }
 
-type WorkerCreateParamsAddressRouting struct {
+type WorkersByLocationListQueryParams struct {
+	Longitude float64 `json:"longitude,string"`
+	Latitude  float64 `json:"latitude,string"`
+	Radius    float64 `json:"radius,omitempty,string"`
+}
+
+type WorkerTasks struct {
+	LastId string `json:"lastId,omitempty"`
+	Tasks  []Task `json:"tasks"`
+}
+
+type WorkerTasksListQueryParams struct {
+	From int64 `json:"from,omitempty,string"`
+	// IsPickupTask is a boolean represented as a string.
+	//
+	// E.g. "true" or "false".
+	//
+	// Set to empty string "" if both dropoff and pickup tasks should be returned.
+	IsPickupTask string `json:"isPickupTask,omitempty"`
+	LastId       string `json:"lastId,omitempty"`
+	To           int64  `json:"to,omitempty,string"`
+}
+
+type WorkerCreateParams struct {
+	Addresses   *WorkerParamsAddressRouting `json:"addresses,omitempty"`
+	Capacity    float64                     `json:"capacity,omitempty"`
+	DisplayName string                      `json:"displayName,omitempty"`
+	Metadata    []Metadata                  `json:"metadata,omitempty"`
+	Name        string                      `json:"name"`
+	Phone       string                      `json:"phone"`
+	Teams       []string                    `json:"teams"`
+	Vehicle     *WorkerParamsVehicle        `json:"vehicle,omitempty"`
+}
+
+type WorkerParamsAddressRouting struct {
 	// Routing should be set to a destination id
 	Routing string `json:"routing"`
 }
 
-type WorkerCreateParamsVehicle struct {
+type WorkerParamsVehicle struct {
 	Color        string            `json:"color,omitempty"`
 	Description  string            `json:"description,omitempty"`
 	LicensePlate string            `json:"licensePlate,omitempty"`
 	Type         WorkerVehicleType `json:"type,omitempty"`
+}
+
+type WorkerUpdateParams struct {
+	Addresses   *WorkerParamsAddressRouting `json:"addresses,omitempty"`
+	Capacity    float64                     `json:"capacity,omitempty"`
+	DisplayName string                      `json:"displayName,omitempty"`
+	Metadata    []Metadata                  `json:"metadata,omitempty"`
+	Name        string                      `json:"name,omitempty"`
+	Teams       []string                    `json:"teams,omitempty"`
+	Vehicle     *WorkerParamsVehicle        `json:"vehicle,omitempty"`
 }
