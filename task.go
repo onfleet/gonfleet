@@ -1,11 +1,9 @@
 package onfleet
 
-// Onfleet Task.
-// Reference https://docs.onfleet.com/reference/tasks.
 type Task struct {
 	AdditionalQuantities     TaskAdditionalQuantities `json:"additionalQuantities"`
 	Appearance               TaskAppearance           `json:"appearance"`
-	Barcodes                 TaskBarcodeContainer     `json:"barcodes,omitempty"`
+	Barcodes                 *TaskBarcodeContainer    `json:"barcodes,omitempty"`
 	CompleteAfter            *int64                   `json:"completeAfter"`
 	CompleteBefore           *int64                   `json:"completeBefore"`
 	CompletionDetails        TaskCompletionDetails    `json:"completionDetails"`

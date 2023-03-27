@@ -1,6 +1,5 @@
 package onfleet
 
-// Reference https://docs.onfleet.com/reference/teams
 type Team struct {
 	EnableSelfAssignment bool     `json:"enableSelfAssignment"`
 	Hub                  *string  `json:"hub"`
@@ -13,7 +12,6 @@ type Team struct {
 	Workers              []string `json:"workers"`
 }
 
-// Reference https://docs.onfleet.com/reference/create-team
 type TeamCreateParams struct {
 	EnableSelfAssignment bool     `json:"enableSelfAssignment"`
 	Hub                  string   `json:"hub,omitempty"`
@@ -22,7 +20,6 @@ type TeamCreateParams struct {
 	Workers              []string `json:"workers"`
 }
 
-// Reference https://docs.onfleet.com/reference/update-team
 type TeamUpdateParams struct {
 	EnableSelfAssignment bool     `json:"enableSelfAssignment"`
 	Hub                  string   `json:"hub,omitempty"`
@@ -31,12 +28,10 @@ type TeamUpdateParams struct {
 	Workers              []string `json:"workers"`
 }
 
-// Reference https://docs.onfleet.com/reference/team-auto-dispatch
 type TeamAutoDispatch struct {
 	DispatchId string `json:"dispatchId"`
 }
 
-// Reference https://docs.onfleet.com/reference/team-auto-dispatch
 type TeamAutoDispatchParams struct {
 	MaxAllowedDelay    int     `json:"maxAllowedDelay,omitempty"`
 	MaxTasksPerRoute   int     `json:"maxTasksPerRoute,omitempty"`
@@ -46,14 +41,12 @@ type TeamAutoDispatchParams struct {
 	TaskTimeWindow     []int64 `json:"taskTimeWindow,omitempty"`
 }
 
-// Reference https://docs.onfleet.com/reference/delivery-estimate
 type TeamWorkerEta struct {
 	Steps    []TeamWorkerEtaStep `json:"steps"`
 	Vehicle  WorkerVehicleType   `json:"vehicle"`
 	WorkerId string              `json:"workerId"`
 }
 
-// Reference https://docs.onfleet.com/reference/delivery-estimate
 type TeamWorkerEtaStep struct {
 	CompletionTime int64               `json:"completionTime"`
 	Distance       float64             `json:"distance"`
@@ -62,7 +55,6 @@ type TeamWorkerEtaStep struct {
 	TravelTime     float64             `json:"travelTime"`
 }
 
-// Reference https://docs.onfleet.com/reference/delivery-estimate
 type TeamWorkerEtaQueryParams struct {
 	DropoffLocation         string            `json:"dropoffLocation,omitempty"`
 	PickupLocation          string            `json:"pickupLocation,omitempty"`

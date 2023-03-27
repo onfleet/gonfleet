@@ -23,6 +23,7 @@ func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, call netw.
 	}
 }
 
+// Reference https://docs.onfleet.com/reference/list-webhooks
 func (c *Client) List() ([]onfleet.Webhook, error) {
 	webhooks := []onfleet.Webhook{}
 	err := c.call(
@@ -38,6 +39,7 @@ func (c *Client) List() ([]onfleet.Webhook, error) {
 	return webhooks, err
 }
 
+// Reference https://docs.onfleet.com/reference/create-webhook
 func (c *Client) Create(params onfleet.WebhookCreateParams) (onfleet.Webhook, error) {
 	webhook := onfleet.Webhook{}
 	err := c.call(
@@ -53,6 +55,7 @@ func (c *Client) Create(params onfleet.WebhookCreateParams) (onfleet.Webhook, er
 	return webhook, err
 }
 
+// Reference https://docs.onfleet.com/reference/delete-webhook
 func (c *Client) Delete(webhookId string) error {
 	err := c.call(
 		c.apiKey,

@@ -1,7 +1,5 @@
 package onfleet
 
-// Onfleet Organization.
-// Reference https://docs.onfleet.com/reference/organizations
 type Organization struct {
 	Country            string   `json:"country"`
 	Delegatees         []string `json:"delegatees"`

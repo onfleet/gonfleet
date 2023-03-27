@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.5](https://github.com/onfleet/gonfleet/compare/v0.1.4...v0.1.5) - 2023-03-26
+* Changed
+    * service handler comments only reference official onfleet api docs via url
+
 ## [0.1.4](https://github.com/onfleet/gonfleet/compare/v0.1.3...v0.1.4) - 2023-03-26
 * Added
     * team `ListTasks`, `GetWorkerEta`, `AutoDispatch`, `Get`

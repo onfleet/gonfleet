@@ -23,6 +23,7 @@ func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, call netw.
 	}
 }
 
+// Reference https://docs.onfleet.com/reference/get-single-destination
 func (c *Client) Get(destinationId string) (onfleet.Destination, error) {
 	destination := onfleet.Destination{}
 	err := c.call(
@@ -38,6 +39,7 @@ func (c *Client) Get(destinationId string) (onfleet.Destination, error) {
 	return destination, err
 }
 
+// Reference https://docs.onfleet.com/reference/create-destination
 func (c *Client) Create(params onfleet.DestinationCreateParams) (onfleet.Destination, error) {
 	destination := onfleet.Destination{}
 	err := c.call(

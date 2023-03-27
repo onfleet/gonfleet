@@ -23,7 +23,7 @@ func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, call netw.
 	}
 }
 
-// Lists all hubs.
+// Reference https://docs.onfleet.com/reference/list-hubs
 func (c *Client) List() ([]onfleet.Hub, error) {
 	hubs := []onfleet.Hub{}
 	err := c.call(
@@ -39,7 +39,7 @@ func (c *Client) List() ([]onfleet.Hub, error) {
 	return hubs, err
 }
 
-// Creates hub.
+// Reference https://docs.onfleet.com/reference/create-hub
 func (c *Client) Create(params onfleet.HubCreateParams) (onfleet.Hub, error) {
 	hub := onfleet.Hub{}
 	err := c.call(
@@ -55,7 +55,7 @@ func (c *Client) Create(params onfleet.HubCreateParams) (onfleet.Hub, error) {
 	return hub, err
 }
 
-// Updates hub.
+// Reference https://docs.onfleet.com/reference/update-hub
 func (c *Client) Update(hubId string, params onfleet.HubUpdateParams) (onfleet.Hub, error) {
 	hub := onfleet.Hub{}
 	err := c.call(

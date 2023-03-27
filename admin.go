@@ -1,7 +1,5 @@
 package onfleet
 
-// Onfleet Administrator.
-// Reference https://docs.onfleet.com/reference/administrators.
 type Admin struct {
 	Email            string     `json:"email"`
 	ID               string     `json:"id"`
@@ -24,9 +22,7 @@ type AdminCreateParams struct {
 	Metadata   []Metadata `json:"metadata,omitempty"`
 	Name       string     `json:"name"`
 	Phone      string     `json:"phone,omitempty"`
-	// Type is the admin type. Can be "super" or "standard".
-	// If empty will default to "standard".
-	Type string `json:"type,omitempty"`
+	Type       string     `json:"type,omitempty"`
 }
 
 type AdminUpdateParams struct {
