@@ -40,7 +40,7 @@ if err != nil {
 import (
     "fmt"
 
-	onfleet "github.com/onfleet/gonfleet"
+	"github.com/onfleet/gonfleet"
     "github.com/onfleet/gonfleet/client"
 )
 

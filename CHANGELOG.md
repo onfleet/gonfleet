@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.3](https://github.com/onfleet/gonfleet/compare/v0.1.2...v0.1.3) - 2023-03-26
+* Added
+    * worker `SetSchedule`, `ListWorkersByLocation`, `ListTasks`, `Update`, `Delete`
+
 ## [0.1.2](https://github.com/onfleet/gonfleet/compare/v0.1.1...v0.1.2) - 2023-03-26
 * Added
     * init README.md

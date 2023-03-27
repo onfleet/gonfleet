@@ -103,7 +103,54 @@ func (c *Client) GetSchedule(workerId string) (onfleet.WorkerScheduleEntries, er
 	return scheduleEntries, err
 }
 
-// Creates creates a new Onfleet worker.
+func (c *Client) ListWorkersByLocation(params onfleet.WorkersByLocationListQueryParams) (onfleet.WorkersByLocation, error) {
+	workersByLocation := onfleet.WorkersByLocation{}
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodGet,
+		c.url,
+		[]string{"location"},
+		params,
+		nil,
+		&workersByLocation,
+	)
+	return workersByLocation, err
+}
+
+func (c *Client) SetSchedule(workerId string, entries onfleet.WorkerScheduleEntries) (onfleet.WorkerScheduleEntries, error) {
+	scheduleEntries := onfleet.WorkerScheduleEntries{}
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodPost,
+		c.url,
+		[]string{workerId, "schedule"},
+		nil,
+		entries,
+		&scheduleEntries,
+	)
+	return scheduleEntries, err
+}
+
+// Lists tasks assigned to specified worker.
+// Params must contain a valid "From" millisecond timestamp.
+func (c *Client) ListTasks(workerId string, params onfleet.WorkerTasksListQueryParams) (onfleet.WorkerTasks, error) {
+	workerTasks := onfleet.WorkerTasks{}
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodGet,
+		c.url,
+		[]string{workerId, "tasks"},
+		params,
+		nil,
+		&workerTasks,
+	)
+	return workerTasks, err
+}
+
+// Creates new worker.
 func (c *Client) Create(params onfleet.WorkerCreateParams) (onfleet.Worker, error) {
 	worker := onfleet.Worker{}
 	err := c.call(
@@ -117,4 +164,35 @@ func (c *Client) Create(params onfleet.WorkerCreateParams) (onfleet.Worker, erro
 		&worker,
 	)
 	return worker, err
+}
+
+// Updates worker with specified id.
+func (c *Client) Update(workerId string, params onfleet.WorkerUpdateParams) (onfleet.Worker, error) {
+	worker := onfleet.Worker{}
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodPut,
+		c.url,
+		[]string{workerId},
+		nil,
+		params,
+		&worker,
+	)
+	return worker, err
+}
+
+// Deletes worker with specified id.
+func (c *Client) Delete(workerId string) error {
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodDelete,
+		c.url,
+		[]string{workerId},
+		nil,
+		nil,
+		nil,
+	)
+	return err
 }
