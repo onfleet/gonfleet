@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"time"
 
 	"golang.org/x/time/rate"
 
-	"github.com/onfleet/gonfleet/util"
 	"github.com/onfleet/gonfleet/version"
 )
 
@@ -61,6 +61,44 @@ func parseError(r io.Reader) error {
 	return reqError
 }
 
+// urlAttachPath appends path segments onto provided baseUrl.
+func urlAttachPath(baseUrl string, pathSegments ...string) string {
+	newUrl, err := url.JoinPath(baseUrl, pathSegments...)
+	if err != nil {
+		return baseUrl
+	}
+	return newUrl
+}
+
+// stomp converts a struct to a map[string]any
+func stomp(v any) (map[string]any, error) {
+	m := map[string]any{}
+	b, err := json.Marshal(v)
+	if err != nil {
+		return m, err
+	}
+	err = json.Unmarshal(b, &m)
+	return m, err
+}
+
+// urlAttachQuery sets query parameters on the provided baseUrl.
+func urlAttachQuery(baseUrl string, v any) string {
+	URL, err := url.Parse(baseUrl)
+	if err != nil {
+		return baseUrl
+	}
+	q := URL.Query()
+	params, err := stomp(v)
+	if err != nil {
+		return baseUrl
+	}
+	for k, v := range params {
+		q.Set(k, fmt.Sprintf("%v", v))
+	}
+	URL.RawQuery = q.Encode()
+	return URL.String()
+}
+
 type Caller func(
 	apiKey string,
 	rlHttpClient *RlHttpClient,
@@ -87,10 +125,10 @@ func Call(
 
 	url := baseUrl
 	if pathSegments != nil {
-		url = util.UrlAttachPath(url, pathSegments...)
+		url = urlAttachPath(url, pathSegments...)
 	}
 	if queryParams != nil {
-		url = util.UrlAttachQuery(url, queryParams)
+		url = urlAttachQuery(url, queryParams)
 	}
 
 	switch method {
