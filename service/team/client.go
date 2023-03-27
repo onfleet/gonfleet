@@ -23,7 +23,7 @@ func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, call netw.
 	}
 }
 
-// Gets a single team.
+// Reference https://docs.onfleet.com/reference/get-single-team
 func (c *Client) Get(teamId string) (onfleet.Team, error) {
 	team := onfleet.Team{}
 	err := c.call(

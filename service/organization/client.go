@@ -25,6 +25,7 @@ func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, altUrl str
 	}
 }
 
+// Reference https://docs.onfleet.com/reference/get-details
 func (c *Client) Get() (onfleet.Organization, error) {
 	organization := onfleet.Organization{}
 	err := c.call(
@@ -40,6 +41,7 @@ func (c *Client) Get() (onfleet.Organization, error) {
 	return organization, err
 }
 
+// Reference https://docs.onfleet.com/reference/get-delegatee-details
 func (c *Client) GetDelegate(orgId string) (onfleet.OrganizationDelegate, error) {
 	delegate := onfleet.OrganizationDelegate{}
 	err := c.call(

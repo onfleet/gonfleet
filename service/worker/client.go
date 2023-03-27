@@ -23,7 +23,7 @@ func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, call netw.
 	}
 }
 
-// Gets single worker by id.
+// Reference https://docs.onfleet.com/reference/get-single-worker
 func (c *Client) Get(workerId string) (onfleet.Worker, error) {
 	worker := onfleet.Worker{}
 	err := c.call(
@@ -39,10 +39,7 @@ func (c *Client) Get(workerId string) (onfleet.Worker, error) {
 	return worker, err
 }
 
-// Gets single worker with query params.
-//
-// Note that (as opposed to Get returning onfleet.Worker) GetWithQuery returns map[string]any.
-// This is necessary as using the params "Filter" allows for partial onfleet Worker data to be returned.
+// Reference https://docs.onfleet.com/reference/get-single-worker
 func (c *Client) GetWithQuery(workerId string, params onfleet.WorkerGetQueryParams) (map[string]any, error) {
 	worker := map[string]any{}
 	err := c.call(
@@ -58,7 +55,7 @@ func (c *Client) GetWithQuery(workerId string, params onfleet.WorkerGetQueryPara
 	return worker, err
 }
 
-// List fetches all workers.
+// Reference https://docs.onfleet.com/reference/list-workers
 func (c *Client) List() ([]onfleet.Worker, error) {
 	workers := []onfleet.Worker{}
 	err := c.call(
@@ -74,7 +71,7 @@ func (c *Client) List() ([]onfleet.Worker, error) {
 	return workers, err
 }
 
-// Lists workers with query params.
+// Reference // Reference https://docs.onfleet.com/reference/list-workers
 func (c *Client) ListWithQuery(params onfleet.WorkerListQueryParams) ([]map[string]any, error) {
 	workers := []map[string]any{}
 	err := c.call(
@@ -90,7 +87,7 @@ func (c *Client) ListWithQuery(params onfleet.WorkerListQueryParams) ([]map[stri
 	return workers, err
 }
 
-// Gets single worker schedule.
+// Reference https://docs.onfleet.com/reference/get-workers-schedule
 func (c *Client) GetSchedule(workerId string) (onfleet.WorkerScheduleEntries, error) {
 	scheduleEntries := onfleet.WorkerScheduleEntries{}
 	err := c.call(
@@ -106,7 +103,7 @@ func (c *Client) GetSchedule(workerId string) (onfleet.WorkerScheduleEntries, er
 	return scheduleEntries, err
 }
 
-// Lists workers by lat long location with optional radius param.
+// Reference https://docs.onfleet.com/reference/get-workers-by-location
 func (c *Client) ListWorkersByLocation(params onfleet.WorkersByLocationListQueryParams) (onfleet.WorkersByLocation, error) {
 	workersByLocation := onfleet.WorkersByLocation{}
 	err := c.call(
@@ -122,7 +119,7 @@ func (c *Client) ListWorkersByLocation(params onfleet.WorkersByLocationListQuery
 	return workersByLocation, err
 }
 
-// Sets single worker's schedule.
+// Reference https://docs.onfleet.com/reference/set-workers-schedule
 func (c *Client) SetSchedule(workerId string, entries onfleet.WorkerScheduleEntries) (onfleet.WorkerScheduleEntries, error) {
 	scheduleEntries := onfleet.WorkerScheduleEntries{}
 	err := c.call(
@@ -138,8 +135,7 @@ func (c *Client) SetSchedule(workerId string, entries onfleet.WorkerScheduleEntr
 	return scheduleEntries, err
 }
 
-// Lists tasks assigned to specified worker.
-// Params must contain a valid "From" millisecond timestamp.
+// Reference https://docs.onfleet.com/reference/list-workers-assigned-tasks
 func (c *Client) ListTasks(workerId string, params onfleet.WorkerTasksListQueryParams) (onfleet.WorkerTasks, error) {
 	workerTasks := onfleet.WorkerTasks{}
 	err := c.call(
@@ -155,7 +151,7 @@ func (c *Client) ListTasks(workerId string, params onfleet.WorkerTasksListQueryP
 	return workerTasks, err
 }
 
-// Creates new worker.
+// Reference https://docs.onfleet.com/reference/create-worker
 func (c *Client) Create(params onfleet.WorkerCreateParams) (onfleet.Worker, error) {
 	worker := onfleet.Worker{}
 	err := c.call(
@@ -171,7 +167,7 @@ func (c *Client) Create(params onfleet.WorkerCreateParams) (onfleet.Worker, erro
 	return worker, err
 }
 
-// Updates worker.
+// Reference https://docs.onfleet.com/reference/update-worker
 func (c *Client) Update(workerId string, params onfleet.WorkerUpdateParams) (onfleet.Worker, error) {
 	worker := onfleet.Worker{}
 	err := c.call(
@@ -187,7 +183,7 @@ func (c *Client) Update(workerId string, params onfleet.WorkerUpdateParams) (onf
 	return worker, err
 }
 
-// Deletes worker.
+// Reference https://docs.onfleet.com/reference/delete-worker
 func (c *Client) Delete(workerId string) error {
 	err := c.call(
 		c.apiKey,

@@ -1,7 +1,5 @@
 package onfleet
 
-// Onfleet Container.
-// Reference https://docs.onfleet.com/reference/containers.
 type Container struct {
 	ActiveTask       *string       `json:"activeTask"`
 	ID               string        `json:"id"`

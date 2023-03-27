@@ -1,7 +1,5 @@
 package onfleet
 
-// Onfleet Recipient
-// Reference https://docs.onfleet.com/reference/recipients
 type Recipient struct {
 	ID                   string     `json:"id"`
 	TimeCreated          int64      `json:"timeCreated"`

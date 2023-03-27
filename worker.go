@@ -1,7 +1,5 @@
 package onfleet
 
-// Onfleet Worker.
-// Reference https://docs.onfleet.com/reference/workers.
 type Worker struct {
 	AccountStatus                   WorkerAccountStatus        `json:"accountStatus"`
 	ActiveTask                      *string                    `json:"activeTask"`
@@ -68,8 +66,6 @@ const (
 	WorkerAccountStatusInvited  WorkerAccountStatus = "INVITED"
 )
 
-// Onfleet Worker Schedule
-// Reference https://docs.onfleet.com/reference/get-workers-schedule
 type WorkerSchedule struct {
 	Date     string    `json:"date"`
 	Shifts   [][]int64 `json:"shifts"`
@@ -125,23 +121,17 @@ type WorkerAnalyticsTaskCounts struct {
 }
 
 type WorkerGetQueryParams struct {
-	// Analytics indicates whether analytics data should be includes on the retrieved worker object
-	Analytics bool `json:"analytics,omitempty"`
-	// Filter is comma separated list of worker fields to return
-	Filter string `json:"filter,omitempty"`
-	From   int64  `json:"from,omitempty,string"`
-	To     int64  `json:"to,omitempty,string"`
+	Analytics bool   `json:"analytics,omitempty"`
+	Filter    string `json:"filter,omitempty"`
+	From      int64  `json:"from,omitempty,string"`
+	To        int64  `json:"to,omitempty,string"`
 }
 
 type WorkerListQueryParams struct {
-	// Filter is comma separated list of worker fields to return
 	Filter string `json:"filter,omitempty"`
-	// Phones is a comma separated list of workers' phone numbers
 	Phones string `json:"phones,omitempty"`
-	// States is comma separeted list of worker states
 	States string `json:"states,omitempty"`
-	// Teams is a comma separated list of team ids worker must be part of
-	Teams string `json:"teams,omitempty"`
+	Teams  string `json:"teams,omitempty"`
 }
 
 type WorkersByLocation struct {
@@ -183,7 +173,6 @@ type WorkerCreateParams struct {
 }
 
 type WorkerParamsAddressRouting struct {
-	// Routing should be set to a destination id
 	Routing string `json:"routing"`
 }
 

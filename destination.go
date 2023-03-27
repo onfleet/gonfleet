@@ -12,8 +12,6 @@ type Destination struct {
 	Warnings         []any               `json:"warnings"`
 }
 
-// Location is longitude and latitude.
-// In that order :)
 type DestinationLocation []float64
 
 type DestinationAddress struct {
@@ -36,6 +34,5 @@ type DestinationCreateParams struct {
 }
 
 type DestinationOptions struct {
-	// Language is a ISO standard two letter country code
 	Language string `json:"language,omitempty"`
 }

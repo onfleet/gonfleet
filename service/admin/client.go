@@ -23,7 +23,7 @@ func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, call netw.
 	}
 }
 
-// Lists all administrator in organization.
+// Reference https://docs.onfleet.com/reference/list-administrators
 func (c *Client) List() ([]onfleet.Admin, error) {
 	admins := []onfleet.Admin{}
 	err := c.call(
@@ -39,7 +39,7 @@ func (c *Client) List() ([]onfleet.Admin, error) {
 	return admins, err
 }
 
-// Creates a new administrator.
+// Reference https://docs.onfleet.com/reference/create-administrator
 func (c *Client) Create(params onfleet.AdminCreateParams) (onfleet.Admin, error) {
 	admin := onfleet.Admin{}
 	err := c.call(
@@ -55,8 +55,7 @@ func (c *Client) Create(params onfleet.AdminCreateParams) (onfleet.Admin, error)
 	return admin, err
 }
 
-// Updates an administrator.
-// If updating email address further email verification will be required before change is processed.
+// Reference https://docs.onfleet.com/reference/update-administrator
 func (c *Client) Update(adminId string, params onfleet.AdminUpdateParams) (onfleet.Admin, error) {
 	admin := onfleet.Admin{}
 	err := c.call(
@@ -72,7 +71,7 @@ func (c *Client) Update(adminId string, params onfleet.AdminUpdateParams) (onfle
 	return admin, err
 }
 
-// Deletes an admin.
+// Reference https://docs.onfleet.com/reference/delete-administrator
 func (c *Client) Delete(adminId string) error {
 	err := c.call(
 		c.apiKey,
