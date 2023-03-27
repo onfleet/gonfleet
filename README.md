@@ -20,7 +20,6 @@ For comprehensive documentation / examples, visit [Onfleet API reference](https:
 import (
     "log"
     "os"
-
     "github.com/onfleet/gonfleet/client"
 )
 
@@ -39,8 +38,7 @@ if err != nil {
 ```go
 import (
     "fmt"
-
-	"github.com/onfleet/gonfleet"
+    "github.com/onfleet/gonfleet"
     "github.com/onfleet/gonfleet/client"
 )
 
@@ -63,5 +61,5 @@ if err != nil {
     return
 }
 
-// do something with worker
+// do something with worker ...
 ```
