@@ -23,7 +23,7 @@ func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, call netw.
 	}
 }
 
-// Get gets a single worker.
+// Gets single worker by id.
 func (c *Client) Get(workerId string) (onfleet.Worker, error) {
 	worker := onfleet.Worker{}
 	err := c.call(
@@ -39,7 +39,10 @@ func (c *Client) Get(workerId string) (onfleet.Worker, error) {
 	return worker, err
 }
 
-// GetWithQuery gets a single worker with query params.
+// Gets single worker with query params.
+//
+// Note that (as opposed to Get returning onfleet.Worker) GetWithQuery returns map[string]any.
+// This is necessary as using the params "Filter" allows for partial onfleet Worker data to be returned.
 func (c *Client) GetWithQuery(workerId string, params onfleet.WorkerGetQueryParams) (map[string]any, error) {
 	worker := map[string]any{}
 	err := c.call(
@@ -71,7 +74,7 @@ func (c *Client) List() ([]onfleet.Worker, error) {
 	return workers, err
 }
 
-// List fetches all workers with specified query param.
+// Lists workers with query params.
 func (c *Client) ListWithQuery(params onfleet.WorkerListQueryParams) ([]map[string]any, error) {
 	workers := []map[string]any{}
 	err := c.call(
@@ -87,7 +90,7 @@ func (c *Client) ListWithQuery(params onfleet.WorkerListQueryParams) ([]map[stri
 	return workers, err
 }
 
-// GetSchedule gets the specified worker's schedule.
+// Gets single worker schedule.
 func (c *Client) GetSchedule(workerId string) (onfleet.WorkerScheduleEntries, error) {
 	scheduleEntries := onfleet.WorkerScheduleEntries{}
 	err := c.call(
@@ -103,6 +106,7 @@ func (c *Client) GetSchedule(workerId string) (onfleet.WorkerScheduleEntries, er
 	return scheduleEntries, err
 }
 
+// Lists workers by lat long location with optional radius param.
 func (c *Client) ListWorkersByLocation(params onfleet.WorkersByLocationListQueryParams) (onfleet.WorkersByLocation, error) {
 	workersByLocation := onfleet.WorkersByLocation{}
 	err := c.call(
@@ -118,6 +122,7 @@ func (c *Client) ListWorkersByLocation(params onfleet.WorkersByLocationListQuery
 	return workersByLocation, err
 }
 
+// Sets single worker's schedule.
 func (c *Client) SetSchedule(workerId string, entries onfleet.WorkerScheduleEntries) (onfleet.WorkerScheduleEntries, error) {
 	scheduleEntries := onfleet.WorkerScheduleEntries{}
 	err := c.call(
@@ -166,7 +171,7 @@ func (c *Client) Create(params onfleet.WorkerCreateParams) (onfleet.Worker, erro
 	return worker, err
 }
 
-// Updates worker with specified id.
+// Updates worker.
 func (c *Client) Update(workerId string, params onfleet.WorkerUpdateParams) (onfleet.Worker, error) {
 	worker := onfleet.Worker{}
 	err := c.call(
@@ -182,7 +187,7 @@ func (c *Client) Update(workerId string, params onfleet.WorkerUpdateParams) (onf
 	return worker, err
 }
 
-// Deletes worker with specified id.
+// Deletes worker.
 func (c *Client) Delete(workerId string) error {
 	err := c.call(
 		c.apiKey,

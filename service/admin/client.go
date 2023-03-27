@@ -23,7 +23,7 @@ func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, call netw.
 	}
 }
 
-// List fetches all admins.
+// Lists all administrator in organization.
 func (c *Client) List() ([]onfleet.Admin, error) {
 	admins := []onfleet.Admin{}
 	err := c.call(
@@ -72,7 +72,7 @@ func (c *Client) Update(adminId string, params onfleet.AdminUpdateParams) (onfle
 	return admin, err
 }
 
-// Deletes an admin
+// Deletes an admin.
 func (c *Client) Delete(adminId string) error {
 	err := c.call(
 		c.apiKey,
