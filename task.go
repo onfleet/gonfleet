@@ -30,7 +30,7 @@ type Task struct {
 	Quantity                 float64                  `json:"quantity"`
 	Recipients               []Recipient              `json:"recipients"`
 	ScanOnlyRequiredBarcodes bool                     `json:"scanOnlyRequiredBarcodes"`
-	ServiceTime              float32                  `json:"serviceTime"`
+	ServiceTime              float64                  `json:"serviceTime"`
 	ShortId                  string                   `json:"shortId"`
 	State                    TaskState                `json:"state"`
 	TimeCreated              int64                    `json:"timeCreated"`

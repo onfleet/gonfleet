@@ -53,5 +53,5 @@ func (c *Client) GetByShortId(taskShortId string) (onfleet.Task, error) {
 	return task, err
 }
 
-func (c *Client) List() {
+func (c *Client) ListTasks(teamId string) {
 }
