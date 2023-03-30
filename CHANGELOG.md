@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.6](https://github.com/onfleet/gonfleet/compare/v0.1.5...v0.1.6) - 2023-03-26
+* Add
+    * list admins, workers, destinations, tasks, and recipients with metdata query. Method per service named `ListWithMetadataQuery`
+* Change
+    * netw package renamed netwrk
+
 ## [0.1.5](https://github.com/onfleet/gonfleet/compare/v0.1.4...v0.1.5) - 2023-03-26
 * Changed
     * service handler comments only reference official onfleet api docs via url

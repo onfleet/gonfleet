@@ -1,4 +1,4 @@
-package netw
+package netwrk
 
 import (
 	"bytes"
@@ -138,6 +138,9 @@ func Call(
 			url,
 			nil,
 		)
+		if err != nil {
+			return err
+		}
 		request.Header.Set("Accept", "application/json")
 	case "POST", "PUT":
 		body, err := json.Marshal(body)
@@ -150,6 +153,9 @@ func Call(
 			url,
 			buffer,
 		)
+		if err != nil {
+			return err
+		}
 		request.Header.Set("Content-Type", "application/json")
 	}
 

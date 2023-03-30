@@ -4,17 +4,17 @@ import (
 	"net/http"
 
 	"github.com/onfleet/gonfleet"
-	"github.com/onfleet/gonfleet/netw"
+	"github.com/onfleet/gonfleet/netwrk"
 )
 
 type Client struct {
 	apiKey       string
-	rlHttpClient *netw.RlHttpClient
+	rlHttpClient *netwrk.RlHttpClient
 	url          string
-	call         netw.Caller
+	call         netwrk.Caller
 }
 
-func Plug(apiKey string, rlHttpClient *netw.RlHttpClient, url string, call netw.Caller) *Client {
+func Plug(apiKey string, rlHttpClient *netwrk.RlHttpClient, url string, call netwrk.Caller) *Client {
 	return &Client{
 		apiKey:       apiKey,
 		rlHttpClient: rlHttpClient,
@@ -53,4 +53,20 @@ func (c *Client) Create(params onfleet.DestinationCreateParams) (onfleet.Destina
 		&destination,
 	)
 	return destination, err
+}
+
+// Reference https://docs.onfleet.com/reference/querying-by-metadata
+func (c *Client) ListWithMetadataQuery(metadata []onfleet.Metadata) ([]onfleet.Destination, error) {
+	destinations := []onfleet.Destination{}
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodPost,
+		c.url,
+		[]string{"metadata"},
+		nil,
+		metadata,
+		&destinations,
+	)
+	return destinations, err
 }
