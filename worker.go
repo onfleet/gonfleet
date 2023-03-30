@@ -162,21 +162,21 @@ type WorkerTasksListQueryParams struct {
 }
 
 type WorkerCreateParams struct {
-	Addresses   *WorkerParamsAddressRouting `json:"addresses,omitempty"`
-	Capacity    float64                     `json:"capacity,omitempty"`
-	DisplayName string                      `json:"displayName,omitempty"`
-	Metadata    []Metadata                  `json:"metadata,omitempty"`
-	Name        string                      `json:"name"`
-	Phone       string                      `json:"phone"`
-	Teams       []string                    `json:"teams"`
-	Vehicle     *WorkerParamsVehicle        `json:"vehicle,omitempty"`
+	Addresses   *WorkerAddressRoutingParam `json:"addresses,omitempty"`
+	Capacity    float64                    `json:"capacity,omitempty"`
+	DisplayName string                     `json:"displayName,omitempty"`
+	Metadata    []Metadata                 `json:"metadata,omitempty"`
+	Name        string                     `json:"name"`
+	Phone       string                     `json:"phone"`
+	Teams       []string                   `json:"teams"`
+	Vehicle     *WorkerVehicleParam        `json:"vehicle,omitempty"`
 }
 
-type WorkerParamsAddressRouting struct {
+type WorkerAddressRoutingParam struct {
 	Routing string `json:"routing"`
 }
 
-type WorkerParamsVehicle struct {
+type WorkerVehicleParam struct {
 	Color        string            `json:"color,omitempty"`
 	Description  string            `json:"description,omitempty"`
 	LicensePlate string            `json:"licensePlate,omitempty"`
@@ -184,11 +184,11 @@ type WorkerParamsVehicle struct {
 }
 
 type WorkerUpdateParams struct {
-	Addresses   *WorkerParamsAddressRouting `json:"addresses,omitempty"`
-	Capacity    float64                     `json:"capacity,omitempty"`
-	DisplayName string                      `json:"displayName,omitempty"`
-	Metadata    []Metadata                  `json:"metadata,omitempty"`
-	Name        string                      `json:"name,omitempty"`
-	Teams       []string                    `json:"teams,omitempty"`
-	Vehicle     *WorkerParamsVehicle        `json:"vehicle,omitempty"`
+	Addresses   *WorkerAddressRoutingParam `json:"addresses,omitempty"`
+	Capacity    float64                    `json:"capacity,omitempty"`
+	DisplayName string                     `json:"displayName,omitempty"`
+	Metadata    []Metadata                 `json:"metadata,omitempty"`
+	Name        string                     `json:"name,omitempty"`
+	Teams       []string                   `json:"teams,omitempty"`
+	Vehicle     *WorkerVehicleParam        `json:"vehicle,omitempty"`
 }

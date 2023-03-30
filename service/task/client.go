@@ -74,4 +74,18 @@ func (c *Client) ListWithMetadataQuery(metadata []onfleet.Metadata) ([]onfleet.T
 	return tasks, err
 }
 
-// Reference
+// Reference https://docs.onfleet.com/reference/create-task
+func (c *Client) Create(params onfleet.TaskCreateParams) (onfleet.Task, error) {
+	task := onfleet.Task{}
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodPost,
+		c.url,
+		nil,
+		nil,
+		params,
+		&task,
+	)
+	return task, err
+}

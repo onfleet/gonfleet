@@ -17,18 +17,3 @@ const (
 	MetadataVisibilityOptionDashboard MetadataVisibilityOption = "dashboard"
 	MetadataVisibilityOptionWorker    MetadataVisibilityOption = "worker"
 )
-
-type MetadataMatchedResult struct {
-	ID       string     `json:"id"`
-	Metadata []Metadata `json:"metadata"`
-}
-
-type MetadataQueryKey = string
-
-const (
-	MetadataQueryKeyAdmins       MetadataQueryKey = "admins"
-	MetadataQueryKeyDestinations MetadataQueryKey = "destinations"
-	MetadataQueryKeyRecipients   MetadataQueryKey = "recipients"
-	MetadataQueryKeyTasks        MetadataQueryKey = "tasks"
-	MetadataQueryKeyWorkers      MetadataQueryKey = "workers"
-)
