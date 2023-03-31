@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.3](https://github.com/onfleet/gonfleet/compare/v0.2.2...v0.2.3) - 2023-03-31
+* Fix
+    * resync changelog with current version
+
 ## [0.2.2](https://github.com/onfleet/gonfleet/compare/v0.2.1...v0.2.2) - 2023-03-31
 * Change
     * README task creation example to use RecipientCreateParams
