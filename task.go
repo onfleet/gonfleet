@@ -128,7 +128,7 @@ type TaskParams struct {
 	CompleteBefore int64                `json:"completeBefore,omitempty"`
 	Container      *TaskContainer       `json:"container,omitempty"`
 	Dependencies   []string             `json:"dependencies,omitempty"`
-	// Destination can string destination id or destination object onfleet.Destination
+	// Destination can string destination id or destination object onfleet.DestinationCreateParams
 	Destination    any        `json:"destination,omitempty"`
 	Executor       string     `json:"executor,omitempty"`
 	Merchant       string     `json:"merchant,omitempty"`
@@ -225,7 +225,7 @@ type TaskCloneParams struct {
 type TaskCloneOverridesParam struct {
 	CompleteAfter  int64 `json:"completeAfter,omitempty"`
 	CompleteBefore int64 `json:"completeBefore,omitempty"`
-	// Destination can string destination id or destination object onfleet.Destination
+	// Destination can string destination id or destination object onfleet.DestinationCreateParams
 	Destination any        `json:"destination,omitempty"`
 	Metadata    []Metadata `json:"metadata,omitempty"`
 	Notes       string     `json:"notes,omitempty"`

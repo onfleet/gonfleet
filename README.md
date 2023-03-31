@@ -33,6 +33,44 @@ if err != nil {
 // do something with client ...
 ```
 
+### Tasks
+
+```go
+import (
+    "fmt"
+    "github.com/onfleet/gonfleet"
+    "github.com/onfleet/gonfleet/client"
+)
+
+params := onfleet.TaskParams{
+    Destination: onfleet.DestinationCreateParams{
+        Address: onfleet.DestinationAddress{
+            Number:     "8221",
+            Street:     "Sunset Blvd",
+            City:       "Los Angeles",
+            State:      "CA",
+            PostalCode: "90046",
+            Country:    "US",
+        },
+    },
+    Recipients: []onfleet.Recipient{
+        {
+            Name:  "Kurt Cobain",
+            Phone: "+13105550107",
+        },
+    },
+    PickupTask: true,
+}
+
+task, err := client.Tasks.Create(params)
+if err != nil {
+    fmt.Println(err)
+    return
+}
+
+// do something with task ...
+```
+
 ### Workers
 
 ```go
