@@ -7,7 +7,7 @@ type Task struct {
 	CompleteAfter            *int64                   `json:"completeAfter"`
 	CompleteBefore           *int64                   `json:"completeBefore"`
 	CompletionDetails        TaskCompletionDetails    `json:"completionDetails"`
-	Container                TaskContainer            `json:"container"`
+	Container                *TaskContainer           `json:"container"`
 	Creator                  string                   `json:"creator"`
 	DelayTime                *float64                 `json:"delayTime"`
 	Dependencies             []string                 `json:"dependencies"`
@@ -30,12 +30,14 @@ type Task struct {
 	ScanOnlyRequiredBarcodes bool                     `json:"scanOnlyRequiredBarcodes"`
 	ServiceTime              float64                  `json:"serviceTime"`
 	ShortId                  string                   `json:"shortId"`
-	State                    TaskState                `json:"state"`
-	TimeCreated              int64                    `json:"timeCreated"`
-	TimeLastModified         int64                    `json:"timeLastModified"`
-	TrackingUrl              string                   `json:"trackingURL"`
-	TrackingViewed           bool                     `json:"trackingViewed"`
-	Worker                   *string                  `json:"worker"`
+	// SourceTaskId only set on cloned tasks
+	SourceTaskId     string    `json:"sourceTaskId,omitempty"`
+	State            TaskState `json:"state"`
+	TimeCreated      int64     `json:"timeCreated"`
+	TimeLastModified int64     `json:"timeLastModified"`
+	TrackingUrl      string    `json:"trackingURL"`
+	TrackingViewed   bool      `json:"trackingViewed"`
+	Worker           *string   `json:"worker"`
 }
 
 type TaskState int
@@ -93,10 +95,10 @@ type TaskAppearance struct {
 }
 
 type TaskContainer struct {
-	Organization string        `json:"organization"`
-	Team         string        `json:"team"`
+	Organization string        `json:"organization,omitempty"`
+	Team         string        `json:"team,omitempty"`
 	Type         ContainerType `json:"type"`
-	Worker       string        `json:"worker"`
+	Worker       string        `json:"worker,omitempty"`
 }
 
 type TaskBarcodeContainer struct {
@@ -105,12 +107,12 @@ type TaskBarcodeContainer struct {
 }
 
 type TaskBarcode struct {
-	BlockCompletion bool            `json:"blockCompletion"`
-	Data            TaskBarcodeData `json:"data,omitempty"`
+	BlockCompletion bool   `json:"blockCompletion"`
+	Data            string `json:"data,omitempty"`
 }
 
 type TaskCapturedBarcode struct {
-	Data         TaskBarcodeData     `json:"data"`
+	Data         string              `json:"data"`
 	ID           string              `json:"id"`
 	Location     DestinationLocation `json:"location"`
 	Symbology    string              `json:"symbology"`
@@ -118,13 +120,117 @@ type TaskCapturedBarcode struct {
 	WasRequested bool                `json:"wasRequested"`
 }
 
-type TaskBarcodeData string
+type TaskParams struct {
+	Appearance     *TaskAppearanceParam `json:"appearance,omitempty"`
+	AutoAssign     *TaskAutoAssignParam `json:"autoAssign,omitempty"`
+	Barcodes       []TaskBarcode        `json:"barcodes,omitempty"`
+	CompleteAfter  int64                `json:"completeAfter,omitempty"`
+	CompleteBefore int64                `json:"completeBefore,omitempty"`
+	Container      *TaskContainer       `json:"container,omitempty"`
+	Dependencies   []string             `json:"dependencies,omitempty"`
+	// Destination can string destination id or destination object onfleet.Destination
+	Destination    any        `json:"destination,omitempty"`
+	Executor       string     `json:"executor,omitempty"`
+	Merchant       string     `json:"merchant,omitempty"`
+	Metadata       []Metadata `json:"metadata,omitempty"`
+	Notes          string     `json:"notes,omitempty"`
+	PickupTask     bool       `json:"pickupTask"`
+	Quantity       float64    `json:"quantity,omitempty"`
+	RecipientName  string     `json:"recipientName,omitempty"`
+	RecipientNotes string     `json:"recipientNotes,omitempty"`
+	// Recipients can be slice of string recipient ids or recipient objects []onfleet.Recipient
+	Recipients                    any                              `json:"recipients,omitempty"`
+	RecipientSkipSmsNotifications bool                             `json:"recipientSkipSMSNotifications,omitempty"`
+	Requirements                  *TaskCompletionRequirementsParam `json:"requirements,omitempty"`
+	ScanOnlyRequiredBarcodes      bool                             `json:"scanOnlyRequiredBarcodes,omitempty"`
+	ServiceTime                   float64                          `json:"serviceTime,omitempty"`
+	UseMerchantForProxy           bool                             `json:"useMerchantForProxy,omitempty"`
+}
 
-type TaskCreateParams struct {
-	Executor string `json:"executor,omitempty"`
-	Merchant string `json:"merchant,omitempty"`
+type TaskAutoAssignMode string
+
+const (
+	TaskAutoAssignModeDistance TaskAutoAssignMode = "distance"
+	TaskAutoAssignModeLoad     TaskAutoAssignMode = "load"
+)
+
+type TaskAutoAssignParam struct {
+	ConsiderDependencies bool               `json:"considerDependencies,omitempty"`
+	ExcludedWorkerIds    []string           `json:"excludedWorkerIds,omitempty"`
+	MaxAssignedTaskCount int                `json:"maxAssignedTaskCount,omitempty"`
+	Mode                 TaskAutoAssignMode `json:"mode"`
+	Team                 string             `json:"team,omitempty"`
+}
+
+type TaskAutoAssignMultiParams struct {
+	Tasks   []string                        `json:"tasks"`
+	Options TaskAutoAssignMultiOptionsParam `json:"options"`
+}
+
+type TaskAutoAssignMultiOptionsParam struct {
+	ConsiderDependencies         bool               `json:"considerDependencies,omitempty"`
+	ExcludedWorkerIds            []string           `json:"excludedWorkerIds,omitempty"`
+	MaxAssignedTaskCount         int                `json:"maxAssignedTaskCount,omitempty"`
+	Mode                         TaskAutoAssignMode `json:"mode"`
+	RestrictAutoAssignmentToTeam bool               `json:"restrictAutoAssignmentToTeam"`
+	Teams                        []string           `json:"teams,omitempty"`
+}
+
+type TaskAutoAssignMultiResponse struct {
+	AssignedTasksCount int      `json:"assignedTasksCount"`
+	AssignedTasks      []string `json:"assignedTasks"`
+}
+
+type TaskCompletionRequirementsParam struct {
+	MinimumAge int  `json:"minimumAge,omitempty"`
+	Notes      bool `json:"notes,omitempty"`
+	Photo      bool `json:"photo,omitempty"`
+	Signature  bool `json:"signature,omitempty"`
+}
+
+type TaskAppearanceParam struct {
+	TriangleColor string `json:"triangleColor"`
 }
 
 type TaskBatchCreateParams struct {
-	Tasks []Task `json:"tasks"`
+	Tasks []TaskParams `json:"tasks"`
+}
+
+type TaskBatchCreateResponse struct {
+	Tasks  []Task                 `json:"tasks"`
+	Errors []TaskBatchCreateError `json:"errors"`
+}
+
+type TaskBatchCreateError struct {
+	Error RequestErrorMessage `json:"error"`
+	Task  TaskParams          `json:"task"`
+}
+
+type TaskForceCompletionParams struct {
+	CompletionDetails TaskForceCompletionDetailsParam `json:"completionDetails"`
+}
+
+type TaskForceCompletionDetailsParam struct {
+	Success bool   `json:"success"`
+	Notes   string `json:"notes,omitempty"`
+}
+
+type TaskCloneParams struct {
+	IncludeBarcodes     bool                     `json:"includeBarcodes"`
+	IncludeDependencies bool                     `json:"includeDependencies"`
+	IncludeMetadata     bool                     `json:"includeMetadata"`
+	Overrides           *TaskCloneOverridesParam `json:"overrides,omitempty"`
+}
+
+type TaskCloneOverridesParam struct {
+	CompleteAfter  int64 `json:"completeAfter,omitempty"`
+	CompleteBefore int64 `json:"completeBefore,omitempty"`
+	// Destination can string destination id or destination object onfleet.Destination
+	Destination any        `json:"destination,omitempty"`
+	Metadata    []Metadata `json:"metadata,omitempty"`
+	Notes       string     `json:"notes,omitempty"`
+	PickupTask  bool       `json:"pickupTask"`
+	// Recipients can be slice of string recipient ids or recipient objects []onfleet.Recipient
+	Recipients  any     `json:"recipients,omitempty"`
+	ServiceTime float64 `json:"serviceTime,omitempty"`
 }

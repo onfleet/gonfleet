@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/onfleet/gonfleet/netw"
+	"github.com/onfleet/gonfleet/netwrk"
 	"github.com/onfleet/gonfleet/service/admin"
 	"github.com/onfleet/gonfleet/service/container"
 	"github.com/onfleet/gonfleet/service/destination"
@@ -75,7 +75,7 @@ func New(apiKey string, params *InitParams) (*API, error) {
 		}
 	}
 
-	rlHttpClient := netw.NewRlHttpClient(
+	rlHttpClient := netwrk.NewRlHttpClient(
 		rate.NewLimiter(rate.Every(1*time.Second), 18),
 		timeout,
 	)
@@ -86,62 +86,62 @@ func New(apiKey string, params *InitParams) (*API, error) {
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/admins",
-		netw.Call,
+		netwrk.Call,
 	)
 	api.Containers = container.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/containers",
-		netw.Call,
+		netwrk.Call,
 	)
 	api.Destinations = destination.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/destinations",
-		netw.Call,
+		netwrk.Call,
 	)
 	api.Hubs = hub.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/hubs",
-		netw.Call,
+		netwrk.Call,
 	)
 	api.Organizations = organization.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/organization",
 		fullBaseUrl+"/organizations",
-		netw.Call,
+		netwrk.Call,
 	)
 	api.Recipients = recipient.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/recipients",
-		netw.Call,
+		netwrk.Call,
 	)
 	api.Tasks = task.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/tasks",
-		netw.Call,
+		netwrk.Call,
 	)
 	api.Teams = team.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/teams",
-		netw.Call,
+		netwrk.Call,
 	)
 	api.Webhooks = webhook.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/webhooks",
-		netw.Call,
+		netwrk.Call,
 	)
 	api.Workers = worker.Plug(
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/workers",
-		netw.Call,
+		netwrk.Call,
 	)
 
 	return &api, nil

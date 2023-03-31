@@ -7,7 +7,7 @@ type Metadata struct {
 	Subtype    string                     `json:"subtype,omitempty"`
 	Type       string                     `json:"type"`
 	Value      any                        `json:"value"`
-	Visibility []MetadataVisibilityOption `json:"visibility"`
+	Visibility []MetadataVisibilityOption `json:"visibility,omitempty"`
 }
 
 type MetadataVisibilityOption string
@@ -17,8 +17,3 @@ const (
 	MetadataVisibilityOptionDashboard MetadataVisibilityOption = "dashboard"
 	MetadataVisibilityOptionWorker    MetadataVisibilityOption = "worker"
 )
-
-type MetadataMatchedResult struct {
-	ID       string     `json:"id"`
-	Metadata []Metadata `json:"metadata"`
-}
