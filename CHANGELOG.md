@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.1](https://github.com/onfleet/gonfleet/compare/v0.2.0...v0.2.1) - 2023-03-30
+* Remove
+    * util package. no longer needed / relevant
+
 ## [0.2.0](https://github.com/onfleet/gonfleet/compare/v0.1.6...v0.2.0) - 2023-03-30
 * Add
     * README example of task creation
