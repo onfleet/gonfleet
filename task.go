@@ -138,7 +138,7 @@ type TaskParams struct {
 	Quantity       float64    `json:"quantity,omitempty"`
 	RecipientName  string     `json:"recipientName,omitempty"`
 	RecipientNotes string     `json:"recipientNotes,omitempty"`
-	// Recipients can be slice of string recipient ids or recipient objects []onfleet.Recipient
+	// Recipients can be slice of string recipient ids or recipient objects []onfleet.RecipientCreateParams
 	Recipients                    any                              `json:"recipients,omitempty"`
 	RecipientSkipSmsNotifications bool                             `json:"recipientSkipSMSNotifications,omitempty"`
 	Requirements                  *TaskCompletionRequirementsParam `json:"requirements,omitempty"`
@@ -230,7 +230,7 @@ type TaskCloneOverridesParam struct {
 	Metadata    []Metadata `json:"metadata,omitempty"`
 	Notes       string     `json:"notes,omitempty"`
 	PickupTask  bool       `json:"pickupTask"`
-	// Recipients can be slice of string recipient ids or recipient objects []onfleet.Recipient
+	// Recipients can be slice of string recipient ids or recipient objects []onfleet.RecipientCreateParams
 	Recipients  any     `json:"recipients,omitempty"`
 	ServiceTime float64 `json:"serviceTime,omitempty"`
 }
