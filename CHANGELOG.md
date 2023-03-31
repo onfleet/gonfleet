@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0](https://github.com/onfleet/gonfleet/compare/v0.1.6...v0.2.0) - 2023-03-30
+* Add
+    * README example of task creation
+* Fix
+    * task creation comment suggests `DestinationCreateParams` over `Destination`
+
 ## [0.1.6](https://github.com/onfleet/gonfleet/compare/v0.1.5...v0.1.6) - 2023-03-30
 * Add
     * list admins, workers, destinations, tasks, and recipients with metdata query. Method per service named `ListWithMetadataQuery`
