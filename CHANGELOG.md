@@ -1,8 +1,9 @@
 # Changelog
 
 ## [0.2.2](https://github.com/onfleet/gonfleet/compare/v0.2.1...v0.2.2) - 2023-03-31
-* Remove
-    * util package. no longer needed / relevant
+* Change
+    * README task creation example to use RecipientCreateParams
+    * `DestinationCreateParams` to included `Metadata`
 
 ## [0.2.1](https://github.com/onfleet/gonfleet/compare/v0.2.0...v0.2.1) - 2023-03-30
 * Remove
