@@ -163,6 +163,25 @@ type TaskAutoAssignParam struct {
 	Team                 string             `json:"team,omitempty"`
 }
 
+type TaskAutoAssignMultiParams struct {
+	Tasks   []string                        `json:"tasks"`
+	Options TaskAutoAssignMultiOptionsParam `json:"options"`
+}
+
+type TaskAutoAssignMultiOptionsParam struct {
+	ConsiderDependencies         bool               `json:"considerDependencies,omitempty"`
+	ExcludedWorkerIds            []string           `json:"excludedWorkerIds,omitempty"`
+	MaxAssignedTaskCount         int                `json:"maxAssignedTaskCount,omitempty"`
+	Mode                         TaskAutoAssignMode `json:"mode"`
+	RestrictAutoAssignmentToTeam bool               `json:"restrictAutoAssignmentToTeam"`
+	Teams                        []string           `json:"teams,omitempty"`
+}
+
+type TaskAutoAssignMultiResponse struct {
+	AssignedTasksCount int      `json:"assignedTasksCount"`
+	AssignedTasks      []string `json:"assignedTasks"`
+}
+
 type TaskCompletionRequirementsParam struct {
 	MinimumAge int  `json:"minimumAge,omitempty"`
 	Notes      bool `json:"notes,omitempty"`

@@ -3,7 +3,7 @@
 ## [0.1.6](https://github.com/onfleet/gonfleet/compare/v0.1.5...v0.1.6) - 2023-03-30
 * Add
     * list admins, workers, destinations, tasks, and recipients with metdata query. Method per service named `ListWithMetadataQuery`
-    * task `Create`, `BatchCreate`, `Update`, `ForceComplete`
+    * task `Create`, `BatchCreate`, `Update`, `ForceComplete`, `Clone`, `Delete`
 * Change
     * netw package renamed netwrk
 

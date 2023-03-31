@@ -167,3 +167,19 @@ func (c *Client) Delete(taskId string) error {
 	)
 	return err
 }
+
+// Reference https://docs.onfleet.com/reference/automatically-assign-list-of-tasks
+func (c *Client) AutoAssignMulti(params onfleet.TaskAutoAssignMultiParams) (onfleet.TaskAutoAssignMultiResponse, error) {
+	autoAssignMulti := onfleet.TaskAutoAssignMultiResponse{}
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodPost,
+		c.url,
+		[]string{"autoAssign"},
+		nil,
+		params,
+		&autoAssignMulti,
+	)
+	return autoAssignMulti, err
+}
