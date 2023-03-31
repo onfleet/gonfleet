@@ -120,7 +120,7 @@ type TaskCapturedBarcode struct {
 
 type TaskBarcodeData string
 
-type TaskCreateParams struct {
+type TaskParams struct {
 	Appearance     *TaskAppearanceParam `json:"appearance,omitempty"`
 	AutoAssign     *TaskAutoAssignParam `json:"autoAssign,omitempty"`
 	CompleteAfter  int64                `json:"completeAfter,omitempty"`
@@ -137,12 +137,12 @@ type TaskCreateParams struct {
 	RecipientName  string  `json:"recipientName,omitempty"`
 	RecipientNotes string  `json:"recipientNotes,omitempty"`
 	// Recpinets can be slice of string recipient ids or recipient objects []onfleet.Recipient
-	Recipients                    any                                    `json:"recipients,omitempty"`
-	RecipientSkipSmsNotifications bool                                   `json:"recipientSkipSMSNotifications,omitempty"`
-	Requirements                  *TaskCompletionRequirementsCreateParam `json:"requirements,omitempty"`
-	ScanOnlyRequiredBarcodes      bool                                   `json:"scanOnlyRequiredBarcodes,omitempty"`
-	ServiceTime                   float64                                `json:"serviceTime,omitempty"`
-	UseMerchantForProxy           bool                                   `json:"useMerchantForProxy,omitempty"`
+	Recipients                    any                              `json:"recipients,omitempty"`
+	RecipientSkipSmsNotifications bool                             `json:"recipientSkipSMSNotifications,omitempty"`
+	Requirements                  *TaskCompletionRequirementsParam `json:"requirements,omitempty"`
+	ScanOnlyRequiredBarcodes      bool                             `json:"scanOnlyRequiredBarcodes,omitempty"`
+	ServiceTime                   float64                          `json:"serviceTime,omitempty"`
+	UseMerchantForProxy           bool                             `json:"useMerchantForProxy,omitempty"`
 }
 
 type TaskAutoAssignMode string
@@ -160,7 +160,7 @@ type TaskAutoAssignParam struct {
 	Team                 string             `json:"team,omitempty"`
 }
 
-type TaskCompletionRequirementsCreateParam struct {
+type TaskCompletionRequirementsParam struct {
 	MinimumAge int  `json:"minimumAge,omitempty"`
 	Notes      bool `json:"notes,omitempty"`
 	Photo      bool `json:"photo,omitempty"`
@@ -172,7 +172,7 @@ type TaskAppearanceParam struct {
 }
 
 type TaskBatchCreateParams struct {
-	Tasks []TaskCreateParams `json:"tasks"`
+	Tasks []TaskParams `json:"tasks"`
 }
 
 type TaskBatchCreateResponse struct {
@@ -182,5 +182,14 @@ type TaskBatchCreateResponse struct {
 
 type TaskBatchCreateError struct {
 	Error RequestErrorMessage `json:"error"`
-	Task  TaskCreateParams    `json:"task"`
+	Task  TaskParams          `json:"task"`
+}
+
+type TaskForceCompletionParams struct {
+	CompletionDetails TaskForceCompletionDetailsParam `json:"completionDetails"`
+}
+
+type TaskForceCompletionDetailsParam struct {
+	Success bool   `json:"success"`
+	Notes   string `json:"notes,omitempty"`
 }

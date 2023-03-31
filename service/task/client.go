@@ -75,7 +75,7 @@ func (c *Client) ListWithMetadataQuery(metadata []onfleet.Metadata) ([]onfleet.T
 }
 
 // Reference https://docs.onfleet.com/reference/create-task
-func (c *Client) Create(params onfleet.TaskCreateParams) (onfleet.Task, error) {
+func (c *Client) Create(params onfleet.TaskParams) (onfleet.Task, error) {
 	task := onfleet.Task{}
 	err := c.call(
 		c.apiKey,
@@ -104,4 +104,35 @@ func (c *Client) BatchCreate(params onfleet.TaskBatchCreateParams) (onfleet.Task
 		&batchTasks,
 	)
 	return batchTasks, err
+}
+
+// Reference https://docs.onfleet.com/reference/update-task
+func (c *Client) Update(taskId string, params onfleet.TaskParams) (onfleet.Task, error) {
+	task := onfleet.Task{}
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodPut,
+		c.url,
+		[]string{taskId},
+		nil,
+		params,
+		&task,
+	)
+	return task, err
+}
+
+// Reference https://docs.onfleet.com/reference/complete-task
+func (c *Client) ForceComplete(taskId string, params onfleet.TaskForceCompletionParams) error {
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodPost,
+		c.url,
+		[]string{taskId, "complete"},
+		nil,
+		params,
+		nil,
+	)
+	return err
 }
