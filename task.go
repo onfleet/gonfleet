@@ -107,12 +107,12 @@ type TaskBarcodeContainer struct {
 }
 
 type TaskBarcode struct {
-	BlockCompletion bool            `json:"blockCompletion"`
-	Data            TaskBarcodeData `json:"data,omitempty"`
+	BlockCompletion bool   `json:"blockCompletion"`
+	Data            string `json:"data,omitempty"`
 }
 
 type TaskCapturedBarcode struct {
-	Data         TaskBarcodeData     `json:"data"`
+	Data         string              `json:"data"`
 	ID           string              `json:"id"`
 	Location     DestinationLocation `json:"location"`
 	Symbology    string              `json:"symbology"`
@@ -120,11 +120,10 @@ type TaskCapturedBarcode struct {
 	WasRequested bool                `json:"wasRequested"`
 }
 
-type TaskBarcodeData string
-
 type TaskParams struct {
 	Appearance     *TaskAppearanceParam `json:"appearance,omitempty"`
 	AutoAssign     *TaskAutoAssignParam `json:"autoAssign,omitempty"`
+	Barcodes       []TaskBarcode        `json:"barcodes,omitempty"`
 	CompleteAfter  int64                `json:"completeAfter,omitempty"`
 	CompleteBefore int64                `json:"completeBefore,omitempty"`
 	Container      *TaskContainer       `json:"container,omitempty"`
