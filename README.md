@@ -53,7 +53,7 @@ params := onfleet.TaskParams{
             Country:    "US",
         },
     },
-    Recipients: []onfleet.Recipient{
+    Recipients: []onfleet.RecipientCreateParams{
         {
             Name:  "Kurt Cobain",
             Phone: "+13105550107",

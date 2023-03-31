@@ -29,6 +29,7 @@ type DestinationAddress struct {
 type DestinationCreateParams struct {
 	Address  DestinationAddress       `json:"address"`
 	Location DestinationLocation      `json:"location,omitempty"`
+	Metadata []Metadata               `json:"metadata,omitempty"`
 	Notes    string                   `json:"notes,omitempty"`
 	Options  *DestinationOptionsParam `json:"options,omitempty"`
 }
