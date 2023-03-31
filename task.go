@@ -137,7 +137,7 @@ type TaskCreateParams struct {
 	RecipientName  string  `json:"recipientName,omitempty"`
 	RecipientNotes string  `json:"recipientNotes,omitempty"`
 	// Recpinets can be slice of string recipient ids or recipient objects []onfleet.Recipient
-	Recipients                    []any                                  `json:"recipients,omitempty"`
+	Recipients                    any                                    `json:"recipients,omitempty"`
 	RecipientSkipSmsNotifications bool                                   `json:"recipientSkipSMSNotifications,omitempty"`
 	Requirements                  *TaskCompletionRequirementsCreateParam `json:"requirements,omitempty"`
 	ScanOnlyRequiredBarcodes      bool                                   `json:"scanOnlyRequiredBarcodes,omitempty"`
@@ -172,5 +172,15 @@ type TaskAppearanceParam struct {
 }
 
 type TaskBatchCreateParams struct {
-	Tasks []Task `json:"tasks"`
+	Tasks []TaskCreateParams `json:"tasks"`
+}
+
+type TaskBatchCreateResponse struct {
+	Tasks  []Task                 `json:"tasks"`
+	Errors []TaskBatchCreateError `json:"errors"`
+}
+
+type TaskBatchCreateError struct {
+	Error RequestErrorMessage `json:"error"`
+	Task  TaskCreateParams    `json:"task"`
 }

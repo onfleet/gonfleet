@@ -3,7 +3,7 @@ package task
 import (
 	"net/http"
 
-	onfleet "github.com/onfleet/gonfleet"
+	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/netwrk"
 )
 
@@ -88,4 +88,20 @@ func (c *Client) Create(params onfleet.TaskCreateParams) (onfleet.Task, error) {
 		&task,
 	)
 	return task, err
+}
+
+// Reference https://docs.onfleet.com/reference/create-tasks-in-batch
+func (c *Client) BatchCreate(params onfleet.TaskBatchCreateParams) (onfleet.TaskBatchCreateResponse, error) {
+	batchTasks := onfleet.TaskBatchCreateResponse{}
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodPost,
+		c.url,
+		[]string{"batch"},
+		nil,
+		params,
+		&batchTasks,
+	)
+	return batchTasks, err
 }

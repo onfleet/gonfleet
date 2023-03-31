@@ -5,13 +5,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"time"
 
 	"golang.org/x/time/rate"
 
+	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/version"
 )
 
@@ -27,38 +27,6 @@ func NewRlHttpClient(rl *rate.Limiter, timeout int64) *RlHttpClient {
 		},
 		RateLimiter: rl,
 	}
-}
-
-type requestErrorMessage struct {
-	Cause any `json:"cause,omitempty"`
-	// Error is an internal error code.
-	// It is different than the request status code.
-	Error int `json:"error"`
-	// Message is the error messages / description
-	Message string `json:"message"`
-	// RemoteAddress is remote ip
-	RemoteAddress string `json:"remoteAddress"`
-	// Request is uuid associated with the request
-	Request string `json:"request"`
-}
-
-type requestError struct {
-	// Code is error type e.g. "InvalidArgument"
-	Code string `json:"code"`
-	// Message contains futher details about the error.
-	Message requestErrorMessage `json:"message"`
-}
-
-func (err requestError) Error() string {
-	return fmt.Sprintf("%s: %s", err.Code, err.Message.Message)
-}
-
-func parseError(r io.Reader) error {
-	var reqError requestError
-	if err := json.NewDecoder(r).Decode(&reqError); err != nil {
-		return err
-	}
-	return reqError
 }
 
 // urlAttachPath appends path segments onto provided baseUrl.
@@ -173,7 +141,7 @@ func Call(
 	}
 	defer response.Body.Close()
 	if response.StatusCode < 200 || response.StatusCode > 299 {
-		return parseError(response.Body)
+		return onfleet.ParseError(response.Body)
 	}
 	if v == nil {
 		return nil
