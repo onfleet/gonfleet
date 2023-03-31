@@ -136,3 +136,34 @@ func (c *Client) ForceComplete(taskId string, params onfleet.TaskForceCompletion
 	)
 	return err
 }
+
+// Reference https://docs.onfleet.com/reference/clone-task
+func (c *Client) Clone(taskId string, params *onfleet.TaskCloneParams) (onfleet.Task, error) {
+	task := onfleet.Task{}
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodPost,
+		c.url,
+		[]string{taskId, "clone"},
+		nil,
+		params,
+		&task,
+	)
+	return task, err
+}
+
+// Reference https://docs.onfleet.com/reference/delete-task
+func (c *Client) Delete(taskId string) error {
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodDelete,
+		c.url,
+		[]string{taskId},
+		nil,
+		nil,
+		nil,
+	)
+	return err
+}

@@ -30,12 +30,14 @@ type Task struct {
 	ScanOnlyRequiredBarcodes bool                     `json:"scanOnlyRequiredBarcodes"`
 	ServiceTime              float64                  `json:"serviceTime"`
 	ShortId                  string                   `json:"shortId"`
-	State                    TaskState                `json:"state"`
-	TimeCreated              int64                    `json:"timeCreated"`
-	TimeLastModified         int64                    `json:"timeLastModified"`
-	TrackingUrl              string                   `json:"trackingURL"`
-	TrackingViewed           bool                     `json:"trackingViewed"`
-	Worker                   *string                  `json:"worker"`
+	// SourceTaskId only set on cloned tasks
+	SourceTaskId     string    `json:"sourceTaskId,omitempty"`
+	State            TaskState `json:"state"`
+	TimeCreated      int64     `json:"timeCreated"`
+	TimeLastModified int64     `json:"timeLastModified"`
+	TrackingUrl      string    `json:"trackingURL"`
+	TrackingViewed   bool      `json:"trackingViewed"`
+	Worker           *string   `json:"worker"`
 }
 
 type TaskState int
@@ -128,15 +130,16 @@ type TaskParams struct {
 	Container      *TaskContainer       `json:"container,omitempty"`
 	Dependencies   []string             `json:"dependencies,omitempty"`
 	// Destination can string destination id or destination object onfleet.Destination
-	Destination    any     `json:"destination,omitempty"`
-	Executor       string  `json:"executor,omitempty"`
-	Merchant       string  `json:"merchant,omitempty"`
-	Notes          string  `json:"notes,omitempty"`
-	PickupTask     bool    `json:"pickupTask"`
-	Quantity       float64 `json:"quantity,omitempty"`
-	RecipientName  string  `json:"recipientName,omitempty"`
-	RecipientNotes string  `json:"recipientNotes,omitempty"`
-	// Recpinets can be slice of string recipient ids or recipient objects []onfleet.Recipient
+	Destination    any        `json:"destination,omitempty"`
+	Executor       string     `json:"executor,omitempty"`
+	Merchant       string     `json:"merchant,omitempty"`
+	Metadata       []Metadata `json:"metadata,omitempty"`
+	Notes          string     `json:"notes,omitempty"`
+	PickupTask     bool       `json:"pickupTask"`
+	Quantity       float64    `json:"quantity,omitempty"`
+	RecipientName  string     `json:"recipientName,omitempty"`
+	RecipientNotes string     `json:"recipientNotes,omitempty"`
+	// Recipients can be slice of string recipient ids or recipient objects []onfleet.Recipient
 	Recipients                    any                              `json:"recipients,omitempty"`
 	RecipientSkipSmsNotifications bool                             `json:"recipientSkipSMSNotifications,omitempty"`
 	Requirements                  *TaskCompletionRequirementsParam `json:"requirements,omitempty"`
@@ -192,4 +195,24 @@ type TaskForceCompletionParams struct {
 type TaskForceCompletionDetailsParam struct {
 	Success bool   `json:"success"`
 	Notes   string `json:"notes,omitempty"`
+}
+
+type TaskCloneParams struct {
+	IncludeBarcodes     bool                     `json:"includeBarcodes"`
+	IncludeDependencies bool                     `json:"includeDependencies"`
+	IncludeMetadata     bool                     `json:"includeMetadata"`
+	Overrides           *TaskCloneOverridesParam `json:"overrides,omitempty"`
+}
+
+type TaskCloneOverridesParam struct {
+	CompleteAfter  int64 `json:"completeAfter,omitempty"`
+	CompleteBefore int64 `json:"completeBefore,omitempty"`
+	// Destination can string destination id or destination object onfleet.Destination
+	Destination any        `json:"destination,omitempty"`
+	Metadata    []Metadata `json:"metadata,omitempty"`
+	Notes       string     `json:"notes,omitempty"`
+	PickupTask  bool       `json:"pickupTask"`
+	// Recipients can be slice of string recipient ids or recipient objects []onfleet.Recipient
+	Recipients  any     `json:"recipients,omitempty"`
+	ServiceTime float64 `json:"serviceTime,omitempty"`
 }
