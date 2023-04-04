@@ -1,5 +1,10 @@
 package onfleet
 
+type TasksPaginated struct {
+	LastId string `json:"lastId,omitempty"`
+	Tasks  []Task `json:"tasks"`
+}
+
 type Task struct {
 	AdditionalQuantities     TaskAdditionalQuantities `json:"additionalQuantities"`
 	Appearance               TaskAppearance           `json:"appearance"`
@@ -233,4 +238,15 @@ type TaskCloneOverridesParam struct {
 	// Recipients can be slice of string recipient ids or recipient objects []onfleet.RecipientCreateParams
 	Recipients  any     `json:"recipients,omitempty"`
 	ServiceTime float64 `json:"serviceTime,omitempty"`
+}
+
+type TaskListQueryParams struct {
+	// From is required
+	From int64 `json:"from,omitempty,string"`
+	To   int64 `json:"to,omitempty,string"`
+	// Used for pagination
+	LastID               string `json:"lastId,omitempty"`
+	Worker               string `json:"worker,omitempty"`
+	CompleteBeforeBefore int64  `json:"completeBeforeBefore,omitempty,string"`
+	CompleteAfterAfter   int64  `json:"completeAfterAfter,omitempty,string"`
 }
