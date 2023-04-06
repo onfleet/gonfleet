@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.0](https://github.com/onfleet/gonfleet/compare/v0.2.3...v0.3.0) - 2023-04-06
+* Add
+    * task `List`
+
 ## [0.2.3](https://github.com/onfleet/gonfleet/compare/v0.2.2...v0.2.3) - 2023-03-31
 * Fix
     * resync changelog with current version
