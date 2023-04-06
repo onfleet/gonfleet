@@ -1,10 +1,5 @@
 package onfleet
 
-type TasksPaginated struct {
-	LastId string `json:"lastId,omitempty"`
-	Tasks  []Task `json:"tasks"`
-}
-
 type Task struct {
 	AdditionalQuantities     TaskAdditionalQuantities `json:"additionalQuantities"`
 	Appearance               TaskAppearance           `json:"appearance"`
@@ -43,6 +38,11 @@ type Task struct {
 	TrackingUrl      string    `json:"trackingURL"`
 	TrackingViewed   bool      `json:"trackingViewed"`
 	Worker           *string   `json:"worker"`
+}
+
+type TasksPaginated struct {
+	LastId string `json:"lastId,omitempty"`
+	Tasks  []Task `json:"tasks"`
 }
 
 type TaskState int
@@ -245,7 +245,7 @@ type TaskListQueryParams struct {
 	From int64 `json:"from,omitempty,string"`
 	To   int64 `json:"to,omitempty,string"`
 	// Used for pagination
-	LastID               string `json:"lastId,omitempty"`
+	LastId               string `json:"lastId,omitempty"`
 	Worker               string `json:"worker,omitempty"`
 	CompleteBeforeBefore int64  `json:"completeBeforeBefore,omitempty,string"`
 	CompleteAfterAfter   int64  `json:"completeAfterAfter,omitempty,string"`
