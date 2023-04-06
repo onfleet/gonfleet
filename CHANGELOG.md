@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.1](https://github.com/onfleet/gonfleet/compare/v0.3.0...v0.3.1) - 2023-04-06
+* Change
+    * `TaskListQueryParams` field `LastID` to `LastId`
+
 ## [0.3.0](https://github.com/onfleet/gonfleet/compare/v0.2.3...v0.3.0) - 2023-04-06
 * Add
     * task `List`
