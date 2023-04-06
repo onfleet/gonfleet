@@ -55,7 +55,20 @@ func (c *Client) GetByShortId(taskShortId string) (onfleet.Task, error) {
 	return task, err
 }
 
-func (c *Client) ListTasks(teamId string) {
+// Reference https://docs.onfleet.com/reference/list-tasks
+func (c *Client) List(params onfleet.TaskListQueryParams) (onfleet.TasksPaginated, error) {
+	paginatedTasks := onfleet.TasksPaginated{}
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodGet,
+		c.url,
+		[]string{"all"},
+		params,
+		nil,
+		&paginatedTasks,
+	)
+	return paginatedTasks, err
 }
 
 // Reference https://docs.onfleet.com/reference/querying-by-metadata
