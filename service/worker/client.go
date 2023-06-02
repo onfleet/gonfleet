@@ -152,7 +152,7 @@ func (c *Client) SetSchedule(workerId string, entries onfleet.WorkerScheduleEntr
 }
 
 // Reference https://docs.onfleet.com/reference/list-workers-assigned-tasks
-func (c *Client) ListTasks(workerId string, params onfleet.WorkerTasksListQueryParams) (onfleet.WorkerTasks, error) {
+func (c *Client) ListTasks(workerId string, params *onfleet.WorkerTasksListQueryParams) (onfleet.WorkerTasks, error) {
 	workerTasks := onfleet.WorkerTasks{}
 	err := c.call(
 		c.apiKey,
