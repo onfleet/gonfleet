@@ -2,5 +2,5 @@ package version
 
 const (
 	Name  = "onfleet/gonfleet"
-	Value = "0.3.1"
+	Value = "0.4.0"
 )

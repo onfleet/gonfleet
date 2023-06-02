@@ -135,7 +135,7 @@ func (c *Client) GetWorkerEta(teamId string, params onfleet.TeamWorkerEtaQueryPa
 }
 
 // Reference https://docs.onfleet.com/reference/list-tasks-in-team
-func (c *Client) ListTasks(teamId string, params onfleet.TeamTasksListQueryParams) (onfleet.TeamTasks, error) {
+func (c *Client) ListTasks(teamId string, params *onfleet.TeamTasksListQueryParams) (onfleet.TeamTasks, error) {
 	teamTasks := onfleet.TeamTasks{}
 	err := c.call(
 		c.apiKey,
@@ -143,7 +143,7 @@ func (c *Client) ListTasks(teamId string, params onfleet.TeamTasksListQueryParam
 		http.MethodGet,
 		c.url,
 		[]string{teamId, "tasks"},
-		nil,
+		params,
 		nil,
 		&teamTasks,
 	)

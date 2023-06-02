@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.0](https://github.com/onfleet/gonfleet/compare/v0.3.1...v0.4.0) - 2023-06-01
+* Change
+    * `Worker.ListTasks` parameter changed from `WorkerTasksListQueryParams` to `*WorkerTasksListQueryParams`
+    * `Teams.ListTasks` parameter changed from `TeamTasksListQueryParams` to `*TeamTasksListQueryParams`
+
 ## [0.3.1](https://github.com/onfleet/gonfleet/compare/v0.3.0...v0.3.1) - 2023-04-06
 * Change
     * `TaskListQueryParams` field `LastID` to `LastId`
