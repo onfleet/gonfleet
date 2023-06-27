@@ -211,6 +211,33 @@ type TaskBatchCreateError struct {
 	Task  TaskParams          `json:"task"`
 }
 
+// Create from Batch Async - Reference https://docs.onfleet.com/reference/create-tasks-in-batch-async
+type TaskBatchCreateParamsAsync struct {
+	Tasks []TaskParams `json:"tasks"`
+}
+
+// Response Batch Async
+type TaskBatchCreateResponseAsync struct {
+	Status String `json:"status"`
+    	JobId String `jason:"jobId"`
+}
+
+/* 
+Batch Job Status Response, most of these are omit, because the fact that it might be incomplete and only have Status and Submitted 
+Reference https://docs.onfleet.com/reference/batch-job-status
+*/
+type BatchJobStatusResponse struct {
+	Status String `jason:"status"`
+	Submitted String `jason:"submitted"`
+	TasksReceived Number `json:"taskReceived,omitempty"`
+	TasksCreated Number `json:"tasksCreated,omitempty"`
+	TasksErrored Number `json:"tasksErrored,omitempty"`
+	NewTasksWithWarnings []Task `json:"newTasksWithWarnings,omitempty"`
+	NewTasks []Task `json:"newTasks,omitempty"`
+	FailedTasks []TaskParams `json:"failedTasks,omitempty"`
+	Errors []TaskBatchCreateError `json:"errors,omitempty"`
+}
+
 type TaskForceCompletionParams struct {
 	CompletionDetails TaskForceCompletionDetailsParam `json:"completionDetails"`
 }
