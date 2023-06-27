@@ -19,6 +19,9 @@ type RequestErrorMessage struct {
 	Request string `json:"request,omitempty"`
 	// StatusCode only present on errors returned for batch task creation
 	StatusCode int `json:"statusCode,omitempty"`
+
+	// TaskData only present on errors returned for query Batch Job Status
+	TaskData TaskParams `json:"taskData,omitempty"`
 }
 
 type RequestError struct {
