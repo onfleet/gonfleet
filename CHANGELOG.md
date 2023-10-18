@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.0](https://github.com/onfleet/gonfleet/compare/v0.4.0...v0.5.0) - 2023-10-18
+* Add
+    * `Tasks.BatchCreateAsync`
+    * `Tasks.GetBatchJobStatus`
+
 ## [0.4.0](https://github.com/onfleet/gonfleet/compare/v0.3.1...v0.4.0) - 2023-06-01
 * Change
     * `Worker.ListTasks` parameter changed from `WorkerTasksListQueryParams` to `*WorkerTasksListQueryParams`
