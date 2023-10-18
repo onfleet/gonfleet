@@ -211,6 +211,31 @@ type TaskBatchCreateError struct {
 	Task  TaskParams          `json:"task"`
 }
 
+type TaskBatchCreateResponseAsync struct {
+	JobID  string `json:"jobId"`
+	Status string `json:"status"`
+}
+
+type TaskBatchStatusResponseAsync struct {
+	Status               string                      `json:"status"`
+	Submitted            string                      `json:"submitted"`
+	TasksReceived        int                         `json:"tasksReceived"`
+	TasksCreated         int                         `json:"tasksCreated"`
+	TasksErrored         int                         `json:"tasksErrored"`
+	NewTasks             []Task                      `json:"newTasks"`
+	NewTasksWithWarnings []Task                      `json:"newTasksWithWarnings"`
+	FailedTasks          []TaskParams                `json:"failedTasks"`
+	Errors               []TaskBatchCreateErrorAsync `json:"errors"`
+}
+
+type TaskBatchCreateErrorAsync struct {
+	StatusCode int        `json:"statusCode"`
+	ErrorCode  int        `json:"errorCode"`
+	Message    string     `json:"message"`
+	Cause      string     `json:"cause"`
+	TaskData   TaskParams `json:"taskData"`
+}
+
 type TaskForceCompletionParams struct {
 	CompletionDetails TaskForceCompletionDetailsParam `json:"completionDetails"`
 }
