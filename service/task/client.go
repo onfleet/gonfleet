@@ -119,6 +119,38 @@ func (c *Client) BatchCreate(params onfleet.TaskBatchCreateParams) (onfleet.Task
 	return batchTasks, err
 }
 
+// Reference https://docs.onfleet.com/reference/create-tasks-in-batch-async
+func (c *Client) BatchCreateAsync(params onfleet.TaskBatchCreateParams) (onfleet.TaskBatchCreateResponseAsync, error) {
+	batchRes := onfleet.TaskBatchCreateResponseAsync{}
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodPost,
+		c.url,
+		[]string{"batch-async"},
+		nil,
+		params,
+		&batchRes,
+	)
+	return batchRes, err
+}
+
+// Reference https://docs.onfleet.com/reference/batch-job-status
+func (c *Client) GetBatchJobStatus(batchJobId string) (onfleet.TaskBatchStatusResponseAsync, error) {
+	batchStatus := onfleet.TaskBatchStatusResponseAsync{}
+	err := c.call(
+		c.apiKey,
+		c.rlHttpClient,
+		http.MethodGet,
+		c.url,
+		[]string{"batch", batchJobId},
+		nil,
+		nil,
+		&batchStatus,
+	)
+	return batchStatus, err
+}
+
 // Reference https://docs.onfleet.com/reference/update-task
 func (c *Client) Update(taskId string, params onfleet.TaskParams) (onfleet.Task, error) {
 	task := onfleet.Task{}
