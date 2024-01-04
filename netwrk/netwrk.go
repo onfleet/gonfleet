@@ -11,13 +11,18 @@ import (
 
 	"golang.org/x/time/rate"
 
-	"github.com/onfleet/gonfleet"
+	onfleet "github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/version"
 )
 
 type RlHttpClient struct {
 	Client      *http.Client
 	RateLimiter *rate.Limiter
+}
+
+type AdditionalAPIKey struct {
+	Key   string
+	Value string
 }
 
 func NewRlHttpClient(rl *rate.Limiter, timeout int64) *RlHttpClient {
@@ -76,6 +81,7 @@ type Caller func(
 	queryParams any,
 	body any,
 	v any,
+	additionalAPIKeys ...AdditionalAPIKey,
 ) error
 
 func Call(
@@ -87,6 +93,7 @@ func Call(
 	queryParams any,
 	body any,
 	v any,
+	additionalAPIKeys ...AdditionalAPIKey,
 ) error {
 	var request *http.Request
 	var err error
@@ -127,6 +134,11 @@ func Call(
 		request.Header.Set("Content-Type", "application/json")
 	}
 
+	for _, apiKey := range additionalAPIKeys {
+		if apiKey != (AdditionalAPIKey{}) {
+			request.Header.Set(apiKey.Key, apiKey.Value)
+		}
+	}
 	request.Header.Set("User-Agent", fmt.Sprintf("%s-%s", version.Name, version.Value))
 	request.SetBasicAuth(apiKey, "")
 

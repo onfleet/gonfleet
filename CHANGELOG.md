@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.1](https://github.com/onfleet/gonfleet/compare/v0.5.0...v0.5.1) - 2024-01-04
+* Add
+    * providers/manifest `Generate`
+
 ## [0.5.0](https://github.com/onfleet/gonfleet/compare/v0.4.0...v0.5.0) - 2023-10-18
 * Add
     * `Tasks.BatchCreateAsync`
