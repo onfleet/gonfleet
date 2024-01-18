@@ -14,7 +14,7 @@ type Task struct {
 	Destination              Destination              `json:"destination"`
 	EstimatedArrivalTime     *int64                   `json:"estimatedArrivalTime"`
 	EstimatedCompletionTime  *int64                   `json:"estimatedCompletionTime"`
-	Eta                      *int64                   `json:"eta"`
+	ETA                      *int64                   `json:"eta"`
 	Executor                 string                   `json:"executor"`
 	Feedback                 []any                    `json:"feedback"`
 	ID                       string                   `json:"id"`

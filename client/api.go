@@ -10,6 +10,7 @@ import (
 	"github.com/onfleet/gonfleet/service/destination"
 	"github.com/onfleet/gonfleet/service/hub"
 	"github.com/onfleet/gonfleet/service/organization"
+	"github.com/onfleet/gonfleet/service/providers/manifest"
 	"github.com/onfleet/gonfleet/service/recipient"
 	"github.com/onfleet/gonfleet/service/task"
 	"github.com/onfleet/gonfleet/service/team"
@@ -28,16 +29,17 @@ const (
 )
 
 type API struct {
-	Administrators *admin.Client
-	Containers     *container.Client
-	Destinations   *destination.Client
-	Hubs           *hub.Client
-	Organizations  *organization.Client
-	Recipients     *recipient.Client
-	Tasks          *task.Client
-	Teams          *team.Client
-	Webhooks       *webhook.Client
-	Workers        *worker.Client
+	Administrators   *admin.Client
+	Containers       *container.Client
+	Destinations     *destination.Client
+	Hubs             *hub.Client
+	Organizations    *organization.Client
+	Recipients       *recipient.Client
+	Tasks            *task.Client
+	Teams            *team.Client
+	Webhooks         *webhook.Client
+	Workers          *worker.Client
+	ManifestProvider *manifest.Client
 }
 
 // InitParams accepts user provided overrides to be set on Config
@@ -141,6 +143,14 @@ func New(apiKey string, params *InitParams) (*API, error) {
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/workers",
+		netwrk.Call,
+	)
+
+	// Integration Marketplace Providers
+	api.ManifestProvider = manifest.Plug(
+		apiKey,
+		rlHttpClient,
+		fullBaseUrl+"/integrations/marketplace",
 		netwrk.Call,
 	)
 

@@ -11,7 +11,7 @@ import (
 
 	"golang.org/x/time/rate"
 
-	"github.com/onfleet/gonfleet"
+	onfleet "github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/version"
 )
 
@@ -76,6 +76,7 @@ type Caller func(
 	queryParams any,
 	body any,
 	v any,
+	additionalHeaders ...[2]string,
 ) error
 
 func Call(
@@ -87,6 +88,7 @@ func Call(
 	queryParams any,
 	body any,
 	v any,
+	additionalHeaders ...[2]string,
 ) error {
 	var request *http.Request
 	var err error
@@ -127,6 +129,11 @@ func Call(
 		request.Header.Set("Content-Type", "application/json")
 	}
 
+	for _, h := range additionalHeaders {
+		if h != ([2]string{}) {
+			request.Header.Set(h[0], h[1])
+		}
+	}
 	request.Header.Set("User-Agent", fmt.Sprintf("%s-%s", version.Name, version.Value))
 	request.SetBasicAuth(apiKey, "")
 
