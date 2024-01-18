@@ -1,10 +1,10 @@
 package onfleet
 
 type TurnByTurn struct {
-	StartAddress    string   `json:"startAddress"`
-	EndAddress      string   `json:"endAddress"`
+	DrivingDistance string   `json:"driving_distance"`
+	EndAddress      string   `json:"end_address"`
 	ETA             int64    `json:"eta"`
-	DrivingDistance string   `json:"drivingDistance"`
+	StartAddress    string   `json:"start_address"`
 	Steps           []string `json:"steps"`
 }
 
@@ -14,17 +14,17 @@ type Driver struct {
 }
 
 type ManifestGenerateParams struct {
-	WorkerId string `json:"workerId"`
 	HubId    string `json:"hubId"`
+	WorkerId string `json:"workerId"`
 }
 
 type DeliveryManifest struct {
-	ManifestDate  int64              `json:"manifestDate"`
 	DepartureTime int64              `json:"departureTime"`
 	Driver        Driver             `json:"driver"`
-	Vehicle       WorkerVehicleParam `json:"vehicle"`
 	HubAddress    string             `json:"hubAddress"`
+	ManifestDate  int64              `json:"manifestDate"`
 	Tasks         []Task             `json:"tasks"`
-	TurnByTurn    []TurnByTurn       `json:"turnByTurn"`
 	TotalDistance string             `json:"totalDistance"`
+	TurnByTurn    []TurnByTurn       `json:"turnByTurn"`
+	Vehicle       WorkerVehicleParam `json:"vehicle"`
 }
