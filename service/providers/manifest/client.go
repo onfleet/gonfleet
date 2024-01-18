@@ -33,11 +33,12 @@ func (c *Client) Generate(params *onfleet.ManifestGenerateParams, googleAPIKey s
 		"path":   fmt.Sprintf("providers/manifest/generate?hubId=%s&workerId=%s", hubId, workerId),
 		"method": "GET",
 	}
-	additionalAPIKeys := netwrk.AdditionalAPIKey{}
+
+	additionalHeaders := [2]string{}
 	if googleAPIKey != "" {
-		additionalAPIKeys = netwrk.AdditionalAPIKey{
-			Key:   "X-API-Key",
-			Value: fmt.Sprintf("Google %s", googleAPIKey),
+		additionalHeaders = [2]string{
+			"X-API-Key",
+			fmt.Sprintf("Google %s", googleAPIKey),
 		}
 	}
 
@@ -50,7 +51,7 @@ func (c *Client) Generate(params *onfleet.ManifestGenerateParams, googleAPIKey s
 		nil,
 		body,
 		&deliveryManifest,
-		additionalAPIKeys,
+		additionalHeaders,
 	)
 
 	return deliveryManifest, err

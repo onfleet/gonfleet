@@ -51,11 +51,6 @@ type InitParams struct {
 	ApiVersion  string
 }
 
-type AdditionalAPIKey struct {
-	Key   string
-	Value string
-}
-
 func New(apiKey string, params *InitParams) (*API, error) {
 	if apiKey == "" {
 		return nil, fmt.Errorf("Onfleet API key not found")
