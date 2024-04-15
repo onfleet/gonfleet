@@ -270,8 +270,9 @@ type TaskListQueryParams struct {
 	From int64 `json:"from,omitempty,string"`
 	To   int64 `json:"to,omitempty,string"`
 	// Used for pagination
-	LastId               string `json:"lastId,omitempty"`
-	Worker               string `json:"worker,omitempty"`
-	CompleteBeforeBefore int64  `json:"completeBeforeBefore,omitempty,string"`
-	CompleteAfterAfter   int64  `json:"completeAfterAfter,omitempty,string"`
+	LastId               string   `json:"lastId,omitempty"`
+	Worker               string   `json:"worker,omitempty"`
+	CompleteBeforeBefore int64    `json:"completeBeforeBefore,omitempty,string"`
+	CompleteAfterAfter   int64    `json:"completeAfterAfter,omitempty,string"`
+	Dependencies         []string `json:"dependencies,omitempty"`
 }
