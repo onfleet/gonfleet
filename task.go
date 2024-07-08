@@ -96,7 +96,7 @@ type TaskIdentity struct {
 }
 
 type TaskAppearance struct {
-	TriangleColor *string `json:"triangleColor"`
+	TriangleColor *int `json:"triangleColor"`
 }
 
 type TaskContainer struct {
@@ -194,7 +194,7 @@ type TaskCompletionRequirementsParam struct {
 }
 
 type TaskAppearanceParam struct {
-	TriangleColor string `json:"triangleColor"`
+	TriangleColor int `json:"triangleColor"`
 }
 
 type TaskBatchCreateParams struct {
