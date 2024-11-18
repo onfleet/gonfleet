@@ -9,6 +9,7 @@ type Task struct {
 	CompletionDetails        TaskCompletionDetails    `json:"completionDetails"`
 	Container                *TaskContainer           `json:"container"`
 	Creator                  string                   `json:"creator"`
+	CustomFields             []CustomField            `json:"customFields"`
 	DelayTime                *float64                 `json:"delayTime"`
 	Dependencies             []string                 `json:"dependencies"`
 	Destination              Destination              `json:"destination"`
@@ -132,6 +133,7 @@ type TaskParams struct {
 	CompleteAfter  int64                `json:"completeAfter,omitempty"`
 	CompleteBefore int64                `json:"completeBefore,omitempty"`
 	Container      *TaskContainer       `json:"container,omitempty"`
+	CustomFields   []CustomFieldParams  `json:"customFields,omitempty"`
 	Dependencies   []string             `json:"dependencies,omitempty"`
 	// Destination can string destination id or destination object onfleet.DestinationCreateParams
 	Destination    any        `json:"destination,omitempty"`
