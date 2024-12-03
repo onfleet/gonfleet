@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/cenkalti/backoff/v4"
 	"net/http"
@@ -91,22 +92,39 @@ func Call(
 	v any,
 	additionalHeaders ...[2]string,
 ) error {
+	exponentialBackOff := backoff.NewExponentialBackOff()
+	exponentialBackOff.MaxElapsedTime = 15 * time.Second
+	ctx := context.Background()
+	b := backoff.WithContext(exponentialBackOff, ctx)
+	return backoff.Retry(func() error {
+		err := callInternal(ctx, apiKey, rlHttpClient, method, baseUrl, pathSegments, queryParams, body, v, additionalHeaders)
+		if errors.Is(err, onfleet.TooManyRequestsError{}) {
+			return err
+		}
+		if err != nil {
+			return backoff.Permanent(err)
+		}
+		return nil
+	}, b)
+}
+
+func callInternal(ctx context.Context, apiKey string, rlHttpClient *RlHttpClient, method string, baseUrl string, pathSegments []string, queryParams any, body any, v any, additionalHeaders [][2]string) error {
 	var request *http.Request
 	var err error
 
-	calledUrl := baseUrl
+	callUrl := baseUrl
 	if pathSegments != nil {
-		calledUrl = urlAttachPath(calledUrl, pathSegments...)
+		callUrl = urlAttachPath(callUrl, pathSegments...)
 	}
 	if queryParams != nil {
-		calledUrl = urlAttachQuery(calledUrl, queryParams)
+		callUrl = urlAttachQuery(callUrl, queryParams)
 	}
 
 	switch method {
 	case "GET", "DELETE":
 		request, err = http.NewRequest(
 			method,
-			calledUrl,
+			callUrl,
 			nil,
 		)
 		if err != nil {
@@ -114,14 +132,14 @@ func Call(
 		}
 		request.Header.Set("Accept", "application/json")
 	case "POST", "PUT":
-		marshalledBody, errMarshal := json.Marshal(body)
+		bodyMarshal, errMarshal := json.Marshal(body)
 		if errMarshal != nil {
 			return errMarshal
 		}
-		buffer := bytes.NewBuffer(marshalledBody)
+		buffer := bytes.NewBuffer(bodyMarshal)
 		request, err = http.NewRequest(
 			method,
-			calledUrl,
+			callUrl,
 			buffer,
 		)
 		if err != nil {
@@ -129,7 +147,7 @@ func Call(
 		}
 		request.Header.Set("Content-Type", "application/json")
 	default:
-		return fmt.Errorf("unsupported method")
+		return fmt.Errorf("unsupported method: %s", method)
 	}
 
 	for _, h := range additionalHeaders {
@@ -140,33 +158,20 @@ func Call(
 	request.Header.Set("User-Agent", fmt.Sprintf("%s-%s", version.Name, version.Value))
 	request.SetBasicAuth(apiKey, "")
 
-	ctx := context.Background()
 	err = rlHttpClient.RateLimiter.Wait(ctx)
 	if err != nil {
 		return err
 	}
-	exponentialBackOff := backoff.NewExponentialBackOff()
-	exponentialBackOff.MaxElapsedTime = 15 * time.Second
-	b := backoff.WithContext(exponentialBackOff, ctx)
-	var response *http.Response
-	errRetryCancel := backoff.Retry(func() error {
-		var errDo error
-		response, errDo = rlHttpClient.Client.Do(request)
-		if errDo != nil {
-			return errDo
-		}
-		defer response.Body.Close()
-		if response.StatusCode == http.StatusTooManyRequests {
-			// Retry on rate limiting
-			return fmt.Errorf("rate limited. Retry")
-		}
-		if response.StatusCode < 200 || response.StatusCode > 299 {
-			return backoff.Permanent(onfleet.ParseError(response.Body))
-		}
-		return nil
-	}, b)
-	if errRetryCancel != nil {
-		return errRetryCancel
+	response, err := rlHttpClient.Client.Do(request)
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
+	if response.StatusCode == http.StatusTooManyRequests {
+		return onfleet.TooManyRequestsError{}
+	}
+	if response.StatusCode < 200 || response.StatusCode > 299 {
+		return onfleet.ParseError(response.Body)
 	}
 	if v == nil {
 		return nil
