@@ -167,7 +167,7 @@ func callInternal(ctx context.Context, apiKey string, rlHttpClient *RlHttpClient
 		return err
 	}
 	defer response.Body.Close()
-	if response.StatusCode == http.StatusTooManyRequests {
+	if response.StatusCode == http.StatusTooManyRequests || response.StatusCode == http.StatusPreconditionFailed {
 		return onfleet.TooManyRequestsError{}
 	}
 	if response.StatusCode < 200 || response.StatusCode > 299 {
