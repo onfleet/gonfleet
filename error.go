@@ -29,7 +29,7 @@ type RequestError struct {
 }
 
 func (err RequestError) Error() string {
-	return fmt.Sprintf("%s: %s", err.Code, err.Message.Message)
+	return fmt.Sprintf("%s: \n  Cause: %s\n  Message: %s", err.Code, err.Message.Cause, err.Message.Message)
 }
 
 func ParseError(r io.Reader) error {
