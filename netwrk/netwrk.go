@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/cenkalti/backoff/v4"
 	"net/http"
 	"net/url"
 	"time"
@@ -93,19 +94,19 @@ func Call(
 	var request *http.Request
 	var err error
 
-	url := baseUrl
+	calledUrl := baseUrl
 	if pathSegments != nil {
-		url = urlAttachPath(url, pathSegments...)
+		calledUrl = urlAttachPath(calledUrl, pathSegments...)
 	}
 	if queryParams != nil {
-		url = urlAttachQuery(url, queryParams)
+		calledUrl = urlAttachQuery(calledUrl, queryParams)
 	}
 
 	switch method {
 	case "GET", "DELETE":
 		request, err = http.NewRequest(
 			method,
-			url,
+			calledUrl,
 			nil,
 		)
 		if err != nil {
@@ -113,20 +114,22 @@ func Call(
 		}
 		request.Header.Set("Accept", "application/json")
 	case "POST", "PUT":
-		body, err := json.Marshal(body)
-		if err != nil {
-			return err
+		marshalledBody, errMarshal := json.Marshal(body)
+		if errMarshal != nil {
+			return errMarshal
 		}
-		buffer := bytes.NewBuffer(body)
+		buffer := bytes.NewBuffer(marshalledBody)
 		request, err = http.NewRequest(
 			method,
-			url,
+			calledUrl,
 			buffer,
 		)
 		if err != nil {
 			return err
 		}
 		request.Header.Set("Content-Type", "application/json")
+	default:
+		return fmt.Errorf("unsupported method")
 	}
 
 	for _, h := range additionalHeaders {
@@ -142,18 +145,33 @@ func Call(
 	if err != nil {
 		return err
 	}
-	response, err := rlHttpClient.Client.Do(request)
-	if err != nil {
-		return err
-	}
-	defer response.Body.Close()
-	if response.StatusCode < 200 || response.StatusCode > 299 {
-		return onfleet.ParseError(response.Body)
+	exponentialBackOff := backoff.NewExponentialBackOff()
+	exponentialBackOff.MaxElapsedTime = 15 * time.Second
+	b := backoff.WithContext(exponentialBackOff, ctx)
+	var response *http.Response
+	errRetryCancel := backoff.Retry(func() error {
+		var errDo error
+		response, errDo = rlHttpClient.Client.Do(request)
+		if errDo != nil {
+			return errDo
+		}
+		defer response.Body.Close()
+		if response.StatusCode == http.StatusTooManyRequests {
+			// Retry on rate limiting
+			return fmt.Errorf("rate limited. Retry")
+		}
+		if response.StatusCode < 200 || response.StatusCode > 299 {
+			return backoff.Permanent(onfleet.ParseError(response.Body))
+		}
+		return nil
+	}, b)
+	if errRetryCancel != nil {
+		return errRetryCancel
 	}
 	if v == nil {
 		return nil
 	}
-	if err := json.NewDecoder(response.Body).Decode(v); err != nil {
+	if err = json.NewDecoder(response.Body).Decode(v); err != nil {
 		return err
 	}
 	return nil
