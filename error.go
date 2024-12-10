@@ -39,3 +39,10 @@ func ParseError(r io.Reader) error {
 	}
 	return reqError
 }
+
+type TooManyRequestsError struct {
+}
+
+func (err TooManyRequestsError) Error() string {
+	return "too many requests"
+}

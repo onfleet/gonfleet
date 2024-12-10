@@ -22,10 +22,11 @@ import (
 
 // user overridable defaults
 const (
-	defaultUserTimeout int64 = 70000
-	defaultBaseUrl           = "https://onfleet.com"
-	defaultPath              = "/api"
-	defaultApiVersion        = "/v2"
+	defaultUserTimeout       int64 = 70000
+	defaultBaseUrl                 = "https://onfleet.com"
+	defaultPath                    = "/api"
+	defaultApiVersion              = "/v2"
+	defaultMaxCallsPerSecond       = 18
 )
 
 type API struct {
@@ -45,10 +46,11 @@ type API struct {
 // InitParams accepts user provided overrides to be set on Config
 type InitParams struct {
 	// timeout used for http client in milliseconds
-	UserTimeout int64
-	BaseUrl     string
-	Path        string
-	ApiVersion  string
+	UserTimeout       int64
+	BaseUrl           string
+	Path              string
+	ApiVersion        string
+	MaxCallsPerSecond int
 }
 
 func New(apiKey string, params *InitParams) (*API, error) {
@@ -61,7 +63,7 @@ func New(apiKey string, params *InitParams) (*API, error) {
 	path := defaultPath
 	apiVersion := defaultApiVersion
 	timeout := defaultUserTimeout
-
+	maxCallsPerSecond := defaultMaxCallsPerSecond
 	if params != nil {
 		if params.BaseUrl != "" {
 			baseUrl = params.BaseUrl
@@ -75,10 +77,13 @@ func New(apiKey string, params *InitParams) (*API, error) {
 		if params.UserTimeout > 0 && params.UserTimeout <= defaultUserTimeout {
 			timeout = params.UserTimeout
 		}
+		if params.MaxCallsPerSecond > 0 && params.MaxCallsPerSecond <= defaultMaxCallsPerSecond {
+			maxCallsPerSecond = params.MaxCallsPerSecond
+		}
 	}
 
 	rlHttpClient := netwrk.NewRlHttpClient(
-		rate.NewLimiter(rate.Every(1*time.Second), 18),
+		rate.NewLimiter(rate.Every(1*time.Second), maxCallsPerSecond),
 		timeout,
 	)
 
