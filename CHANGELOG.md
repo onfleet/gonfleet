@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.3](https://github.com/onfleet/gonfleet/compare/v0.5.2...v0.5.3) - 2024-12-10
+* Change
+    * use `cenkalti/backoff` package for rate limiting / exp backoff
+* Add
+    * task `Dependencies` to `TaskListQueryParams`
+
 ## [0.5.2](https://github.com/onfleet/gonfleet/compare/v0.5.1...v0.5.2) - 2024-12-10
 * Add
     * task `CustomFields` support
