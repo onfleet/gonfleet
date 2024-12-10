@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.2](https://github.com/onfleet/gonfleet/compare/v0.5.1...v0.5.2) - 2024-12-10
+* Add
+    * task `CustomFields` support
+* Fix
+    * task `TriangleColor`
+
 ## [0.5.1](https://github.com/onfleet/gonfleet/compare/v0.5.0...v0.5.1) - 2024-01-04
 * Add
     * providers/manifest `Generate`
