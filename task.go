@@ -39,6 +39,7 @@ type Task struct {
 	TrackingUrl      string    `json:"trackingURL"`
 	TrackingViewed   bool      `json:"trackingViewed"`
 	Worker           *string   `json:"worker"`
+	RoutePlan        *string   `json:"routePlan"`
 }
 
 type TasksPaginated struct {
