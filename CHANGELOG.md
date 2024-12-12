@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.4](https://github.com/onfleet/gonfleet/compare/v0.5.3...v0.5.4) - 2024-12-12
+* Add
+    * `RoutePlan` API
+
 ## [0.5.3](https://github.com/onfleet/gonfleet/compare/v0.5.2...v0.5.3) - 2024-12-10
 * Change
     * use `cenkalti/backoff` package for rate limiting / exp backoff
