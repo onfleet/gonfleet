@@ -2,6 +2,7 @@ package client
 
 import (
 	"fmt"
+	"github.com/onfleet/gonfleet/service/routePlan"
 	"time"
 
 	"github.com/onfleet/gonfleet/netwrk"
@@ -41,6 +42,7 @@ type API struct {
 	Webhooks         *webhook.Client
 	Workers          *worker.Client
 	ManifestProvider *manifest.Client
+	RoutePlans       *routePlan.Client
 }
 
 // InitParams accepts user provided overrides to be set on Config
@@ -148,6 +150,12 @@ func New(apiKey string, params *InitParams) (*API, error) {
 		apiKey,
 		rlHttpClient,
 		fullBaseUrl+"/workers",
+		netwrk.Call,
+	)
+	api.RoutePlans = routePlan.Plug(
+		apiKey,
+		rlHttpClient,
+		fullBaseUrl+"/routePlans",
 		netwrk.Call,
 	)
 
