@@ -3,6 +3,7 @@ package webhook
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/testingutil"
 )
@@ -24,11 +25,11 @@ func TestClient_List(t *testing.T) {
 
 	webhooks, err := client.List()
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, webhooks, 1)
-	testingutil.AssertEqual(t, expectedWebhooks[0].ID, webhooks[0].ID)
-	testingutil.AssertEqual(t, expectedWebhooks[0].Name, webhooks[0].Name)
-	testingutil.AssertEqual(t, expectedWebhooks[0].Trigger, webhooks[0].Trigger)
+	assert.NoError(t, err)
+	assert.Len(t, webhooks, 1)
+	assert.Equal(t, expectedWebhooks[0].ID, webhooks[0].ID)
+	assert.Equal(t, expectedWebhooks[0].Name, webhooks[0].Name)
+	assert.Equal(t, expectedWebhooks[0].Trigger, webhooks[0].Trigger)
 
 	mockClient.AssertRequestMade("GET", "/webhooks")
 	mockClient.AssertBasicAuth("test_api_key")
@@ -55,10 +56,10 @@ func TestClient_Create(t *testing.T) {
 
 	webhook, err := client.Create(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedWebhook.ID, webhook.ID)
-	testingutil.AssertEqual(t, expectedWebhook.Name, webhook.Name)
-	testingutil.AssertEqual(t, expectedWebhook.Trigger, webhook.Trigger)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedWebhook.ID, webhook.ID)
+	assert.Equal(t, expectedWebhook.Name, webhook.Name)
+	assert.Equal(t, expectedWebhook.Trigger, webhook.Trigger)
 
 	mockClient.AssertRequestMade("POST", "/webhooks")
 }
@@ -76,7 +77,7 @@ func TestClient_Delete(t *testing.T) {
 
 	err := client.Delete("webhook_123")
 
-	testingutil.AssertNoError(t, err)
+	assert.NoError(t, err)
 	mockClient.AssertRequestMade("DELETE", "/webhooks/webhook_123")
 }
 
@@ -181,8 +182,8 @@ func TestClient_WebhookTriggerTypes(t *testing.T) {
 
 			webhook, err := client.Create(params)
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, tt.trigger, webhook.Trigger)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.trigger, webhook.Trigger)
 		})
 	}
 }
@@ -257,7 +258,7 @@ func TestClient_ErrorScenarios(t *testing.T) {
 			client := Plug("test_api_key", nil, "https://api.example.com/webhooks", mockClient.MockCaller)
 
 			err := tt.operation(client)
-			testingutil.AssertError(t, err)
+			assert.Error(t, err)
 		})
 	}
 }

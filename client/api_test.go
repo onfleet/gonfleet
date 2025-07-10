@@ -3,7 +3,7 @@ package client
 import (
 	"testing"
 
-	"github.com/onfleet/gonfleet/testingutil"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNew_ValidAPIKey(t *testing.T) {
@@ -11,22 +11,22 @@ func TestNew_ValidAPIKey(t *testing.T) {
 	
 	api, err := New(apiKey, nil)
 	
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertNotNil(t, api)
+	assert.NoError(t, err)
+	assert.NotNil(t, api)
 	
 	// Verify all services are initialized
-	testingutil.AssertNotNil(t, api.Administrators)
-	testingutil.AssertNotNil(t, api.Containers)
-	testingutil.AssertNotNil(t, api.Destinations)
-	testingutil.AssertNotNil(t, api.Hubs)
-	testingutil.AssertNotNil(t, api.Organizations)
-	testingutil.AssertNotNil(t, api.Recipients)
-	testingutil.AssertNotNil(t, api.Tasks)
-	testingutil.AssertNotNil(t, api.Teams)
-	testingutil.AssertNotNil(t, api.Webhooks)
-	testingutil.AssertNotNil(t, api.Workers)
-	testingutil.AssertNotNil(t, api.ManifestProvider)
-	testingutil.AssertNotNil(t, api.RoutePlans)
+	assert.NotNil(t, api.Administrators)
+	assert.NotNil(t, api.Containers)
+	assert.NotNil(t, api.Destinations)
+	assert.NotNil(t, api.Hubs)
+	assert.NotNil(t, api.Organizations)
+	assert.NotNil(t, api.Recipients)
+	assert.NotNil(t, api.Tasks)
+	assert.NotNil(t, api.Teams)
+	assert.NotNil(t, api.Webhooks)
+	assert.NotNil(t, api.Workers)
+	assert.NotNil(t, api.ManifestProvider)
+	assert.NotNil(t, api.RoutePlans)
 }
 
 func TestNew_EmptyAPIKey(t *testing.T) {
@@ -34,11 +34,11 @@ func TestNew_EmptyAPIKey(t *testing.T) {
 	
 	api, err := New(apiKey, nil)
 	
-	testingutil.AssertError(t, err)
+	assert.Error(t, err)
 	if api != nil {
 		t.Error("Expected nil API client, got non-nil")
 	}
-	testingutil.AssertStringContains(t, err.Error(), "API key not found")
+	assert.Contains(t, err.Error(), "API key not found")
 }
 
 func TestNew_DefaultParameters(t *testing.T) {
@@ -46,8 +46,8 @@ func TestNew_DefaultParameters(t *testing.T) {
 	
 	api, err := New(apiKey, nil)
 	
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertNotNil(t, api)
+	assert.NoError(t, err)
+	assert.NotNil(t, api)
 	
 	// We can't directly test the internal configuration, but we can verify
 	// that the client was created successfully with default parameters
@@ -65,22 +65,22 @@ func TestNew_CustomParameters(t *testing.T) {
 	
 	api, err := New(apiKey, params)
 	
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertNotNil(t, api)
+	assert.NoError(t, err)
+	assert.NotNil(t, api)
 	
 	// Verify all services are still initialized with custom parameters
-	testingutil.AssertNotNil(t, api.Administrators)
-	testingutil.AssertNotNil(t, api.Containers)
-	testingutil.AssertNotNil(t, api.Destinations)
-	testingutil.AssertNotNil(t, api.Hubs)
-	testingutil.AssertNotNil(t, api.Organizations)
-	testingutil.AssertNotNil(t, api.Recipients)
-	testingutil.AssertNotNil(t, api.Tasks)
-	testingutil.AssertNotNil(t, api.Teams)
-	testingutil.AssertNotNil(t, api.Webhooks)
-	testingutil.AssertNotNil(t, api.Workers)
-	testingutil.AssertNotNil(t, api.ManifestProvider)
-	testingutil.AssertNotNil(t, api.RoutePlans)
+	assert.NotNil(t, api.Administrators)
+	assert.NotNil(t, api.Containers)
+	assert.NotNil(t, api.Destinations)
+	assert.NotNil(t, api.Hubs)
+	assert.NotNil(t, api.Organizations)
+	assert.NotNil(t, api.Recipients)
+	assert.NotNil(t, api.Tasks)
+	assert.NotNil(t, api.Teams)
+	assert.NotNil(t, api.Webhooks)
+	assert.NotNil(t, api.Workers)
+	assert.NotNil(t, api.ManifestProvider)
+	assert.NotNil(t, api.RoutePlans)
 }
 
 func TestNew_PartialCustomParameters(t *testing.T) {
@@ -121,13 +121,13 @@ func TestNew_PartialCustomParameters(t *testing.T) {
 			
 			api, err := New(apiKey, tt.params)
 			
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertNotNil(t, api)
+			assert.NoError(t, err)
+			assert.NotNil(t, api)
 			
 			// Verify all services are initialized
-			testingutil.AssertNotNil(t, api.Tasks)
-			testingutil.AssertNotNil(t, api.Workers)
-			testingutil.AssertNotNil(t, api.Organizations)
+			assert.NotNil(t, api.Tasks)
+			assert.NotNil(t, api.Workers)
+			assert.NotNil(t, api.Organizations)
 		})
 	}
 }
@@ -161,8 +161,8 @@ func TestNew_InvalidTimeoutBounds(t *testing.T) {
 			api, err := New(apiKey, params)
 			
 			// Should still succeed but use default timeout
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertNotNil(t, api)
+			assert.NoError(t, err)
+			assert.NotNil(t, api)
 		})
 	}
 }
@@ -196,8 +196,8 @@ func TestNew_InvalidRateLimitBounds(t *testing.T) {
 			api, err := New(apiKey, params)
 			
 			// Should still succeed but use default rate limit
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertNotNil(t, api)
+			assert.NoError(t, err)
+			assert.NotNil(t, api)
 		})
 	}
 }
@@ -254,33 +254,33 @@ func TestNew_URLConstruction(t *testing.T) {
 			
 			api, err := New(apiKey, tt.params)
 			
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertNotNil(t, api)
+			assert.NoError(t, err)
+			assert.NotNil(t, api)
 			
 			// All services should be initialized successfully
-			testingutil.AssertNotNil(t, api.Tasks)
-			testingutil.AssertNotNil(t, api.Workers)
-			testingutil.AssertNotNil(t, api.Organizations)
-			testingutil.AssertNotNil(t, api.Destinations)
-			testingutil.AssertNotNil(t, api.Recipients)
-			testingutil.AssertNotNil(t, api.Teams)
-			testingutil.AssertNotNil(t, api.Webhooks)
-			testingutil.AssertNotNil(t, api.Hubs)
-			testingutil.AssertNotNil(t, api.Administrators)
-			testingutil.AssertNotNil(t, api.Containers)
-			testingutil.AssertNotNil(t, api.RoutePlans)
-			testingutil.AssertNotNil(t, api.ManifestProvider)
+			assert.NotNil(t, api.Tasks)
+			assert.NotNil(t, api.Workers)
+			assert.NotNil(t, api.Organizations)
+			assert.NotNil(t, api.Destinations)
+			assert.NotNil(t, api.Recipients)
+			assert.NotNil(t, api.Teams)
+			assert.NotNil(t, api.Webhooks)
+			assert.NotNil(t, api.Hubs)
+			assert.NotNil(t, api.Administrators)
+			assert.NotNil(t, api.Containers)
+			assert.NotNil(t, api.RoutePlans)
+			assert.NotNil(t, api.ManifestProvider)
 		})
 	}
 }
 
 func TestDefaultConstants(t *testing.T) {
 	// Test that the default constants have expected values
-	testingutil.AssertEqual(t, int64(70000), defaultUserTimeout)
-	testingutil.AssertEqual(t, "https://onfleet.com", defaultBaseUrl)
-	testingutil.AssertEqual(t, "/api", defaultPath)
-	testingutil.AssertEqual(t, "/v2", defaultApiVersion)
-	testingutil.AssertEqual(t, 18, defaultMaxCallsPerSecond)
+	assert.Equal(t, int64(70000), defaultUserTimeout)
+	assert.Equal(t, "https://onfleet.com", defaultBaseUrl)
+	assert.Equal(t, "/api", defaultPath)
+	assert.Equal(t, "/v2", defaultApiVersion)
+	assert.Equal(t, 18, defaultMaxCallsPerSecond)
 }
 
 func TestInitParams_Struct(t *testing.T) {
@@ -293,11 +293,11 @@ func TestInitParams_Struct(t *testing.T) {
 		MaxCallsPerSecond: 10,
 	}
 	
-	testingutil.AssertEqual(t, int64(30000), params.UserTimeout)
-	testingutil.AssertEqual(t, "https://example.com", params.BaseUrl)
-	testingutil.AssertEqual(t, "/test", params.Path)
-	testingutil.AssertEqual(t, "/v1", params.ApiVersion)
-	testingutil.AssertEqual(t, 10, params.MaxCallsPerSecond)
+	assert.Equal(t, int64(30000), params.UserTimeout)
+	assert.Equal(t, "https://example.com", params.BaseUrl)
+	assert.Equal(t, "/test", params.Path)
+	assert.Equal(t, "/v1", params.ApiVersion)
+	assert.Equal(t, 10, params.MaxCallsPerSecond)
 }
 
 func TestNew_RateLimiterConfiguration(t *testing.T) {
@@ -329,11 +329,11 @@ func TestNew_RateLimiterConfiguration(t *testing.T) {
 			
 			api, err := New(apiKey, params)
 			
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertNotNil(t, api)
+			assert.NoError(t, err)
+			assert.NotNil(t, api)
 			
 			// Verify services are created
-			testingutil.AssertNotNil(t, api.Tasks)
+			assert.NotNil(t, api.Tasks)
 		})
 	}
 }
@@ -367,11 +367,11 @@ func TestNew_TimeoutConfiguration(t *testing.T) {
 			
 			api, err := New(apiKey, params)
 			
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertNotNil(t, api)
+			assert.NoError(t, err)
+			assert.NotNil(t, api)
 			
 			// Verify services are created
-			testingutil.AssertNotNil(t, api.Tasks)
+			assert.NotNil(t, api.Tasks)
 		})
 	}
 }
@@ -381,8 +381,8 @@ func TestAPI_ServiceEndpoints(t *testing.T) {
 	apiKey := "test_api_key_123"
 	api, err := New(apiKey, nil)
 	
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertNotNil(t, api)
+	assert.NoError(t, err)
+	assert.NotNil(t, api)
 	
 	// Test that API struct has all expected service fields
 	services := []interface{}{
@@ -424,10 +424,10 @@ func TestNew_EmptyStringFields(t *testing.T) {
 	
 	api, err := New(apiKey, params)
 	
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertNotNil(t, api)
+	assert.NoError(t, err)
+	assert.NotNil(t, api)
 	
 	// Should still work with defaults
-	testingutil.AssertNotNil(t, api.Tasks)
-	testingutil.AssertNotNil(t, api.Workers)
+	assert.NotNil(t, api.Tasks)
+	assert.NotNil(t, api.Workers)
 }

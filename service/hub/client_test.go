@@ -3,6 +3,7 @@ package hub
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/testingutil"
 )
@@ -24,11 +25,11 @@ func TestClient_List(t *testing.T) {
 
 	hubs, err := client.List()
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, hubs, 1)
-	testingutil.AssertEqual(t, expectedHubs[0].ID, hubs[0].ID)
-	testingutil.AssertEqual(t, expectedHubs[0].Name, hubs[0].Name)
-	testingutil.AssertEqual(t, expectedHubs[0].Address.City, hubs[0].Address.City)
+	assert.NoError(t, err)
+	assert.Len(t, hubs, 1)
+	assert.Equal(t, expectedHubs[0].ID, hubs[0].ID)
+	assert.Equal(t, expectedHubs[0].Name, hubs[0].Name)
+	assert.Equal(t, expectedHubs[0].Address.City, hubs[0].Address.City)
 
 	mockClient.AssertRequestMade("GET", "/hubs")
 	mockClient.AssertBasicAuth("test_api_key")
@@ -60,9 +61,9 @@ func TestClient_Create(t *testing.T) {
 
 	hub, err := client.Create(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedHub.ID, hub.ID)
-	testingutil.AssertEqual(t, expectedHub.Name, hub.Name)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedHub.ID, hub.ID)
+	assert.Equal(t, expectedHub.Name, hub.Name)
 
 	mockClient.AssertRequestMade("POST", "/hubs")
 }
@@ -95,9 +96,9 @@ func TestClient_Update(t *testing.T) {
 
 	hub, err := client.Update("hub_123", params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedHub.ID, hub.ID)
-	testingutil.AssertEqual(t, "Updated Distribution Center", hub.Name)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedHub.ID, hub.ID)
+	assert.Equal(t, "Updated Distribution Center", hub.Name)
 
 	mockClient.AssertRequestMade("PUT", "/hubs/hub_123")
 }
@@ -162,10 +163,10 @@ func TestClient_AddressValidation(t *testing.T) {
 
 			hub, err := client.Create(params)
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, tt.address.Street, hub.Address.Street)
-			testingutil.AssertEqual(t, tt.address.City, hub.Address.City)
-			testingutil.AssertEqual(t, tt.address.Country, hub.Address.Country)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.address.Street, hub.Address.Street)
+			assert.Equal(t, tt.address.City, hub.Address.City)
+			assert.Equal(t, tt.address.Country, hub.Address.Country)
 		})
 	}
 }
@@ -217,10 +218,10 @@ func TestClient_TeamAssignment(t *testing.T) {
 
 			hub, err := client.Create(params)
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertLen(t, hub.Teams, len(tt.teams))
+			assert.NoError(t, err)
+			assert.Len(t, hub.Teams, len(tt.teams))
 			if len(tt.teams) > 0 {
-				testingutil.AssertEqual(t, tt.teams[0], hub.Teams[0])
+				assert.Equal(t, tt.teams[0], hub.Teams[0])
 			}
 		})
 	}
@@ -308,7 +309,7 @@ func TestClient_ErrorScenarios(t *testing.T) {
 			client := Plug("test_api_key", nil, "https://api.example.com/hubs", mockClient.MockCaller)
 
 			err := tt.operation(client)
-			testingutil.AssertError(t, err)
+			assert.Error(t, err)
 		})
 	}
 }

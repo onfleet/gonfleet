@@ -3,6 +3,7 @@ package task
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/testingutil"
 )
@@ -24,10 +25,10 @@ func TestClient_Get(t *testing.T) {
 	// Test Get method
 	task, err := client.Get("task_123")
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedTask.ID, task.ID)
-	testingutil.AssertEqual(t, expectedTask.ShortId, task.ShortId)
-	testingutil.AssertEqual(t, expectedTask.State, task.State)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedTask.ID, task.ID)
+	assert.Equal(t, expectedTask.ShortId, task.ShortId)
+	assert.Equal(t, expectedTask.State, task.State)
 
 	// Verify request was made correctly
 	mockClient.AssertRequestMade("GET", "/tasks/task_123")
@@ -48,8 +49,8 @@ func TestClient_Get_NotFound(t *testing.T) {
 
 	task, err := client.Get("nonexistent")
 
-	testingutil.AssertError(t, err)
-	testingutil.AssertEqual(t, "", task.ID) // Empty task on error
+	assert.Error(t, err)
+	assert.Equal(t, "", task.ID) // Empty task on error
 }
 
 func TestClient_GetByShortId(t *testing.T) {
@@ -66,9 +67,9 @@ func TestClient_GetByShortId(t *testing.T) {
 
 	task, err := client.GetByShortId("abc123")
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedTask.ID, task.ID)
-	testingutil.AssertEqual(t, expectedTask.ShortId, task.ShortId)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedTask.ID, task.ID)
+	assert.Equal(t, expectedTask.ShortId, task.ShortId)
 
 	mockClient.AssertRequestMade("GET", "/tasks/shortId/abc123")
 }
@@ -99,9 +100,9 @@ func TestClient_List(t *testing.T) {
 
 	tasks, err := client.List(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, tasks.Tasks, 1)
-	testingutil.AssertEqual(t, expectedTasks.LastId, tasks.LastId)
+	assert.NoError(t, err)
+	assert.Len(t, tasks.Tasks, 1)
+	assert.Equal(t, expectedTasks.LastId, tasks.LastId)
 
 	mockClient.AssertRequestMade("GET", "/tasks")
 }
@@ -131,9 +132,9 @@ func TestClient_ListWithMetadataQuery(t *testing.T) {
 
 	tasks, err := client.ListWithMetadataQuery(metadata)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, tasks, 1)
-	testingutil.AssertEqual(t, expectedTasks[0].ID, tasks[0].ID)
+	assert.NoError(t, err)
+	assert.Len(t, tasks, 1)
+	assert.Equal(t, expectedTasks[0].ID, tasks[0].ID)
 
 	mockClient.AssertRequestMade("POST", "/tasks/metadata")
 }
@@ -154,14 +155,14 @@ func TestClient_Create(t *testing.T) {
 
 	task, err := client.Create(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedTask.ID, task.ID)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedTask.ID, task.ID)
 
 	mockClient.AssertRequestMade("POST", "/tasks")
 	
 	// Verify the request was made correctly
 	lastRequest := mockClient.GetLastRequest()
-	testingutil.AssertNotNil(t, lastRequest)
+	assert.NotNil(t, lastRequest)
 }
 
 func TestClient_Create_ValidationError(t *testing.T) {
@@ -183,8 +184,8 @@ func TestClient_Create_ValidationError(t *testing.T) {
 
 	task, err := client.Create(params)
 
-	testingutil.AssertError(t, err)
-	testingutil.AssertEqual(t, "", task.ID)
+	assert.Error(t, err)
+	assert.Equal(t, "", task.ID)
 }
 
 func TestClient_BatchCreate(t *testing.T) {
@@ -213,9 +214,9 @@ func TestClient_BatchCreate(t *testing.T) {
 
 	response, err := client.BatchCreate(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, response.Tasks, 1)
-	testingutil.AssertLen(t, response.Errors, 0)
+	assert.NoError(t, err)
+	assert.Len(t, response.Tasks, 1)
+	assert.Len(t, response.Errors, 0)
 
 	mockClient.AssertRequestMade("POST", "/tasks/batch")
 }
@@ -244,9 +245,9 @@ func TestClient_BatchCreateAsync(t *testing.T) {
 
 	response, err := client.BatchCreateAsync(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, "job_123", response.JobID)
-	testingutil.AssertEqual(t, "PENDING", response.Status)
+	assert.NoError(t, err)
+	assert.Equal(t, "job_123", response.JobID)
+	assert.Equal(t, "PENDING", response.Status)
 
 	mockClient.AssertRequestMade("POST", "/tasks/batch-async")
 }
@@ -278,10 +279,10 @@ func TestClient_GetBatchJobStatus(t *testing.T) {
 
 	response, err := client.GetBatchJobStatus("job_123")
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, "COMPLETED", response.Status)
-	testingutil.AssertEqual(t, 1, response.TasksCreated)
-	testingutil.AssertLen(t, response.NewTasks, 1)
+	assert.NoError(t, err)
+	assert.Equal(t, "COMPLETED", response.Status)
+	assert.Equal(t, 1, response.TasksCreated)
+	assert.Len(t, response.NewTasks, 1)
 
 	mockClient.AssertRequestMade("GET", "/tasks/batch/job_123")
 }
@@ -306,9 +307,9 @@ func TestClient_Update(t *testing.T) {
 
 	task, err := client.Update("task_123", params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedTask.ID, task.ID)
-	testingutil.AssertEqual(t, "Updated notes", task.Notes)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedTask.ID, task.ID)
+	assert.Equal(t, "Updated notes", task.Notes)
 
 	mockClient.AssertRequestMade("PUT", "/tasks/task_123")
 }
@@ -333,7 +334,7 @@ func TestClient_ForceComplete(t *testing.T) {
 
 	err := client.ForceComplete("task_123", params)
 
-	testingutil.AssertNoError(t, err)
+	assert.NoError(t, err)
 	mockClient.AssertRequestMade("POST", "/tasks/task_123/complete")
 }
 
@@ -363,9 +364,9 @@ func TestClient_Clone(t *testing.T) {
 
 	task, err := client.Clone("task_123", params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, "cloned_task_456", task.ID)
-	testingutil.AssertEqual(t, "task_123", task.SourceTaskId)
+	assert.NoError(t, err)
+	assert.Equal(t, "cloned_task_456", task.ID)
+	assert.Equal(t, "task_123", task.SourceTaskId)
 
 	mockClient.AssertRequestMade("POST", "/tasks/task_123/clone")
 }
@@ -386,8 +387,8 @@ func TestClient_Clone_NilParams(t *testing.T) {
 
 	task, err := client.Clone("task_123", nil)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, "cloned_task_456", task.ID)
+	assert.NoError(t, err)
+	assert.Equal(t, "cloned_task_456", task.ID)
 }
 
 func TestClient_Delete(t *testing.T) {
@@ -403,7 +404,7 @@ func TestClient_Delete(t *testing.T) {
 
 	err := client.Delete("task_123")
 
-	testingutil.AssertNoError(t, err)
+	assert.NoError(t, err)
 	mockClient.AssertRequestMade("DELETE", "/tasks/task_123")
 }
 
@@ -420,7 +421,7 @@ func TestClient_Delete_NotFound(t *testing.T) {
 
 	err := client.Delete("nonexistent")
 
-	testingutil.AssertError(t, err)
+	assert.Error(t, err)
 }
 
 func TestClient_AutoAssignMulti(t *testing.T) {
@@ -452,10 +453,10 @@ func TestClient_AutoAssignMulti(t *testing.T) {
 
 	response, err := client.AutoAssignMulti(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, 2, response.AssignedTasksCount)
-	testingutil.AssertLen(t, response.AssignedTasks, 2)
-	testingutil.AssertEqual(t, "task_123", response.AssignedTasks[0])
+	assert.NoError(t, err)
+	assert.Equal(t, 2, response.AssignedTasksCount)
+	assert.Len(t, response.AssignedTasks, 2)
+	assert.Equal(t, "task_123", response.AssignedTasks[0])
 
 	mockClient.AssertRequestMade("POST", "/tasks/autoAssign")
 }
@@ -485,9 +486,9 @@ func TestClient_AutoAssignMulti_NoAssignments(t *testing.T) {
 
 	response, err := client.AutoAssignMulti(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, 0, response.AssignedTasksCount)
-	testingutil.AssertLen(t, response.AssignedTasks, 0)
+	assert.NoError(t, err)
+	assert.Equal(t, 0, response.AssignedTasksCount)
+	assert.Len(t, response.AssignedTasks, 0)
 }
 
 // Table-driven test for different task states
@@ -519,8 +520,8 @@ func TestClient_Get_DifferentStates(t *testing.T) {
 
 			task, err := client.Get("task_123")
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, tt.state, task.State)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.state, task.State)
 		})
 	}
 }
@@ -552,8 +553,8 @@ func TestClient_DifferentConfigurations(t *testing.T) {
 
 			task, err := client.Get("task_123")
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, expectedTask.ID, task.ID)
+			assert.NoError(t, err)
+			assert.Equal(t, expectedTask.ID, task.ID)
 
 			// Verify correct API key was used
 			mockClient.AssertBasicAuth(tt.apiKey)

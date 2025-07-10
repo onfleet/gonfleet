@@ -3,6 +3,7 @@ package routePlan
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/testingutil"
 )
@@ -37,10 +38,10 @@ func TestClient_Create(t *testing.T) {
 
 	routePlan, err := client.Create(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedRoutePlan.Id, routePlan.Id)
-	testingutil.AssertEqual(t, expectedRoutePlan.Name, routePlan.Name)
-	testingutil.AssertEqual(t, expectedRoutePlan.VehicleType, routePlan.VehicleType)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedRoutePlan.Id, routePlan.Id)
+	assert.Equal(t, expectedRoutePlan.Name, routePlan.Name)
+	assert.Equal(t, expectedRoutePlan.VehicleType, routePlan.VehicleType)
 
 	mockClient.AssertRequestMade("POST", "/route-plans")
 	mockClient.AssertBasicAuth("test_api_key")
@@ -60,11 +61,11 @@ func TestClient_Get(t *testing.T) {
 
 	routePlan, err := client.Get("routeplan_123")
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedRoutePlan.Id, routePlan.Id)
-	testingutil.AssertEqual(t, expectedRoutePlan.Name, routePlan.Name)
-	testingutil.AssertEqual(t, expectedRoutePlan.State, routePlan.State)
-	testingutil.AssertLen(t, routePlan.Tasks, 3)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedRoutePlan.Id, routePlan.Id)
+	assert.Equal(t, expectedRoutePlan.Name, routePlan.Name)
+	assert.Equal(t, expectedRoutePlan.State, routePlan.State)
+	assert.Len(t, routePlan.Tasks, 3)
 
 	mockClient.AssertRequestMade("GET", "/route-plans/routeplan_123")
 }
@@ -93,10 +94,10 @@ func TestClient_Update(t *testing.T) {
 
 	routePlan, err := client.Update("routeplan_123", params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedRoutePlan.Id, routePlan.Id)
-	testingutil.AssertEqual(t, "Updated Morning Route", routePlan.Name)
-	testingutil.AssertEqual(t, "#00FF00", routePlan.Color)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedRoutePlan.Id, routePlan.Id)
+	assert.Equal(t, "Updated Morning Route", routePlan.Name)
+	assert.Equal(t, "#00FF00", routePlan.Color)
 
 	mockClient.AssertRequestMade("PUT", "/route-plans/routeplan_123")
 }
@@ -121,11 +122,11 @@ func TestClient_AddTasks(t *testing.T) {
 
 	routePlan, err := client.AddTasks("routeplan_123", params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedRoutePlan.Id, routePlan.Id)
-	testingutil.AssertLen(t, routePlan.Tasks, 5)
-	testingutil.AssertEqual(t, "task_444", routePlan.Tasks[3])
-	testingutil.AssertEqual(t, "task_555", routePlan.Tasks[4])
+	assert.NoError(t, err)
+	assert.Equal(t, expectedRoutePlan.Id, routePlan.Id)
+	assert.Len(t, routePlan.Tasks, 5)
+	assert.Equal(t, "task_444", routePlan.Tasks[3])
+	assert.Equal(t, "task_555", routePlan.Tasks[4])
 
 	mockClient.AssertRequestMade("PUT", "/route-plans/routeplan_123")
 }
@@ -162,10 +163,10 @@ func TestClient_List(t *testing.T) {
 
 	response, err := client.List(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, response.RoutePlans, 1)
-	testingutil.AssertEqual(t, expectedRoutePlans[0].Id, response.RoutePlans[0].Id)
-	testingutil.AssertEqual(t, "routeplan_123", response.LastId)
+	assert.NoError(t, err)
+	assert.Len(t, response.RoutePlans, 1)
+	assert.Equal(t, expectedRoutePlans[0].Id, response.RoutePlans[0].Id)
+	assert.Equal(t, "routeplan_123", response.LastId)
 
 	mockClient.AssertRequestMade("GET", "/route-plans/all")
 }
@@ -183,7 +184,7 @@ func TestClient_Delete(t *testing.T) {
 
 	err := client.Delete("routeplan_123")
 
-	testingutil.AssertNoError(t, err)
+	assert.NoError(t, err)
 	mockClient.AssertRequestMade("DELETE", "/route-plans/routeplan_123")
 }
 
@@ -238,8 +239,8 @@ func TestClient_VehicleTypes(t *testing.T) {
 
 			routePlan, err := client.Create(params)
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, tt.vehicleType, routePlan.VehicleType)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.vehicleType, routePlan.VehicleType)
 		})
 	}
 }
@@ -311,13 +312,13 @@ func TestClient_PositionTypes(t *testing.T) {
 
 			routePlan, err := client.Create(params)
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, expectedRoutePlan.Id, routePlan.Id)
+			assert.NoError(t, err)
+			assert.Equal(t, expectedRoutePlan.Id, routePlan.Id)
 			if tt.startHub != "" {
-				testingutil.AssertEqual(t, tt.startHub, *routePlan.StartingHubId)
+				assert.Equal(t, tt.startHub, *routePlan.StartingHubId)
 			}
 			if tt.endHub != "" {
-				testingutil.AssertEqual(t, tt.endHub, *routePlan.EndingHubId)
+				assert.Equal(t, tt.endHub, *routePlan.EndingHubId)
 			}
 		})
 	}
@@ -359,8 +360,8 @@ func TestClient_RoutePlanStates(t *testing.T) {
 
 			routePlan, err := client.Get("routeplan_123")
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, tt.state, routePlan.State)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.state, routePlan.State)
 		})
 	}
 }
@@ -469,7 +470,7 @@ func TestClient_ErrorScenarios(t *testing.T) {
 			client := Plug("test_api_key", nil, "https://api.example.com/route-plans", mockClient.MockCaller)
 
 			err := tt.operation(client)
-			testingutil.AssertError(t, err)
+			assert.Error(t, err)
 		})
 	}
 }

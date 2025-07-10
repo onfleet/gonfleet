@@ -3,6 +3,7 @@ package manifest
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/testingutil"
 )
@@ -26,14 +27,14 @@ func TestClient_Generate(t *testing.T) {
 
 	manifest, err := client.Generate(params, "")
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedManifest.DepartureTime, manifest.DepartureTime)
-	testingutil.AssertEqual(t, expectedManifest.Driver.Name, manifest.Driver.Name)
-	testingutil.AssertEqual(t, expectedManifest.Driver.Phone, manifest.Driver.Phone)
-	testingutil.AssertEqual(t, expectedManifest.HubAddress, manifest.HubAddress)
-	testingutil.AssertEqual(t, expectedManifest.TotalDistance, manifest.TotalDistance)
-	testingutil.AssertLen(t, manifest.Tasks, 1)
-	testingutil.AssertLen(t, manifest.TurnByTurn, 1)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedManifest.DepartureTime, manifest.DepartureTime)
+	assert.Equal(t, expectedManifest.Driver.Name, manifest.Driver.Name)
+	assert.Equal(t, expectedManifest.Driver.Phone, manifest.Driver.Phone)
+	assert.Equal(t, expectedManifest.HubAddress, manifest.HubAddress)
+	assert.Equal(t, expectedManifest.TotalDistance, manifest.TotalDistance)
+	assert.Len(t, manifest.Tasks, 1)
+	assert.Len(t, manifest.TurnByTurn, 1)
 
 	mockClient.AssertRequestMade("POST", "/providers/manifest")
 	mockClient.AssertBasicAuth("test_api_key")
@@ -87,10 +88,10 @@ func TestClient_GenerateWithGoogleAPIKey(t *testing.T) {
 	googleAPIKey := "AIzaSyABCDEF123456789"
 	manifest, err := client.Generate(params, googleAPIKey)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedManifest.DepartureTime, manifest.DepartureTime)
-	testingutil.AssertLen(t, manifest.TurnByTurn, 2)
-	testingutil.AssertEqual(t, "Head north on Main St for 0.5 miles", manifest.TurnByTurn[0].Steps[0])
+	assert.NoError(t, err)
+	assert.Equal(t, expectedManifest.DepartureTime, manifest.DepartureTime)
+	assert.Len(t, manifest.TurnByTurn, 2)
+	assert.Equal(t, "Head north on Main St for 0.5 miles", manifest.TurnByTurn[0].Steps[0])
 
 	mockClient.AssertRequestMade("POST", "/providers/manifest")
 
@@ -98,7 +99,7 @@ func TestClient_GenerateWithGoogleAPIKey(t *testing.T) {
 	lastRequest := mockClient.GetLastRequest()
 	expectedHeaderValue := "Google " + googleAPIKey
 	actualHeaderValue := lastRequest.Header.Get("X-API-Key")
-	testingutil.AssertEqual(t, expectedHeaderValue, actualHeaderValue)
+	assert.Equal(t, expectedHeaderValue, actualHeaderValue)
 }
 
 func TestClient_ManifestWithDifferentVehicleTypes(t *testing.T) {
@@ -160,9 +161,9 @@ func TestClient_ManifestWithDifferentVehicleTypes(t *testing.T) {
 
 			manifest, err := client.Generate(params, "")
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, tt.vehicleType, manifest.Vehicle.Type)
-			testingutil.AssertEqual(t, tt.description, manifest.Vehicle.Description)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.vehicleType, manifest.Vehicle.Type)
+			assert.Equal(t, tt.description, manifest.Vehicle.Description)
 		})
 	}
 }
@@ -239,11 +240,11 @@ func TestClient_ManifestWithMultipleTasks(t *testing.T) {
 
 	manifest, err := client.Generate(params, "")
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, manifest.Tasks, 3)
-	testingutil.AssertLen(t, manifest.TurnByTurn, 2)
-	testingutil.AssertEqual(t, "task_456", manifest.Tasks[1].ID)
-	testingutil.AssertEqual(t, "task_789", manifest.Tasks[2].ID)
+	assert.NoError(t, err)
+	assert.Len(t, manifest.Tasks, 3)
+	assert.Len(t, manifest.TurnByTurn, 2)
+	assert.Equal(t, "task_456", manifest.Tasks[1].ID)
+	assert.Equal(t, "task_789", manifest.Tasks[2].ID)
 
 	mockClient.AssertRequestMade("POST", "/providers/manifest")
 }
@@ -296,9 +297,9 @@ func TestClient_ManifestDriverInformation(t *testing.T) {
 
 			manifest, err := client.Generate(params, "")
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, tt.driverName, manifest.Driver.Name)
-			testingutil.AssertEqual(t, tt.driverPhone, manifest.Driver.Phone)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.driverName, manifest.Driver.Name)
+			assert.Equal(t, tt.driverPhone, manifest.Driver.Phone)
 		})
 	}
 }
@@ -403,7 +404,7 @@ func TestClient_ErrorScenarios(t *testing.T) {
 			client := Plug("test_api_key", nil, "https://api.example.com/providers/manifest", mockClient.MockCaller)
 
 			err := tt.operation(client)
-			testingutil.AssertError(t, err)
+			assert.Error(t, err)
 		})
 	}
 }

@@ -3,6 +3,7 @@ package worker
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/testingutil"
 )
@@ -21,10 +22,10 @@ func TestClient_Get(t *testing.T) {
 
 	worker, err := client.Get("worker_123")
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedWorker.ID, worker.ID)
-	testingutil.AssertEqual(t, expectedWorker.Name, worker.Name)
-	testingutil.AssertEqual(t, expectedWorker.Phone, worker.Phone)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedWorker.ID, worker.ID)
+	assert.Equal(t, expectedWorker.Name, worker.Name)
+	assert.Equal(t, expectedWorker.Phone, worker.Phone)
 
 	mockClient.AssertRequestMade("GET", "/workers/worker_123")
 	mockClient.AssertBasicAuth("test_api_key")
@@ -43,8 +44,8 @@ func TestClient_Get_NotFound(t *testing.T) {
 
 	worker, err := client.Get("nonexistent")
 
-	testingutil.AssertError(t, err)
-	testingutil.AssertEqual(t, "", worker.ID)
+	assert.Error(t, err)
+	assert.Equal(t, "", worker.ID)
 }
 
 func TestClient_GetWithQuery(t *testing.T) {
@@ -77,9 +78,9 @@ func TestClient_GetWithQuery(t *testing.T) {
 
 	response, err := client.GetWithQuery("worker_123", params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, "worker_123", response["id"])
-	testingutil.AssertNotNil(t, response["analytics"])
+	assert.NoError(t, err)
+	assert.Equal(t, "worker_123", response["id"])
+	assert.NotNil(t, response["analytics"])
 
 	mockClient.AssertRequestMade("GET", "/workers/worker_123")
 }
@@ -101,9 +102,9 @@ func TestClient_List(t *testing.T) {
 
 	workers, err := client.List()
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, workers, 1)
-	testingutil.AssertEqual(t, expectedWorkers[0].ID, workers[0].ID)
+	assert.NoError(t, err)
+	assert.Len(t, workers, 1)
+	assert.Equal(t, expectedWorkers[0].ID, workers[0].ID)
 
 	mockClient.AssertRequestMade("GET", "/workers")
 }
@@ -133,9 +134,9 @@ func TestClient_ListWithQuery(t *testing.T) {
 
 	response, err := client.ListWithQuery(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, response, 1)
-	testingutil.AssertEqual(t, "worker_123", response[0]["id"])
+	assert.NoError(t, err)
+	assert.Len(t, response, 1)
+	assert.Equal(t, "worker_123", response[0]["id"])
 
 	mockClient.AssertRequestMade("GET", "/workers")
 }
@@ -165,9 +166,9 @@ func TestClient_ListWithMetadataQuery(t *testing.T) {
 
 	workers, err := client.ListWithMetadataQuery(metadata)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, workers, 1)
-	testingutil.AssertEqual(t, expectedWorkers[0].ID, workers[0].ID)
+	assert.NoError(t, err)
+	assert.Len(t, workers, 1)
+	assert.Equal(t, expectedWorkers[0].ID, workers[0].ID)
 
 	mockClient.AssertRequestMade("POST", "/workers/metadata")
 }
@@ -188,9 +189,9 @@ func TestClient_Create(t *testing.T) {
 
 	worker, err := client.Create(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedWorker.ID, worker.ID)
-	testingutil.AssertEqual(t, expectedWorker.Name, worker.Name)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedWorker.ID, worker.ID)
+	assert.Equal(t, expectedWorker.Name, worker.Name)
 
 	mockClient.AssertRequestMade("POST", "/workers")
 }
@@ -213,8 +214,8 @@ func TestClient_Create_ValidationError(t *testing.T) {
 
 	worker, err := client.Create(params)
 
-	testingutil.AssertError(t, err)
-	testingutil.AssertEqual(t, "", worker.ID)
+	assert.Error(t, err)
+	assert.Equal(t, "", worker.ID)
 }
 
 func TestClient_Update(t *testing.T) {
@@ -237,9 +238,9 @@ func TestClient_Update(t *testing.T) {
 
 	worker, err := client.Update("worker_123", params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedWorker.ID, worker.ID)
-	testingutil.AssertEqual(t, "Updated Name", worker.Name)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedWorker.ID, worker.ID)
+	assert.Equal(t, "Updated Name", worker.Name)
 
 	mockClient.AssertRequestMade("PUT", "/workers/worker_123")
 }
@@ -257,7 +258,7 @@ func TestClient_Delete(t *testing.T) {
 
 	err := client.Delete("worker_123")
 
-	testingutil.AssertNoError(t, err)
+	assert.NoError(t, err)
 	mockClient.AssertRequestMade("DELETE", "/workers/worker_123")
 }
 
@@ -284,9 +285,9 @@ func TestClient_GetSchedule(t *testing.T) {
 
 	schedule, err := client.GetSchedule("worker_123")
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, schedule.Entries, 1)
-	testingutil.AssertEqual(t, "2023-01-01", schedule.Entries[0].Date)
+	assert.NoError(t, err)
+	assert.Len(t, schedule.Entries, 1)
+	assert.Equal(t, "2023-01-01", schedule.Entries[0].Date)
 
 	mockClient.AssertRequestMade("GET", "/workers/worker_123/schedule")
 }
@@ -324,9 +325,9 @@ func TestClient_SetSchedule(t *testing.T) {
 
 	schedule, err := client.SetSchedule("worker_123", inputSchedule)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, schedule.Entries, 1)
-	testingutil.AssertEqual(t, "2023-01-02", schedule.Entries[0].Date)
+	assert.NoError(t, err)
+	assert.Len(t, schedule.Entries, 1)
+	assert.Equal(t, "2023-01-02", schedule.Entries[0].Date)
 
 	mockClient.AssertRequestMade("POST", "/workers/worker_123/schedule")
 }
@@ -356,9 +357,9 @@ func TestClient_ListWorkersByLocation(t *testing.T) {
 
 	response, err := client.ListWorkersByLocation(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, response.Workers, 1)
-	testingutil.AssertEqual(t, expectedResponse.Workers[0].ID, response.Workers[0].ID)
+	assert.NoError(t, err)
+	assert.Len(t, response.Workers, 1)
+	assert.Equal(t, expectedResponse.Workers[0].ID, response.Workers[0].ID)
 
 	mockClient.AssertRequestMade("GET", "/workers/location")
 }
@@ -389,9 +390,9 @@ func TestClient_ListTasks(t *testing.T) {
 
 	response, err := client.ListTasks("worker_123", params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, response.Tasks, 1)
-	testingutil.AssertEqual(t, "last_task_456", response.LastId)
+	assert.NoError(t, err)
+	assert.Len(t, response.Tasks, 1)
+	assert.Equal(t, "last_task_456", response.LastId)
 
 	mockClient.AssertRequestMade("GET", "/workers/worker_123/tasks")
 }
@@ -414,8 +415,8 @@ func TestClient_ListTasks_NilParams(t *testing.T) {
 
 	response, err := client.ListTasks("worker_123", nil)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, response.Tasks, 0)
+	assert.NoError(t, err)
+	assert.Len(t, response.Tasks, 0)
 
 	mockClient.AssertRequestMade("GET", "/workers/worker_123/tasks")
 }
@@ -447,8 +448,8 @@ func TestClient_Get_DifferentAccountStatuses(t *testing.T) {
 
 			worker, err := client.Get("worker_123")
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, tt.status, worker.AccountStatus)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.status, worker.AccountStatus)
 		})
 	}
 }
@@ -485,8 +486,8 @@ func TestClient_Create_DifferentVehicleTypes(t *testing.T) {
 
 			worker, err := client.Create(params)
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, tt.vehicleType, worker.Vehicle.Type)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.vehicleType, worker.Vehicle.Type)
 		})
 	}
 }
@@ -538,8 +539,8 @@ func TestClient_ListWithQuery_DifferentFilters(t *testing.T) {
 
 			response, err := client.ListWithQuery(tt.params)
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertLen(t, response, 1)
+			assert.NoError(t, err)
+			assert.Len(t, response, 1)
 		})
 	}
 }
@@ -582,7 +583,7 @@ func TestClient_ErrorScenarios(t *testing.T) {
 				err = client.Delete("worker_123")
 			}
 
-			testingutil.AssertError(t, err)
+			assert.Error(t, err)
 		})
 	}
 }

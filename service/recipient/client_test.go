@@ -3,6 +3,7 @@ package recipient
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/testingutil"
 )
@@ -21,10 +22,10 @@ func TestClient_Get(t *testing.T) {
 
 	recipient, err := client.Get("recipient_123")
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedRecipient.ID, recipient.ID)
-	testingutil.AssertEqual(t, expectedRecipient.Name, recipient.Name)
-	testingutil.AssertEqual(t, expectedRecipient.Phone, recipient.Phone)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedRecipient.ID, recipient.ID)
+	assert.Equal(t, expectedRecipient.Name, recipient.Name)
+	assert.Equal(t, expectedRecipient.Phone, recipient.Phone)
 
 	mockClient.AssertRequestMade("GET", "/recipients/recipient_123")
 	mockClient.AssertBasicAuth("test_api_key")
@@ -44,9 +45,9 @@ func TestClient_FindByName(t *testing.T) {
 
 	recipient, err := client.Find("Jane Smith", onfleet.RecipientQueryKeyName)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedRecipient.ID, recipient.ID)
-	testingutil.AssertEqual(t, expectedRecipient.Name, recipient.Name)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedRecipient.ID, recipient.ID)
+	assert.Equal(t, expectedRecipient.Name, recipient.Name)
 
 	mockClient.AssertRequestMade("GET", "/recipients/name/")
 }
@@ -65,9 +66,9 @@ func TestClient_FindByPhone(t *testing.T) {
 
 	recipient, err := client.Find("+15559876543", onfleet.RecipientQueryKeyPhone)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedRecipient.ID, recipient.ID)
-	testingutil.AssertEqual(t, expectedRecipient.Phone, recipient.Phone)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedRecipient.ID, recipient.ID)
+	assert.Equal(t, expectedRecipient.Phone, recipient.Phone)
 
 	mockClient.AssertRequestMade("GET", "/recipients/phone/+15559876543")
 }
@@ -92,8 +93,8 @@ func TestClient_Create(t *testing.T) {
 
 	recipient, err := client.Create(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedRecipient.ID, recipient.ID)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedRecipient.ID, recipient.ID)
 
 	mockClient.AssertRequestMade("POST", "/recipients")
 }
@@ -118,9 +119,9 @@ func TestClient_Update(t *testing.T) {
 
 	recipient, err := client.Update("recipient_123", params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedRecipient.ID, recipient.ID)
-	testingutil.AssertEqual(t, "Updated notes", recipient.Notes)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedRecipient.ID, recipient.ID)
+	assert.Equal(t, "Updated notes", recipient.Notes)
 
 	mockClient.AssertRequestMade("PUT", "/recipients/recipient_123")
 }
@@ -150,9 +151,9 @@ func TestClient_ListWithMetadataQuery(t *testing.T) {
 
 	recipients, err := client.ListWithMetadataQuery(metadata)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, recipients, 1)
-	testingutil.AssertEqual(t, expectedRecipients[0].ID, recipients[0].ID)
+	assert.NoError(t, err)
+	assert.Len(t, recipients, 1)
+	assert.Equal(t, expectedRecipients[0].ID, recipients[0].ID)
 
 	mockClient.AssertRequestMade("POST", "/recipients/metadata")
 }
@@ -230,7 +231,7 @@ func TestClient_ErrorScenarios(t *testing.T) {
 			client := Plug("test_api_key", nil, "https://api.example.com/recipients", mockClient.MockCaller)
 
 			err := tt.operation(client)
-			testingutil.AssertError(t, err)
+			assert.Error(t, err)
 		})
 	}
 }
@@ -270,8 +271,8 @@ func TestClient_PhoneNumberEncoding(t *testing.T) {
 
 			recipient, err := client.Find(tt.phoneNumber, onfleet.RecipientQueryKeyPhone)
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, tt.phoneNumber, recipient.Phone)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.phoneNumber, recipient.Phone)
 		})
 	}
 }

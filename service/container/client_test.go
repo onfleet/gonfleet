@@ -3,6 +3,7 @@ package container
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/testingutil"
 )
@@ -21,11 +22,11 @@ func TestClient_GetWorkerContainer(t *testing.T) {
 
 	container, err := client.Get("worker_456", onfleet.ContainerQueryKeyWorkers)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedContainer.ID, container.ID)
-	testingutil.AssertEqual(t, expectedContainer.Type, container.Type)
-	testingutil.AssertEqual(t, expectedContainer.Worker, container.Worker)
-	testingutil.AssertLen(t, container.Tasks, 3)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedContainer.ID, container.ID)
+	assert.Equal(t, expectedContainer.Type, container.Type)
+	assert.Equal(t, expectedContainer.Worker, container.Worker)
+	assert.Len(t, container.Tasks, 3)
 
 	mockClient.AssertRequestMade("GET", "/containers/workers/worker_456")
 	mockClient.AssertBasicAuth("test_api_key")
@@ -49,10 +50,10 @@ func TestClient_GetTeamContainer(t *testing.T) {
 
 	container, err := client.Get("team_123", onfleet.ContainerQueryKeyTeams)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedContainer.ID, container.ID)
-	testingutil.AssertEqual(t, onfleet.ContainerTypeTeam, container.Type)
-	testingutil.AssertEqual(t, "team_123", container.Team)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedContainer.ID, container.ID)
+	assert.Equal(t, onfleet.ContainerTypeTeam, container.Type)
+	assert.Equal(t, "team_123", container.Team)
 
 	mockClient.AssertRequestMade("GET", "/containers/teams/team_123")
 }
@@ -75,10 +76,10 @@ func TestClient_GetOrganizationContainer(t *testing.T) {
 
 	container, err := client.Get("org_789", onfleet.ContainerQueryKeyOrganizations)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedContainer.ID, container.ID)
-	testingutil.AssertEqual(t, onfleet.ContainerTypeOrganization, container.Type)
-	testingutil.AssertEqual(t, expectedContainer.Organization, container.Organization)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedContainer.ID, container.ID)
+	assert.Equal(t, onfleet.ContainerTypeOrganization, container.Type)
+	assert.Equal(t, expectedContainer.Organization, container.Organization)
 
 	mockClient.AssertRequestMade("GET", "/containers/organizations/org_789")
 }
@@ -113,11 +114,11 @@ func TestClient_InsertTasksAtIndex(t *testing.T) {
 
 	container, err := client.InsertTasks("worker_456", onfleet.ContainerQueryKeyWorkers, params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedContainer.ID, container.ID)
-	testingutil.AssertLen(t, container.Tasks, 5)
-	testingutil.AssertEqual(t, "task_444", container.Tasks[1])
-	testingutil.AssertEqual(t, "task_555", container.Tasks[2])
+	assert.NoError(t, err)
+	assert.Equal(t, expectedContainer.ID, container.ID)
+	assert.Len(t, container.Tasks, 5)
+	assert.Equal(t, "task_444", container.Tasks[1])
+	assert.Equal(t, "task_555", container.Tasks[2])
 
 	mockClient.AssertRequestMade("PUT", "/containers/workers/worker_456")
 }
@@ -147,10 +148,10 @@ func TestClient_InsertTasksWithDependencies(t *testing.T) {
 
 	container, err := client.InsertTasks("worker_456", onfleet.ContainerQueryKeyWorkers, params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedContainer.ID, container.ID)
-	testingutil.AssertLen(t, container.Tasks, 4)
-	testingutil.AssertEqual(t, "task_666", container.Tasks[3])
+	assert.NoError(t, err)
+	assert.Equal(t, expectedContainer.ID, container.ID)
+	assert.Len(t, container.Tasks, 4)
+	assert.Equal(t, "task_666", container.Tasks[3])
 
 	mockClient.AssertRequestMade("PUT", "/containers/workers/worker_456")
 }
@@ -210,10 +211,10 @@ func TestClient_ContainerTypes(t *testing.T) {
 
 			container, err := client.Get(tt.entityID, tt.queryKey)
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, tt.containerType, container.Type)
-			testingutil.AssertEqual(t, tt.workerField, container.Worker)
-			testingutil.AssertEqual(t, tt.teamField, container.Team)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.containerType, container.Type)
+			assert.Equal(t, tt.workerField, container.Worker)
+			assert.Equal(t, tt.teamField, container.Team)
 
 			mockClient.AssertRequestMade("GET", expectedURL)
 		})
@@ -295,8 +296,8 @@ func TestClient_TaskOperations(t *testing.T) {
 
 			container, err := client.InsertTasks("worker_456", onfleet.ContainerQueryKeyWorkers, tt.params)
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertLen(t, container.Tasks, tt.expectedTasksLength)
+			assert.NoError(t, err)
+			assert.Len(t, container.Tasks, tt.expectedTasksLength)
 
 			mockClient.AssertRequestMade("PUT", "/containers/workers/worker_456")
 		})
@@ -384,7 +385,7 @@ func TestClient_ErrorScenarios(t *testing.T) {
 			client := Plug("test_api_key", nil, "https://api.example.com/containers", mockClient.MockCaller)
 
 			err := tt.operation(client)
-			testingutil.AssertError(t, err)
+			assert.Error(t, err)
 		})
 	}
 }

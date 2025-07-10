@@ -3,6 +3,7 @@ package organization
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/testingutil"
 )
@@ -21,10 +22,10 @@ func TestClient_Get(t *testing.T) {
 
 	org, err := client.Get()
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedOrg.ID, org.ID)
-	testingutil.AssertEqual(t, expectedOrg.Name, org.Name)
-	testingutil.AssertEqual(t, expectedOrg.Email, org.Email)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedOrg.ID, org.ID)
+	assert.Equal(t, expectedOrg.Name, org.Name)
+	assert.Equal(t, expectedOrg.Email, org.Email)
 
 	mockClient.AssertRequestMade("GET", "/organization")
 	mockClient.AssertBasicAuth("test_api_key")
@@ -43,8 +44,8 @@ func TestClient_Get_Error(t *testing.T) {
 
 	org, err := client.Get()
 
-	testingutil.AssertError(t, err)
-	testingutil.AssertEqual(t, "", org.ID)
+	assert.Error(t, err)
+	assert.Equal(t, "", org.ID)
 }
 
 func TestClient_GetDelegate(t *testing.T) {
@@ -70,11 +71,11 @@ func TestClient_GetDelegate(t *testing.T) {
 
 	delegate, err := client.GetDelegate("delegate_123")
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedDelegate.ID, delegate.ID)
-	testingutil.AssertEqual(t, expectedDelegate.Name, delegate.Name)
-	testingutil.AssertEqual(t, expectedDelegate.Email, delegate.Email)
-	testingutil.AssertTrue(t, delegate.IsFulfillment)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedDelegate.ID, delegate.ID)
+	assert.Equal(t, expectedDelegate.Name, delegate.Name)
+	assert.Equal(t, expectedDelegate.Email, delegate.Email)
+	assert.True(t, delegate.IsFulfillment)
 
 	mockClient.AssertRequestMade("GET", "/organizations/delegate_123")
 	mockClient.AssertBasicAuth("test_api_key")
@@ -93,8 +94,8 @@ func TestClient_GetDelegate_NotFound(t *testing.T) {
 
 	delegate, err := client.GetDelegate("nonexistent")
 
-	testingutil.AssertError(t, err)
-	testingutil.AssertEqual(t, "", delegate.ID)
+	assert.Error(t, err)
+	assert.Equal(t, "", delegate.ID)
 }
 
 func TestClient_GetDelegate_Forbidden(t *testing.T) {
@@ -110,8 +111,8 @@ func TestClient_GetDelegate_Forbidden(t *testing.T) {
 
 	delegate, err := client.GetDelegate("delegate_123")
 
-	testingutil.AssertError(t, err)
-	testingutil.AssertEqual(t, "", delegate.ID)
+	assert.Error(t, err)
+	assert.Equal(t, "", delegate.ID)
 }
 
 // Test that the client uses the correct URLs for different operations
@@ -147,7 +148,7 @@ func TestClient_URLUsage(t *testing.T) {
 
 				client := Plug("test_api_key", nil, "https://api.example.com/organization", "https://api.example.com/organizations", mockClient.MockCaller)
 				_, err := client.Get()
-				testingutil.AssertNoError(t, err)
+				assert.NoError(t, err)
 
 			} else if tt.operation == "delegate" {
 				expectedDelegate := onfleet.OrganizationDelegate{
@@ -161,7 +162,7 @@ func TestClient_URLUsage(t *testing.T) {
 
 				client := Plug("test_api_key", nil, "https://api.example.com/organization", "https://api.example.com/organizations", mockClient.MockCaller)
 				_, err := client.GetDelegate("delegate_123")
-				testingutil.AssertNoError(t, err)
+				assert.NoError(t, err)
 			}
 
 			mockClient.AssertRequestMade("GET", tt.expectedURL)
@@ -222,12 +223,12 @@ func TestClient_OrganizationConfigurations(t *testing.T) {
 
 			org, err := client.Get()
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, tt.orgData.ID, org.ID)
-			testingutil.AssertEqual(t, tt.orgData.Name, org.Name)
-			testingutil.AssertEqual(t, tt.orgData.Country, org.Country)
-			testingutil.AssertEqual(t, tt.orgData.Timezone, org.Timezone)
-			testingutil.AssertEqual(t, len(tt.orgData.Delegatees), len(org.Delegatees))
+			assert.NoError(t, err)
+			assert.Equal(t, tt.orgData.ID, org.ID)
+			assert.Equal(t, tt.orgData.Name, org.Name)
+			assert.Equal(t, tt.orgData.Country, org.Country)
+			assert.Equal(t, tt.orgData.Timezone, org.Timezone)
+			assert.Equal(t, len(tt.orgData.Delegatees), len(org.Delegatees))
 		})
 	}
 }
@@ -274,11 +275,11 @@ func TestClient_DelegateConfigurations(t *testing.T) {
 
 			delegate, err := client.GetDelegate(tt.delegateData.ID)
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, tt.delegateData.ID, delegate.ID)
-			testingutil.AssertEqual(t, tt.delegateData.Name, delegate.Name)
-			testingutil.AssertEqual(t, tt.delegateData.IsFulfillment, delegate.IsFulfillment)
-			testingutil.AssertEqual(t, tt.delegateData.Country, delegate.Country)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.delegateData.ID, delegate.ID)
+			assert.Equal(t, tt.delegateData.Name, delegate.Name)
+			assert.Equal(t, tt.delegateData.IsFulfillment, delegate.IsFulfillment)
+			assert.Equal(t, tt.delegateData.Country, delegate.Country)
 		})
 	}
 }
@@ -327,9 +328,9 @@ func TestClient_ErrorScenarios(t *testing.T) {
 			}
 
 			if tt.expectErr {
-				testingutil.AssertError(t, err)
+				assert.Error(t, err)
 			} else {
-				testingutil.AssertNoError(t, err)
+				assert.NoError(t, err)
 			}
 		})
 	}
@@ -391,8 +392,8 @@ func TestClient_DifferentURLConfigurations(t *testing.T) {
 
 			// Test Get
 			org, err := client.Get()
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, expectedOrg.ID, org.ID)
+			assert.NoError(t, err)
+			assert.Equal(t, expectedOrg.ID, org.ID)
 
 			// Reset mock client responses for second call
 			mockClient.Reset()
@@ -403,8 +404,8 @@ func TestClient_DifferentURLConfigurations(t *testing.T) {
 
 			// Test GetDelegate
 			delegate, err := client.GetDelegate("delegate_123")
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, expectedDelegate.ID, delegate.ID)
+			assert.NoError(t, err)
+			assert.Equal(t, expectedDelegate.ID, delegate.ID)
 		})
 	}
 }

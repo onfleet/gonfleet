@@ -3,6 +3,7 @@ package destination
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/testingutil"
 )
@@ -21,9 +22,9 @@ func TestClient_Get(t *testing.T) {
 
 	destination, err := client.Get("destination_123")
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedDestination.ID, destination.ID)
-	testingutil.AssertEqual(t, expectedDestination.Address.Street, destination.Address.Street)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedDestination.ID, destination.ID)
+	assert.Equal(t, expectedDestination.Address.Street, destination.Address.Street)
 
 	mockClient.AssertRequestMade("GET", "/destinations/destination_123")
 	mockClient.AssertBasicAuth("test_api_key")
@@ -55,8 +56,8 @@ func TestClient_Create(t *testing.T) {
 
 	destination, err := client.Create(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedDestination.ID, destination.ID)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedDestination.ID, destination.ID)
 
 	mockClient.AssertRequestMade("POST", "/destinations")
 }
@@ -86,9 +87,9 @@ func TestClient_ListWithMetadataQuery(t *testing.T) {
 
 	destinations, err := client.ListWithMetadataQuery(metadata)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, destinations, 1)
-	testingutil.AssertEqual(t, expectedDestinations[0].ID, destinations[0].ID)
+	assert.NoError(t, err)
+	assert.Len(t, destinations, 1)
+	assert.Equal(t, expectedDestinations[0].ID, destinations[0].ID)
 
 	mockClient.AssertRequestMade("POST", "/destinations/metadata")
 }
@@ -124,7 +125,7 @@ func TestClient_ErrorScenarios(t *testing.T) {
 				_, err = client.Create(onfleet.DestinationCreateParams{})
 			}
 
-			testingutil.AssertError(t, err)
+			assert.Error(t, err)
 		})
 	}
 }

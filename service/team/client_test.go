@@ -3,6 +3,7 @@ package team
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/testingutil"
 )
@@ -21,10 +22,10 @@ func TestClient_Get(t *testing.T) {
 
 	team, err := client.Get("team_123")
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedTeam.ID, team.ID)
-	testingutil.AssertEqual(t, expectedTeam.Name, team.Name)
-	testingutil.AssertEqual(t, expectedTeam.EnableSelfAssignment, team.EnableSelfAssignment)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedTeam.ID, team.ID)
+	assert.Equal(t, expectedTeam.Name, team.Name)
+	assert.Equal(t, expectedTeam.EnableSelfAssignment, team.EnableSelfAssignment)
 
 	mockClient.AssertRequestMade("GET", "/teams/team_123")
 	mockClient.AssertBasicAuth("test_api_key")
@@ -47,9 +48,9 @@ func TestClient_List(t *testing.T) {
 
 	teams, err := client.List()
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, teams, 1)
-	testingutil.AssertEqual(t, expectedTeams[0].ID, teams[0].ID)
+	assert.NoError(t, err)
+	assert.Len(t, teams, 1)
+	assert.Equal(t, expectedTeams[0].ID, teams[0].ID)
 
 	mockClient.AssertRequestMade("GET", "/teams")
 }
@@ -76,8 +77,8 @@ func TestClient_Create(t *testing.T) {
 
 	team, err := client.Create(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedTeam.ID, team.ID)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedTeam.ID, team.ID)
 
 	mockClient.AssertRequestMade("POST", "/teams")
 }
@@ -102,9 +103,9 @@ func TestClient_Update(t *testing.T) {
 
 	team, err := client.Update("team_123", params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedTeam.ID, team.ID)
-	testingutil.AssertEqual(t, "Updated Team Name", team.Name)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedTeam.ID, team.ID)
+	assert.Equal(t, "Updated Team Name", team.Name)
 
 	mockClient.AssertRequestMade("PUT", "/teams/team_123")
 }
@@ -122,7 +123,7 @@ func TestClient_Delete(t *testing.T) {
 
 	err := client.Delete("team_123")
 
-	testingutil.AssertNoError(t, err)
+	assert.NoError(t, err)
 	mockClient.AssertRequestMade("DELETE", "/teams/team_123")
 }
 
@@ -152,8 +153,8 @@ func TestClient_AutoDispatch(t *testing.T) {
 
 	response, err := client.AutoDispatch("team_123", &params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedResponse.DispatchId, response.DispatchId)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedResponse.DispatchId, response.DispatchId)
 
 	mockClient.AssertRequestMade("POST", "/teams/team_123/dispatch")
 }
@@ -192,9 +193,9 @@ func TestClient_GetWorkerEta(t *testing.T) {
 
 	response, err := client.GetWorkerEta("team_123", params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, "worker_123", response.WorkerId)
-	testingutil.AssertLen(t, response.Steps, 1)
+	assert.NoError(t, err)
+	assert.Equal(t, "worker_123", response.WorkerId)
+	assert.Len(t, response.Steps, 1)
 
 	mockClient.AssertRequestMade("GET", "/teams/team_123/estimate")
 }
@@ -226,9 +227,9 @@ func TestClient_ListTasks(t *testing.T) {
 
 	response, err := client.ListTasks("team_123", &params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, response.Tasks, 1)
-	testingutil.AssertEqual(t, "last_task_789", response.LastId)
+	assert.NoError(t, err)
+	assert.Len(t, response.Tasks, 1)
+	assert.Equal(t, "last_task_789", response.LastId)
 
 	mockClient.AssertRequestMade("GET", "/teams/team_123/tasks")
 }
@@ -306,7 +307,7 @@ func TestClient_ErrorScenarios(t *testing.T) {
 			client := Plug("test_api_key", nil, "https://api.example.com/teams", mockClient.MockCaller)
 
 			err := tt.operation(client)
-			testingutil.AssertError(t, err)
+			assert.Error(t, err)
 		})
 	}
 }

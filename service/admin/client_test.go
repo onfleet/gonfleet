@@ -3,6 +3,7 @@ package admin
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/onfleet/gonfleet"
 	"github.com/onfleet/gonfleet/testingutil"
 )
@@ -24,11 +25,11 @@ func TestClient_List(t *testing.T) {
 
 	admins, err := client.List()
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, admins, 1)
-	testingutil.AssertEqual(t, expectedAdmins[0].ID, admins[0].ID)
-	testingutil.AssertEqual(t, expectedAdmins[0].Email, admins[0].Email)
-	testingutil.AssertEqual(t, expectedAdmins[0].Name, admins[0].Name)
+	assert.NoError(t, err)
+	assert.Len(t, admins, 1)
+	assert.Equal(t, expectedAdmins[0].ID, admins[0].ID)
+	assert.Equal(t, expectedAdmins[0].Email, admins[0].Email)
+	assert.Equal(t, expectedAdmins[0].Name, admins[0].Name)
 
 	mockClient.AssertRequestMade("GET", "/admins")
 	mockClient.AssertBasicAuth("test_api_key")
@@ -63,9 +64,9 @@ func TestClient_Create(t *testing.T) {
 
 	admin, err := client.Create(params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedAdmin.ID, admin.ID)
-	testingutil.AssertEqual(t, expectedAdmin.Email, admin.Email)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedAdmin.ID, admin.ID)
+	assert.Equal(t, expectedAdmin.Email, admin.Email)
 
 	mockClient.AssertRequestMade("POST", "/admins")
 }
@@ -99,10 +100,10 @@ func TestClient_Update(t *testing.T) {
 
 	admin, err := client.Update("admin_123", params)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertEqual(t, expectedAdmin.ID, admin.ID)
-	testingutil.AssertEqual(t, "Updated Admin Name", admin.Name)
-	testingutil.AssertEqual(t, "+15550000000", admin.Phone)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedAdmin.ID, admin.ID)
+	assert.Equal(t, "Updated Admin Name", admin.Name)
+	assert.Equal(t, "+15550000000", admin.Phone)
 
 	mockClient.AssertRequestMade("PUT", "/admins/admin_123")
 }
@@ -120,7 +121,7 @@ func TestClient_Delete(t *testing.T) {
 
 	err := client.Delete("admin_123")
 
-	testingutil.AssertNoError(t, err)
+	assert.NoError(t, err)
 	mockClient.AssertRequestMade("DELETE", "/admins/admin_123")
 }
 
@@ -149,9 +150,9 @@ func TestClient_ListWithMetadataQuery(t *testing.T) {
 
 	admins, err := client.ListWithMetadataQuery(metadata)
 
-	testingutil.AssertNoError(t, err)
-	testingutil.AssertLen(t, admins, 1)
-	testingutil.AssertEqual(t, expectedAdmins[0].ID, admins[0].ID)
+	assert.NoError(t, err)
+	assert.Len(t, admins, 1)
+	assert.Equal(t, expectedAdmins[0].ID, admins[0].ID)
 
 	mockClient.AssertRequestMade("POST", "/admins/metadata")
 }
@@ -204,9 +205,9 @@ func TestClient_AdminTypes(t *testing.T) {
 
 			admin, err := client.Create(params)
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertEqual(t, tt.adminType, admin.Type)
-			testingutil.AssertEqual(t, tt.isReadOnly, admin.IsReadOnly)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.adminType, admin.Type)
+			assert.Equal(t, tt.isReadOnly, admin.IsReadOnly)
 		})
 	}
 }
@@ -269,13 +270,13 @@ func TestClient_AdminPermissions(t *testing.T) {
 
 			admins, err := client.List()
 
-			testingutil.AssertNoError(t, err)
-			testingutil.AssertLen(t, admins, 1)
+			assert.NoError(t, err)
+			assert.Len(t, admins, 1)
 			admin := admins[0]
-			testingutil.AssertEqual(t, tt.isAccountOwner, admin.IsAccountOwner)
-			testingutil.AssertEqual(t, tt.isActive, admin.IsActive)
-			testingutil.AssertEqual(t, tt.isReadOnly, admin.IsReadOnly)
-			testingutil.AssertLen(t, admin.Teams, len(tt.teams))
+			assert.Equal(t, tt.isAccountOwner, admin.IsAccountOwner)
+			assert.Equal(t, tt.isActive, admin.IsActive)
+			assert.Equal(t, tt.isReadOnly, admin.IsReadOnly)
+			assert.Len(t, admin.Teams, len(tt.teams))
 		})
 	}
 }
@@ -376,7 +377,7 @@ func TestClient_ErrorScenarios(t *testing.T) {
 			client := Plug("test_api_key", nil, "https://api.example.com/admins", mockClient.MockCaller)
 
 			err := tt.operation(client)
-			testingutil.AssertError(t, err)
+			assert.Error(t, err)
 		})
 	}
 }
