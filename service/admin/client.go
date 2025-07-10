@@ -79,7 +79,7 @@ func (c *Client) Update(adminId string, params onfleet.AdminUpdateParams) (onfle
 		c.rlHttpClient,
 		http.MethodPut,
 		c.url,
-		nil,
+		[]string{adminId},
 		nil,
 		params,
 		&admin,
