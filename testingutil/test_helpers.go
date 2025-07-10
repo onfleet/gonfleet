@@ -2,6 +2,7 @@ package testingutil
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 )
@@ -61,7 +62,7 @@ func AssertErrorContains(t *testing.T, err error, substring string) {
 		t.Error("Expected an error, got nil")
 		return
 	}
-	if !ContainsString(err.Error(), substring) {
+	if !strings.Contains(err.Error(), substring) {
 		t.Errorf("Expected error to contain '%s', got '%s'", substring, err.Error())
 	}
 }
@@ -85,7 +86,7 @@ func AssertFalse(t *testing.T, condition bool) {
 // AssertStringContains checks if a string contains a substring
 func AssertStringContains(t *testing.T, str, substring string) {
 	t.Helper()
-	if !ContainsString(str, substring) {
+	if !strings.Contains(str, substring) {
 		t.Errorf("Expected string '%s' to contain '%s'", str, substring)
 	}
 }
@@ -112,18 +113,6 @@ func AssertTimeWithin(t *testing.T, expected time.Time, actual time.Time, delta 
 	}
 }
 
-// ContainsString checks if a string contains a substring (helper function)
-func ContainsString(str, substring string) bool {
-	return len(str) >= len(substring) && (str == substring || 
-		func() bool {
-			for i := 0; i <= len(str)-len(substring); i++ {
-				if str[i:i+len(substring)] == substring {
-					return true
-				}
-			}
-			return false
-		}())
-}
 
 // GetStringPtr returns a pointer to a string (useful for optional fields)
 func GetStringPtr(s string) *string {

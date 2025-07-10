@@ -1,8 +1,6 @@
 package testingutil
 
 import (
-	"time"
-
 	"github.com/onfleet/gonfleet"
 )
 
@@ -145,8 +143,8 @@ func GetSampleTask() onfleet.Task {
 		PickupTask: false,
 		Quantity:   1.0,
 		ServiceTime: 5.0,
-		TimeCreated: time.Now().Unix() - 3600,
-		TimeLastModified: time.Now().Unix() - 1800,
+		TimeCreated: 1640995200,      // 2022-01-01 00:00:00 UTC
+		TimeLastModified: 1640995500, // 2022-01-01 00:05:00 UTC
 		TrackingUrl: "https://onfleet.com/track/abc123",
 		TrackingViewed: false,
 		Notes: "Test task notes",
@@ -216,9 +214,9 @@ func GetSampleWorker() onfleet.Worker {
 		OnDuty:      true,
 		Organization: "org_456",
 		AccountStatus: onfleet.WorkerAccountStatusAccepted,
-		TimeCreated: time.Now().Unix() - 86400,
-		TimeLastModified: time.Now().Unix() - 1800,
-		TimeLastSeen: time.Now().Unix() - 300,
+		TimeCreated: 1640908800,      // 2021-12-31 00:00:00 UTC (1 day earlier)
+		TimeLastModified: 1640995500, // 2022-01-01 00:05:00 UTC
+		TimeLastSeen: 1640999100,     // 2022-01-01 01:05:00 UTC
 		Location: onfleet.DestinationLocation{-122.4194, 37.7749}, // [longitude, latitude]
 		Teams: []string{"team_123", "team_456"},
 		Tasks: []string{"task_123", "task_456"},
@@ -235,7 +233,7 @@ func GetSampleWorker() onfleet.Worker {
 			Color: GetStringPtr("Blue"),
 			Description: GetStringPtr("2020 Honda Civic"),
 			LicensePlate: GetStringPtr("ABC123"),
-			TimeLastModified: time.Now().Unix() - 86400,
+			TimeLastModified: 1640908800, // 2021-12-31 00:00:00 UTC
 		},
 		ImageUrl: GetStringPtr("https://example.com/avatar.jpg"),
 		Timezone: GetStringPtr("America/Los_Angeles"),
@@ -262,8 +260,8 @@ func GetSampleWorker() onfleet.Worker {
 				GooglePlaceId: "place_123",
 				Notes: "Home address",
 				Organization: "org_456",
-				TimeCreated: time.Now().Unix() - 86400,
-				TimeLastModified: time.Now().Unix() - 86400,
+				TimeCreated: 1640908800, // 2021-12-31 00:00:00 UTC
+				TimeLastModified: 1640908800, // 2021-12-31 00:00:00 UTC
 				CreatedByLocation: false,
 				WasGeocoded: true,
 			},
@@ -287,8 +285,8 @@ func GetSampleDestination() onfleet.Destination {
 		Location: onfleet.DestinationLocation{-122.4194, 37.7749}, // [longitude, latitude]
 		GooglePlaceId: "place_123",
 		Notes: "Front door delivery",
-		TimeCreated: time.Now().Unix() - 3600,
-		TimeLastModified: time.Now().Unix() - 1800,
+		TimeCreated: 1640995200,      // 2022-01-01 00:00:00 UTC
+		TimeLastModified: 1640995500, // 2022-01-01 00:05:00 UTC
 		Metadata: []onfleet.Metadata{},
 		Warnings: []any{},
 	}
@@ -302,8 +300,8 @@ func GetSampleRecipient() onfleet.Recipient {
 		Phone:       "+15559876543",
 		Organization: "org_456",
 		SkipSmsNotifications: false,
-		TimeCreated: time.Now().Unix() - 3600,
-		TimeLastModified: time.Now().Unix() - 1800,
+		TimeCreated: 1640995200,      // 2022-01-01 00:00:00 UTC
+		TimeLastModified: 1640995500, // 2022-01-01 00:05:00 UTC
 		Metadata: []onfleet.Metadata{},
 		Notes: "Customer prefers text updates",
 	}
@@ -314,8 +312,8 @@ func GetSampleTeam() onfleet.Team {
 	return onfleet.Team{
 		ID:     "team_123",
 		Name:   "Delivery Team A",
-		TimeCreated: time.Now().Unix() - 86400,
-		TimeLastModified: time.Now().Unix() - 3600,
+		TimeCreated: 1640908800,      // 2021-12-31 00:00:00 UTC 
+		TimeLastModified: 1640992000, // 2021-12-31 23:00:00 UTC
 		Workers: []string{"worker_123", "worker_456"},
 		Tasks:   []string{"task_123", "task_456"},
 		Managers: []string{"admin_123"},
@@ -333,8 +331,8 @@ func GetSampleOrganization() onfleet.Organization {
 		DriverSupportEmail: "support@testorg.com",
 		Timezone: "America/Los_Angeles",
 		Country: "US",
-		TimeCreated: time.Now().Unix() - 86400*30,
-		TimeLastModified: time.Now().Unix() - 86400,
+		TimeCreated: 1638316800,      // 2021-12-01 00:00:00 UTC (30 days earlier)
+		TimeLastModified: 1640908800, // 2021-12-31 00:00:00 UTC
 		Image: "https://example.com/logo.png",
 		Delegatees: []string{},
 	}
@@ -369,8 +367,8 @@ func GetSampleTaskParams() onfleet.TaskParams {
 		Quantity:   2.0,
 		ServiceTime: 10.0,
 		Notes: "Handle with care",
-		CompleteAfter: time.Now().Unix() + 3600,
-		CompleteBefore: time.Now().Unix() + 7200,
+		CompleteAfter: 1641002400,  // 2022-01-01 02:00:00 UTC (future)
+		CompleteBefore: 1641006000, // 2022-01-01 03:00:00 UTC (future)
 	}
 }
 
